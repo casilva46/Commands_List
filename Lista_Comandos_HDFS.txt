@@ -79,7 +79,7 @@ hdfs dfs -find / -name data
 hdfs dfs -find / -iname Data -print/user/semantix/input/data
 hdfs dfs -find input/ -name \*.txt -print input/teste1.txt, input/teste2.txt
 
---------------------------------------------------------------------------|Verificar Permissções|-----------------------------------------------------------------------------------------
+--------------------------------------------------------------------------|Verificar Permissões|-----------------------------------------------------------------------------------------
 
 getfacl <Nome_arquivo>							Verifica as permissões em um arquivo
 hdfs dfs -getfac /RAW/SILVER						Verifica as permissões em um Path
