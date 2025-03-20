@@ -1,0 +1,98 @@
+HDFS Commands
+
+https://sparkbyexamples.com/apache-hadoop/hadoop-hdfs-dfs-commands-and-starting-hdfs-dfs-services/
+
+https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSCommands.html
+
+Command								Description
+
+hdfs dfs -ls						List files with permissions and other details
+hdfs dfs -mkdir						Creates a directory named path in HDFS
+hdfs dfs -rm						To Remove File or a Directory
+hdfs dfs -rmr						Removes the file that identified by path / Folder and subfolders
+hdfs dfs -rmdir						Delete a directory
+hdfs dfs -put						Upload a file / Folder from the local disk to HDFS
+hdfs dfs -cat						Display the contents for a file
+hdfs dfs -du						Shows the size of the file on hdfs.
+hdfs dfs -dus						Directory/file of total size
+hdfs dfs -get						Store file / Folder from HDFS to local file
+hdfs dfs -getmerge					Merge Multiple Files in an HDFS
+hdfs dfs -count						Count number of directory, number of files and file size
+hdfs dfs -setrep					Changes the replication factor of a file
+hdfs dfs -mv						HDFS Command to move files from source to destination
+hdfs dfs -moveFromLocal					Move file / Folder from local disk to HDFS
+hdfs dfs -moveToLocal					Move a File to HDFS from Local
+hdfs dfs -cp						Copy files from source to destination
+hdfs dfs -tail						Displays last kilobyte of the file
+hdfs dfs -touch						create, change and modify timestamps of a file
+hdfs dfs -touchz					Create a new file on HDFS with size 0 bytes
+hdfs dfs -appendToFile					Appends the content to the file which is present on HDF
+hdfs dfs -copyFromLocal					Copy file from local file system
+hdfs dfs -copyToLocal					Copy files from HDFS to local file system
+hdfs dfs -usage						Return the Help for Individual Command
+hdfs dfs -checksum					Returns the checksum information of a file
+hdfs dfs -chgrp						Change group association of files/change the group of a file or a path
+hdfs dfs -chmod						Change the permissions of a file
+hdfs dfs -chown						change the owner and group of a file
+hdfs dfs -df						Displays free space
+hdfs dfs -head						Displays first kilobyte of the file
+hdfs dfs -Create Snapshots				Create a snapshot of a snapshottable directory
+hdfs dfs -Delete Snapshots				Delete a snapshot of from a snapshottable directory
+hdfs dfs -Rename Snapshots				Rename a snapshot
+hdfs dfs -expunge					create new checkpoint
+hdfs dfs -Stat						Print statistics about the file/directory
+hdfs dfs -truncate					Truncate all files that match the specified file pattern to the specified length
+hdfs dfs -find						Find File Size in HDFS
+hdfs dfs -help  					Ajuda
+hdfs dfs -help ls					Ajuda
+
+hdfs dfs -cat /user/Nome_arquivo                  	Exibe o conteúdo do arquivo
+hdfs dfs -tail /user/Nome_arquivo			Exibe as últimas linhas de um arquivo	
+
+-------------------------------------------------------------------------|Comandos Informações|-------------------------------------------------------------------------------------------
+
+hdfs dfs du -h <diretório>						Mostrar o uso do disco
+hdfs dfs df -h <diretório>						Exibir o espaço livre
+hdfs dfs stat <diretório>						Mostrar as informações do diretório
+hdfs dfs -stat %r name.txt 						informações fator de replicação do arquivo
+hdfs dfs -stat %o name.txt 						informações tamanho do bloco do arquivo
+hdfs dfs count -h <diretório>						Contar o número de diretórios, número de arquivos e tamanho do arquivo especificado
+hdfs dfs expunge							Esvaziar a lixeira (Usar com cuidado)
+hdfs dfs -du -s -h /Diretório						Verifica espaço utilizado na pasta
+
+-------------------------------------------------------------------------|Comandos Arquivos|-------------------------------------------------------------------------------------------
+
+hdfs dfs cat <arquivo>							Ver conteúdo do arquivo
+hdfs dfs setrep <nº repetições> <arquivo>				Alterar o fator de replicação do arquivo
+hdfs dfs touchz <diretório>						Criar um arquivo de registro com data e hora
+hdfs dfs checksum <arquivo>						Retornar as informações da soma de verificação de um arquivo
+hdfs dfs tail [-f] <arquivo>						Mostra o último 1KB do arquivo no console: 
+hdfs dfs -tail name.txt
+hdfs dfs -cat name.txt | head -n 1
+
+-------------------------------------------------------------------------|Comandos Localização|-------------------------------------------------------------------------------------------
+
+hdfs dfs find <caminho> <Nome_busca> -print				Localiza todos os arquivos que correspondem à expressão
+
+• Exemplos:
+hdfs dfs -find / -name data
+hdfs dfs -find / -iname Data -print/user/semantix/input/data
+hdfs dfs -find input/ -name \*.txt -print input/teste1.txt, input/teste2.txt
+
+--------------------------------------------------------------------------|Verificar Permissções|-----------------------------------------------------------------------------------------
+
+getfacl <Nome_arquivo>							Verifica as permissões em um arquivo
+hdfs dfs -getfac /RAW/SILVER						Verifica as permissões em um Path
+
+
+
+
+
+
+
+
+
+
+
+
+

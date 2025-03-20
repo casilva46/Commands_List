@@ -1,0 +1,20 @@
+DOCKER
+
+• docker-compose pull					Baixar as imagens
+• docker image ls					Listar as imagens
+• docker-compose up –d  				Executar os containers / Iniciar todos os serviços em background (-d)
+• docker container ls					Lista os containers
+• docker-compose stop					Parar os serviços (todos os containers)
+• docker-compose start					Iniciar os serviços (todos os containers)
+• docker-compose dowm					Matar os serviços
+• docker volume prune					Apagar todos os volumes sem uso 
+• docker system prune --all				Apagar tudo (image, volume, network)
+• docker exec -it <container> bash			Acesso ao Shell (linux) de um container especifico
+• docker ps 						Visualiza todos containers Ativos
+• docker ps –a						Visualiza todos containers Ativos e Parados
+• docker exec -it <container> <comando>			Executar comandos no container
+• docker logs <container>				Visualizar os logs de um container especifico
+• docker-compose logs					Visualizar os logs de todos os containers
+• docker cp <diretório> <container>:/<diretório>  	Enviar arquivos de um container para outro
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
