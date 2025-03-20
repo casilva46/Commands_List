@@ -1,0 +1,150 @@
+**************************************************************************** | COMANDOS SQL | ***********************************************************************************
+FUNÇÃO SELECT
+
+SELECT * FROM CUSTOMER;                                                 (SELECT * FROM Nome_Tabela;)
+
+SELECT CUSTOMER_id, NAME FROM CUSTOMER;                                   SELECT Nome_Coluna_A, Nome_Coluna_B FROM Nome_Tabela;
+
+SELECT PRODUCT_ID, DESCRIPTION, PRICE, PRICE * 1.07 AS TAXED_PRICE FROM PRODUCT;
+
+SELECT PRODUCT_ID, DESCRIPTION, PRICE AS UNTAXED_PRICE, PRICE * 1.07 AS TAXED_PRICE FROM PRODUCT;
+
+SELECT PRODUCT_ID, DESCRIPTION, PRICE, ROUND(PRICE * 1.07, 2) AS TAXED_PRICE FROM PRODUCT;     (Arrendonda para 02 casas decimais)
+
+SELECT NAME, CITY || ', ' || STATE AS LOCATION FROM CUSTOMER;	(Concatenação de 02 colunas: Nome_Coluna_A || ', ' || Nome_Coluna_B )
+
+SELECT NAME, STREET_ADDRESS || ' ' || CITY || ', ' || STATE || ' ' || ZIP AS SHIP_ADDRESS FROM CUSTOMER;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FUNÇÃO WHERE
+
+SELECT * FROM STATION_DATA WHERE YEAR = 2010;   (Seleciona todos os dados onde o ano é igual a 2010)
+
+SELECT * FROM STATION_DATA WHERE YEAR != 2010; 	(Seleciona todos os anos com exceção "!=" aos do ano de 2010)
+
+SELECT * FROM STATION_DATA WHERE YEAR <> 2010;   (Seleciona todos os anos com exceção "<>" aos do ano de 2010)
+
+SELECT * FROM STATION_DATA WHERE YEAR BETWEEN 2005 AND 2010;  (Seleciona os dados entre os anos de 2005 e 2010)
+
+SELECT * FROM STATION_DATA WHERE YEAR >= 2005 AND YEAR <= 2010; (Seleciona os dados em que o ano deve ser maior ou igual a 2005 e menor ou igual a 2010)
+
+SELECT * FROM STATION_DATA WHERE YEAR > 2005 AND YEAR < 2010; (Seleciona os dados excluindo os anos de 2005 e 2010, isto é apenas 2006 a 2009)
+
+SELECT * FROM STATION_DATA WHERE MONTH = 3 OR MONTH = 6 OR MONTH = 9 OR MONTH = 12;
+
+SELECT * FROM STATION_DATA WHERE MONTH IN (3,6,9,12);  (mesma coisa que a query acima, porém mais resumida)
+
+SELECT * FROM STATION_DATA WHERE MONTH NOT IN (3,6,9,12); (Todos os meses menos os que estão entre () )
+
+SELECT * FROM STATION_DATA WHERE MONTH % 3 = 0 ( Me dê todos os meses em que o resultado da divisão por 3 seja igual a zero)
+
+SELECT * FROM STATION_DATA WHERE report_code = '513A63'; (Busca por um registro especifico ' ' )
+
+SELECT * FROM STATION_DATA WHERE report_code IN ('513A63','1F8A7B','EF616A'); (busca por mais de um registro )
+
+SELECT * FROM STATION_DATA WHERE LENGTH(REPORT_CODE) != 6; (LENGTH conta a quantidade de caracteres, com exeção a aqueles que tem 6)
+
+SELECT * FROM STATION_DATA WHERE REPORT_CODE LIKE 'B%';  (faz uma busca por todos os registros na coluna REPORT_CODE iniciados com a letra B)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+BOOLEANOS  (TABELA VERDADE), No mundo de banco de dados falso é 0 e verdadeiro é 1
+
+SELECT * FROM STATION_DATA WHERE TORNADO = TRUE AND HAIL = TRUE;
+
+SELECT * FROM STATION_DATA WHERE TORNADO = 1 AND HAIL = 1;
+
+SELECT * FROM STATION_DATA WHERE TORNADO AND HAIL;
+
+SELECT * FROM STATION_DATA WHERE TORNADO = 0 AND HAIL = 1;
+
+SELECT * FROM STATION_DATA WHERE NOT TORNADO AND HAIL;
+
+SELECT * FROM STATION_DATA WHERE SNOW_DEPTH IS NULL;     			(Busca por valores nulos "em branco" em uma coluna)
+
+SELECT * FROM STATION_DATA WHERE SNOW_DEPTH IS not NULL;            (Busca por valores não nulos "em branco" em uma coluna)
+
+SELECT * FROM STATION_DATA WHERE PRECIPITATION <= 0.5;
+
+SELECT * FROM STATION_DATA WHERE PRECIPITATION IS NULL OR PRECIPITATION <= 0.5;
+
+SELECT * FROM STATION_DATA WHERE RAIN = 1 AND TEMPERATURE <= 32 OR SNOW_DEPTH > 0;
+
+SELECT * FROM STATION_DATA WHERE (RAIN = 1 AND TEMPERATURE <= 32) OR SNOW_DEPTH > 0;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ORDER BY E GROUP BY  (Agrupamento de registros)
+
+SELECT COUNT(*) AS RECORD_COUNT FROM STATION_DATA;  (Conta todos os registros da tabela STATION_DATA e cria um alias RECORD_COUNT)
+
+SELECT COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1;
+
+SELECT YEAR, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR;
+
+SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH;
+
+SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY 1, 2;  (MESMA COISA QUE A QUERY ACIMA)
+
+
+SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH ORDER BY YEAR, MONTH;  (ORDEM CRESCENTE (PADRÃO) POR ANO)
+
+SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH ORDER BY YEAR DESC, MONTH; (ORDEM ANO DECRESCENTE)
+
+
+SELECT COUNT(SNOW_DEPTH) AS RECORDED_SNOW_DEPTH_COUNT FROM STATION_DATA;   (CONTA OS VALORES NULOS DE UMA COLUNA ESPECIFICA QUE ESTÁ ENTRE ())
+
+SELECT MONTH, AVG(TEMPERATURE) AS AVG_TEMP FROM STATION_DATA WHERE YEAR >= 2000 GROUP BY MONTH;  (CALCULA AS MÉDIAS 'avg' EM UMA COLUNA ESPECIFICA ENTRE ())
+
+SELECT MONTH, ROUND(AVG(TEMPERATURE),2) AS AVG_TEMP FROM STATION_DATA WHERE YEAR >= 2000 GROUP BY MONTH;  (FAZ O ARREDONDAMENTO PARA DUAS CASAS DECIMAIS)
+
+SELECT YEAR, SUM(SNOW_DEPTH) AS TOTAL_SNOW FROM STATION_DATA WHERE YEAR >= 2000 GROUP BY YEAR;    (SOMA O QUE ESTÁ ENTRE ())
+
+SELECT YEAR, SUM(PRECIPITATION) AS TORNADO_PRECIPITATION FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR;
+
+SELECT DISTINCT STATION_NUMBER FROM STATION_DATA;    (OBTEM VALORES DISTINTOS SEM DUPLICATAS)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FUNÇÃO CASE
+
+Mapeia um ou mais condições para um valor. Ela inicia com CASE e finaliza END
+
+SELECT REPORT_CODE, YEAR, MONTH, DAY, WIND_SPEED,
+
+CASE
+
+    WHEN WIND_SPEED >= 40 THEN 'HIGH'
+    WHEN WIND_SPEED >= 30 AND WIND_SPEED < 40 THEN 'MODERATE'
+
+    ELSE 'LOW'
+    
+END AS WIND_SEVERITY
+
+FROM STATION_DATA;
+
+======================================================================================================
+
+SELECT YEAR,
+
+CASE
+
+    WHEN WIND_SPEED >= 40 THEN 'HIGH'
+    WHEN WIND_SPEED >= 30 THEN 'MODERATE'
+
+    ELSE 'LOW'
+    
+END AS WIND_SEVERITY,
+
+COUNT(*) AS RECORD_COUNT
+
+FROM STATION_DATA GROUP BY 1, 2;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FUNÇÃO JOIN
+
+
+
+
+
+

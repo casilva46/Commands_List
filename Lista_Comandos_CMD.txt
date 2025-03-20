@@ -1,0 +1,7 @@
+USAR NO CMD
+
+net user XXXXXXXXX /do                                           Faz toda a pesquisa dos grupos do usuário
+
+net user xxxxxxxxxx /do | findstr /i XXXXXXXX | sort             Filtra a busca por um grupo especifico
+
+net group xxxxxxxxxxxxxx /do                                     Busca por grupo

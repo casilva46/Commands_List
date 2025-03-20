@@ -1,0 +1,785 @@
+
+************************************************************************** LISTA DE COMANDOS LINUX ****************************************************************************
+
+
+ln -s /home/USER/scripts/rdmup.ksh rdmup (pasta para onde será direcionado) - criar link Simbólico
+find . | grep "Optimization"
+grep -i fasttrack Version.xml
+find . | grep "InformationGovernanceCatalog"
+find ./ * -size +800M                 Faz a busca de arquivos maiores que 800Mb
+find ./ -size -800M                   Faz a busca de arquivos menores que 800Mb
+find ./ -size +10G -type f
+
+find $PWD -name XXXXXXXXXXXX
+
+find / -iname XXXXXXXXXXXXXX
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COMANDOS BÁSICOS
+
+<TAB>	                               Completa nomes e comandos no shell.
+<Ctrl>+<C>	                          Interrompe a execução de um comando.
+<Ctrl>+<Z>	                          Pausa a execução de um comando. Para retornar use fg n, sendo n um número exibido entre colchetes [ ], exemplo: fg 1.
+history		                            Exibe o histórico de comandos digitados.
+history -cw	                         Limpa o histórico do shell.
+↑ ou ↓		                             As teclas direcionais para cima ou para baixo exibem os comandos digitados que estão armazenados no histórico.
+|	(Pipe)                             Filtra a saída do terminal. Útil para combinar diversos comandos.
+echo "Livro Shell" >                 Arquivo	Salva o conteúdo de “Livro Shell” no “arquivo”.
+echo "Livro Shell" >>                Arquivo	Salva o conteúdo de “Livro Shell” no final do “arquivo”. Não apaga o conteúdo pre existente, apenas adiciona ao final.
+nome="Tales" ; echo $nome	“nome”     Recebe o valor de “Tales” e exibe o valor da variável.
+
+
+scp -p user@host:/<caminho_origem> : user@host:/<caminho_destino>
+
+scp usuário@máquina:<diretório_origem> <diretório_destino>
+
+scp Nome_arquivo user@host:/<caminho_destino>
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+dmidecode -t 1                 Para saber se uma máquina é fisica ou virtual
+
+id <usuario>                   Identifica quais as permissões que o usuário possui
+
+dos2unix <nome_arquivo>        Faz a convesão de um arquivo para formato Unix
+
+
+
+mv ./arquivo ./arquivo_bkp    renomeia um arquivo ou diretório
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CRONTAB
+
+sudocrontab -u root -e      para criar uma tabela de agendamentos cron com a permissão do superusuário (root)
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Listar diretórios recursivamente e salvar a saída em arquivo
+
+hadoop fs -ls -R /sistemas/ods/tgtfiles | grep "^d" | sed '1d;s/  */ /g' | cut -d\  -f8 > /tmp/ods_dir.txt
+
+find /produtos/bdr/* -size "+1G" -exec ls -lah {} \;  <- disco
+
+watch "ps -Ao user,uid,comm,pid,pcpu,tty --sort=-pcpu | head -n 6"  <- CPU
+
+ps aux | sort -k 4 -r | head -n 10 <- memória
+
+ps -eo user,pid,cmd,pcpu,pmem --sort -rss | head -n20
+ps -ef user,pid,cmd,pcpu,pmem --sort -rss | head -n20
+
+***** Busca dos maiores arquivos ou diretórios
+
+find /produtos/bdr/* -size "+3G" -exec ls -lah {} \;
+
+df -h | awk '$5 >=90 {print $5,6}' ou df -h | awk '$5 >=90 {print $2,$4,$5,$6}' (verifica o uso acima de 90% 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Descobrindo o processo que está consumindo mais CPU
+
+ps aux |head -1 ; ps aux | sort -nk 3 -r | head -n 1
+
+ps aux |head -1 ; ps aux | sort -nk 3 -r | head -n 5
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Descobrindo o processo que está consumindo mais memória
+
+ps aux |head -1 ; ps aux | sort -nk 4 -r | head -n 1
+
+ps -eo user,pid,pmem,pcpu,comm --sort= -pcpu | head
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+comando1 ; comando2 ; comando3 ; comandoN 		  executa os comandos indiferente do resultado do comando anterior
+
+comando1 && comando2 && comando3 && comandoN 	executa o comando seguinte apenas se o anterior tiver sucesso, retorno 0
+
+comando1 || comando2 || comando3 || comandoN 	executa o comando seguinte apenas se o anterior não tiver sucesso, retorno 1
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Validaçao do serviço SSSD (Service Security System Daemon)
+
+service sssd stop
+service sssd start
+service sshd restart
+service sssd status
+
+systemctl restart httpd.service
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Validaçao do serviço SSHD
+
+sudo systemctl start sshd
+sudo systemctl stop sshd
+sudo systemctl restart sshd
+sudo systemctl status sshd
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Verificar o sincronismo da máquina
+
+$systemctl status chronyd.service -1
+
+$ntpq -p
+
+$chronyc sources
+
+$timedatectl: verifica o serviço NTP
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Verificar o serviço do agent cloudera
+
+sudo service cloudera-scm-agent restart
+sudo service cloudera-scm-agent status
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Verificar a memória swap da máquina
+
+$cat /proc/swaps
+
+$cat /proc/sys/vm/swappiness
+
+OBS: O padrão das máquinas cloudera é sempre 1
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SERVIÇO NMON
+
+cd /logs/nmon
+
+./nmon
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COMANDOS DE VERIFICAÇÃO
+
+systemctl list-unit-files: lista todos os servios e status
+
+systemd-analyse blame exibe como foi o último processo de boot da máquina
+
+systemctl status <serviço>: exibe o status do serviço
+
+systemctl | grep running: exibe todos os serviços que estão em execução
+
+systemctl list-units -all --state=inactive: lista todos os serviços que estão inativos
+
+systemctl list-units -all --state=running: lista todos os serviços que estão em execução
+
+dmesg: mostra informações do sistema)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MANIPULANDO ARQUIVOS E DIRETÓRIOS
+
+cd ..		                   Sobe um nível na árvore de diretórios.
+c-                        Volta para o diretótio anterior
+ls			                     Lista arquivos e diretórios.
+ls -lh		                  Lista arquivos e diretórios com mais detalhes.
+ls -lSrh	                 Lista os arquivos por tamanho
+ls -Fltr	                 Lista os arquivos por data
+ls -a		                   Lista arquivos e diretórios, inclusive ocultos.
+ls -d */	                 Lista apenas diretórios.
+ls -l *.XXXX              Lista os arquivos com uma extensão especifica
+mkdir		                   Cria um diretório.
+mkdir -p	                 Cria vários diretórios simultâneos.
+rm			                     Remove um arquivo.
+rm -r		                   Remove um arquivo, exige uma confirmação antes da remoção
+rm -rf		                  Remove um arquivo ou diretório sem perguntar
+rmdir		                   Remove um diretorio desde que esteja vazio
+cp			                     Copia um arquivo.
+cp -r		                   Copia um diretório recursivamente.
+cp -p		                   Copia um arquivo ou diretório mantendo as suas propriedades originais (data, owner etc)
+cp -i                     Copia e pergunta se deseja sobreescrever o arquivo caso haja outro com o mesmo nome no destivo
+mv			                     Move um arquivo/diretório ou renomeia. Se o caminho-destino for o mesmo local, irá renomear, se for diferente, irá mover.
+pwd			                    Exibe o caminho completo até o diretório atual.
+
+
+-l: exibe em forma de lista
+-t: exibe por ordem de modificação
+-s: exibe por ordem de tamanho
+-h: exibe o tamanho do arquivo
+-a: exibe os arquivos ocultos
+-r: exibe os arquivos em ordem reversa
+
+ls  -Fltrsh: Filtra arquivos por data e tamanho
+
+ls  -lSrh: Filtra arquivos por data e tamanho (usar esse)
+
+ls -lt | head -40 : Filtra pelas ultimas 40 saídas
+
+ls -lt | grep jul" "(dia)"   Filtra por uma data especifica
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DATA E HORA
+
+date			                Exibe e altera a data e a hora do sistema.
+date -s			             Altera a data e a hora do sistema por extenso.
+date -r			             Exibe a última data e hora de modificação de um arquivo.
+cal                    Exibe o calendário
+touch			               Modifica a data e hora de um arquivo.
+touch -m arquivo	      Altera a data e hora de modificação do arquivo.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INFORMAÇÕES GERAIS
+
+free -m			                  Mostra o uso (livre/usado) das memórias.
+df -h			                    Mostra o espaço utilizado pelos dispositivos.
+df -hi 			                  Mostra a quantidade de inodes ocupando espaço em um disco
+du -h			                    Mostra o espaço utilizado pelos arquivos.
+cat /proc/cpuinfo	          Informações do processador do computador.
+cat /proc/meminfo	          Informações da memória do computador.
+cat /proc/partitions	       Informações sobre discos e partições.
+ps                          Lista a lista de processos em execução, útil para saber o pid de um processo para o mandar abaixo com o comando kill, entre outras coisas
+pstree -p		                 Mostra cada processo em execução, em forma de árvore, contendo o PID de cada processo.
+ps -a                       Mostra os processos de todos os usuários (permissão de root para tal)
+ps -x                       Mostra processos que não estejam associados ao terminal de comandos
+ps -u                       Mostra a lista detalhada contendo o usuário que é dono do processo
+ps -aux | grep XXXX         Mostra a lista de processos, o | grep realiza um filtro para uma busca mais especifica
+lspci			                    Exibe informações dos dispositivos da máquina.
+lsusb			                    Exibe informações dos dispositivos USB da máquina.
+lscpu                       Exibe a quantidade de CPU que a máquina possui
+ls -la /dev/sd*             Lista dos discos que estão fisicamente conectados na máquina
+sudo fdisk /dev/sda
+fsck /dev/sda               Faz uma verificaão na saúde da Partição 
+sensors		                   Exibe informações de temperatura da máquina, CPU, cooler, placa mãe
+hddtemp /dev/[sh]d[a-z]	    Exibe informações sobre temperatura dos dispositivos de armazenamento.
+inxi -v7			                 Informações completas sobre o hardware da máquina.
+w  			                      Exibe os usuários logados, com sessão aberta no sistema.
+whoami                      Exibe com qual usuário estou conectado
+iotop -Pak		                Analisa a leitura e gravação dos discos.
+sar -q                      Exibe o uso da máquina
+cut -d: -f1 /etc/group	     Exibe todos os grupos disponíveis no sistema.
+
+sar -q -s 06:00:00 | head
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESLIGAR OU REINICIAR O SISTEMA
+
+shutdown		               Desliga a máquina.
+shutdown -r		            Reinicia a máquina. Use a palavra “now” para reiniciar imediatamente. Exemplo: shutdown -r now
+shutdown -h		            Desliga a máquina. Use a palavra “now” para desligar imediatamente. Exemplo: shutdown -h now
+shutdown -c		            Cancela a execução do shutdown. Apenas se não for usado a palavra “now”.
+shutdown -h +30	         Desliga o sistema em 30 minutos.
+shutdown -r 04:37 "Prezados, o servidor será reiniciado em 1:30h min"	Reinicia o sistema na hora informada.
+reboot			                Reinicia o sistema.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GERENCIAR USUÁRIOS E GRUPOS
+
+id  						                identifica os grupos do usuário
+adduser XXXXXXX				       Cria o usuário “XXXXX”.
+passwd -a user grupo      Adiciona o usuário ao grupo
+passwd -d user grupo      Remove o usuário do grupo
+adduser XXX YYYY			       Adiciona o usuário XXXX ao grupo YYYY.
+deluser XXX YYYY          Remove o usuário XXXX ao grupo YYYY.
+
+GRUPOS
+
+gpasswd -a Nome_usuário Nome_grupo        Inclui o usuário em um grupo
+gpasswd -d Nome_usuário Nome_grupo        Exclui o usuário de um grupo
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COMANDOS DE EDIÇÃO DE TEXTO
+
+emacs: Editor de texto screen-oriented
+pico: Editor de texto screen-oriented, também chamado de nano
+sed: Editor de texto stream-oriented
+vi: Editor de texto full-screen
+vim: Editor de texto full-screen melhorado (vi improved)
+
+:w salvar na memória para o disco
+:q sair do editor
+:wq salvar e sair do editor
+:x salvar e sair do editor
+:e! reeditar, desprezando as mudanças
+ZZ salvar e sair do editor
+
+U                                     Desfaz o último comando
+:set number                           visualiza o número de linhas
+:set nu                               visualiza o número de linhas
+:set nonumber                         Não visualiza o número de linhas
+:XX                                   Desloca imediatamente para a linha XX
+G                                     Desloca imediatamente para a última linha do arquivo
+:xx,xxw arquivo_teste [enter]         Copia um intervalo desajado de linhas para um novo arquivo
+/XXXXXXXXXXX                          Pesquisa por uma palavra especifica no arquivo
+n ou N                                Navega entre as palavras pesquisadas
+:%s/XXXXXXX/YYYYYYYY/gc                Faz a busca pela palavra XXXXXXX e substitui pela palavra YYYYYYYY. O "gc" faz isso para todas e solicita confirmação 
+   
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VISUALIZAR TEXTOS
+
+cat			     Exibe o conteúdo de um arquivo texto.
+cat -n		   Exibe o conteúdo do arquivo texto, enumerando as linhas.
+head		     Lê as primeiras linhas ou caracteres de um arquivo de texto.
+head -n 7	 Lê as sete primeiras linhas de um arquivo de texto.
+head -c 33	Lê os primeiros 33 caracteres de um arquivo texto.
+tail		     Lê as últimas Linhas de um arquivo texto.
+tail -n 2	 Lê as duas últimas linhas de um arquivo texto.
+tail -c 33	Lê os últimos 33 caracteres de um arquivo texto.
+more		     Visualiza um arquivo texto de forma interativa.
+less		     Visualiza um arquivo texto de forma interativa. Possui mais opções e é mais otimizado que o more.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos de Ajuda e Documentação
+
+apropos:  Localiza comandos por pesquisa de palavra-chave
+find:     Localizar arquivos, como por exemplo: find . -name *.txt -print, para pesquisa de arquivos de texto do diretório atual
+info:     Abre o explorador de informações
+man:      Manual muito completo, pesquisar informação acerca de todos os comandos que necessitemos de saber, como por exemplo man find
+whatis:   Descreve o que um determinado comando é/faz
+whereis:  Localizar a página de ajuda (man page), código fonte, ou arquivos binários, de um determinado programa
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MONTAR E DESMONTAR DISPOSITIVOS
+
+mount		    Monta um dispositivo.
+umount	    Desmonta um dispositivo.
+umount -l	 Desmonta um dispositivo mesmo que o mesmo esteja em uso;
+mount -o loop,ro arquivo.iso /mnt/	Monta uma imagem “.iso”.
+mount -o remount,rw /	Remonta o diretório raiz em modo de leitura e gravação.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COMPACTAÇÃO E DESCOMPACTAÇÃO
+
+Comandos							Descrição
+tar									                         Junta vários arquivos e gera um arquivo.tar.
+tar -cvf arquivo.tar Músicas/		      Gera um “arquivo.tar” do diretório “Músicas”.
+tar -tvf arquivo.tar				             Exibe o conteúdo do “arquivo.tar”, sem extraí-lo.
+tar -xvf arquivo.tar -C /tmp		       Extrai o conteúdo do “arquivo.tar” no diretório /tmp.
+tar -cvzf arquivo.tar.gz Músicas/	   Gera um “arquivo.tar.gz” compactando o diretório “Músicas”.
+tar -tvzf arquivo.tar.gz			          Exibe o conteúdo do “arquivo.tar.gz”, sem extraí-lo.
+tar -xvzf arquivo.tar.gz			          Extrai o conteúdo do “arquivo.tar.gz”.
+tar -cvjf arquivo.tar.gz Músicas/	Gera um “arquivo.tar.bz2” compactando o diretório “Músicas”.
+tar -tvjf arquivo.tar.gz			          Exibe o conteúdo do “arquivo.tar.bz2”, sem extraí-lo.
+tar -xvjf arquivo.tar.gz			          Extrai o conteúdo do “arquivo.tar.bz2”.
+zip -r arquivo.zip arquivo			        Compacta um arquivo ou diretório para o formato .zip.
+
+
+gzip Nome_arquivo                    Compacta um arquivo
+gunzip arquivo.zip					              Descompacta um arquivo .zip
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PROCESSOS
+
+top				      Trabalha com processos em tempo real.
+top -c: 		   Mostra o uso de recursos de forma detalhada
+htop			      Trabalha com processos em tempo real de forma mais amigável.
+kill			      Mata processos através.
+kill -9			   Mata processos de forma forçada.
+killall		    Mata o aplicativo e todos processos ligados a ele.
+kill all -9 	Mata o aplicativo de forma forçada e todos processos ligados a ele. Apaga o que já existe.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+REDE E DOWNLOADS
+
+ifconfig	 Informação e configuração da rede.
+ifconfig eth0 192.168.25.200 netmask 255.255.255.0	Configura o dispositivo “eth0” para o IP “192.168.25.200” e máscara para “255.255.255.0”.
+ifconf eth0 down Desativa a rede do dispositivo “eth0”.
+ifconf eth0 up Ativa a rede do dispositivo “eth0”.
+iwlist	Recolhe informações de redes wireless.
+iwlist wlan0 scan	Pesquisa por redes wireless disponíveis, usando o dispositivo “wlan0”.
+wget		Baixa arquivos da internet.
+wget -c	 Baixa arquivos da internet com “resume”, ou seja, recomeçando de onde parou.
+wget --limit-rate=200k	Baixa arquivos da internet limitando a velocidade de download a “200k”.
+wget -m -p -k -P Diretório Site	Baixa um site completo.
+youtube-dl Baixa vídeos da internet.
+ssh -p 2782 talesam@talesam.org Acessa via ssh o servidor talesam.org com o usuário talesam utilizando a porta 2782.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos de Notícias ou Rede
+
+netstat: Mostra o estado da rede
+netstat -a | grep LISTEN
+netstat -a | grep CLOSE_WAIT
+netstat -a | grep ESTABLISHED
+
+netstat -i: lista as interfaces de rede e e suas respctivas estatisticas de trafego
+netstat -s: lista as estatisticas de trafego para cada protocolo de rede
+netstat -r: lista as tabelas de roteamento
+netstat -l: lista as portas que estão sendo ouvidas
+
+rsh: Um shell em outros sistemas UNIX
+ssh: Versão segura do rsh
+nmap: Poderoso port-scan, para visualizarmos portas abertas num dado host
+ifconfig: Visualizar os ips da nossa máquina, entre outras funções relacionadas com ips
+ping: Pingar um determinado host, ou seja, enviar pacotes icmp para um determinado host e medir tempos de resposta, entre outras coisas
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PROCURAR ARQUIVOS E DIRETÓRIOS
+
+Comando	Descrição
+find	Pesquisa por arquivos.
+find $HOME -name "Janelas" -exec rm -vf {} \;	Procura pelos arquivos com nome de “Janelas” no diretório do usuário e os apaga.
+find . -mtime 3 -print	Procura no diretório corrente por arquivos que foram modificados a 3 dias.
+find . \( -iname "*.png" -o -iname "*.jpg" \) -print -exec tar -rf images.tar {} \;	Procura por imagens do tipo ".png" e ".jpg" no diretório corrente e cria um pacote chamado imagens.tar com as imagens encontradas.
+find / -group users -print 2>/dev/null	Procura em todo sistema por arquivos pertencentes ao grupo users.
+find ~/Música -size +10M -exec ls -lh {} \;	Procura por arquivos maiores que 30M no diretório ~/Músicas, listando o arquivo com o seu tamanho.
+find ~/Música -size +10M -size -30M -exec ls -lh {} \;	Limita o tamanho do arquivo, por exemplo: maior que 10M e menor que 30M.
+find /var/spool/cups/tmp/ -mtime +7 -exec rm -Rf {""} \;	Procura e remove arquivos de uma área temporária aonde os arquivos só devem permanecer por uma semana.
+find $HOME -type d -exec chmod 755 {} \;	Modifica as permissões de diretórios recursivamente para 755 na $HOME do usuário.
+find $HOME -type f -exec chmod 644 {} \;	Modifica as permissões de arquivos recursivamente para 644 na $HOME do usuário.
+locate	Procura por arquivos no sistema que estão em uma base de dados.
+updatedb	Atualiza o banco de dados de arquivos que é utilizado pelo comando locate.
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*****Exibição ou Impressão de Arquivos
+
+cat: Mostra o conteúdo de um arquivo, como o comando type do MD-DOS, e é muito usado também para concatenar arquivos, como por exemplo fazendo cat a.txt b.txt > c.txt” para juntar o arquivo a.txtb.txt num único de nome c.txt
+fold: Encurta, ou seja, faz um fold das linhas longas para caberem no dispositivo de output
+head: Mostra as primeiras linhas de um arquivo, como por exemplo com head -10 a.txt, ou usado como filtro para mostrar apenas os primeiros x resultados de outro comando
+lpq: Examina a spooling queue da impressora
+lpr: Imprime um arquivo
+lprm: Remove jobs da spooling queue da impressora
+more: Mostra o conteúdo de um arquivo, mas apenas um ecrã de cada vez, ou mesmo output de outros comandos, como por exemplo ls | more
+less: Funciona como o more, mas com menos features, menos características e potenciais usos
+page: Funciona de forma parecida com o comando more, mas exibe os ecrãs de forma invertida ao comando more
+pr: Pagina um arquivo para posterior impressão
+tail: Funciona de forma inversa ao comando head, mostra-nos as últimas linhas de um arquivo ou mesmo do output de outro comando, quando usado como filtro
+zcat: Mostra-nos um arquivo comprimido
+xv: Serve para exibir, imprimir ou mesmo manipular imagens
+gv: Exibe arquivos ps e pdf
+xpdf: Exibe arquivos pdf, usa o gv
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+****Comandos de Transferência de Arquivos
+
+ftp:transferência de arquivos ftp, transferir arquivos entre vários hosts de uma rede, como a um servidor de ftp para enviar ou puxar arquivos
+rsync: Sincroniza de forma rápida e flexível dados entre dois computadores
+scp: Versão segura do rcp
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PERMISSÕES
+
+chmod				Altera a permissão de um arquivo.
+chmod -R			Altera a permissão de um arquivo ou diretório de forma recursiva.
+chmod +x arquivo	Torna o “arquivo” executável.
+
+O comando fica assim
+
+sudo chmod 777 arquivo/diretório
+
+Tipo  Dono   Grupo  Outros  Arquivo 
+-     ---    ---    ---     arquivo.extensão
+
+Onde:
+r 	 Significa permissão de leitura (read);
+w 	 Significa permissão de gravação (write);
+x 	 Significa permissão de execução (execution);
+- 	 Significa permissão desabilitada.
+
+Ou seja, para melhor entendimento, o primeiro dígito determina o tipo de arquivo, os três seguintes a permissão do dono do arquivo, os três do meio a permissão do grupo que o arquivo pertence e os últimos a permissão de outros usuários. A regra para as permissão sempre será:
+
+---  Nenhuma permissão;
+r--  Permissão de leitura;
+r-x  Leitura e execução;
+rw-  Leitura e gravação;
+rwx  Leitura, gravação e execução
+
+As permissões para melhor entendimento se tratando das numéricas são:
+
+Permissão   Binário   Decimal
+ ---        000       0
+ --x        001       1
+ -w-        010       2
+ -wx        011       3
+ r--        100       4
+ r-x        101       5
+ rw-        110       6 
+ rwx        111       7
+
+Comando	Número	Permissão	Status
+chmod	000	---------	Nenhuma
+chmod	400	r--------	Leitura apenas para o dono
+chmod	444	r--r--r--	Leitura para o dono, grupo e outros
+chmod	600	rw-------	Leitura e gravação apenas para o dono
+chmod	620	-rw--w----	Leitura e gravação para o dono, gravação para o grupo
+chmod	640	-rw-r-----	Leitura e gravação para o dono, e leitura para o grupo
+chmod	644	rw-r--r--	Leitura e execução para o dono, leitura para o grupo e leitura para outros
+chmod	645	-rw-r--r-x	Leitura e gravação para o dono, leitura para o grupo e leitura e execução para outros
+chmod	646	-rw-r--rw-	Leitura e gravação para o dono, leitura para o grupo e leitura e gravação para outros
+chmod	650	-rw-r-x---	Leitura e gravação para o dono e leitura e execução para o grupo
+chmod	660	-rw-rw----	Leitura e gravação para o dono e leitura e gravação para o grupo
+chmod	661	-rw-rw---x	Leitura e gravação para o dono, leitura e gravação para o grupo e execução para outros
+chmod	662	-rw-rw--w-	Leitura e gravação para o dono, leitura e gravação para o grupo e gravação para outros
+chmod	663	-rw-rw--w-x	Leitura e gravação para o dono, leitura e gravação para o grupo e leitura e execução para outros
+chmod	664	-rw-rw-r--	Leitura e gravação para o dono, leitura e gravação para o grupo e leitura para outros
+chmod	700	-rwx------	Leitura gravação e execução para o dono e nada para os demais
+chmod	770	-rwxrwx---	Leitura e gravação e execução para o dono, leitura gravação e execução para o grupo e nada para outros
+chmod	777	-rwxrwxrwx	Permissão total para dono, grupo e outros
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*****Comandos de Gestão de Arquivos e Diretórios
+
+cd: Mudar de diretório atual, como por exemplo cd diretório, cd .., cd /
+chmod: Mudar a proteção de um arquivo ou diretório, como por exemplo chmod 777, parecido com o attrib do MS-DOS
+chown: Mudar o dono ou grupo de um arquivo ou diretório, vem de change owner
+chgrp: Mudar o grupo de um arquivo ou diretório
+cmp: Compara dois arquivos
+comm: Seleciona ou rejeita linhas comuns a dois arquivos selecionados
+cp: Copia arquivos, como o copy do MS-DOS
+crypt: Encripta ou Descripta arquivos (apenas CCWF)
+diff: Compara o conteúdo de dois arquivos ASCII
+file: Determina o tipo de arquivo
+grep: Procura um arquivo por um padrão, sendo um filtro muito útil e usado, por exemplo um cat a.txt | grep ola irá mostrar-nos apenas as linhas do arquivo a.txt que contenham a palavra “ola”
+gzip: Comprime ou expande arquivo
+ln: Cria um link a um arquivo
+ls: Lista o conteúdo de uma diretório, semelhante ao comando dir no MS-DOS
+lsof: Lista os arquivos abertos, vem de list open files
+mkdir: Cria um diretório, vem de make directory”
+mv: Move ou renomeia arquivos ou diretórios
+pwd: Mostra-nos o caminho por inteiro da diretório em que nos encontramos em dado momento, ou seja um pathname
+quota: Mostra-nos o uso do disco e os limites
+rm: Apaga arquivos, vem de remove, e é semelhante ao comando del no MS-DOS, é preciso ter cuidado com o comando rm * pois apaga tudo sem confirmação por defeito
+rmdir: Apaga diretório, vem de remove directory
+stat: Mostra o estado de um arquivo, útil para saber por exemplo a hora e data do último acesso ao mesmo
+sync: Faz um flush aos buffers do sistema de arquivos, sincroniza os dados no disco com a memória, ou seja escreve todos os dados presentes nos buffers da memória para o disco
+tar: Cria ou extrai arquivos, muito usado como programa de backup ou compressão de arquivos
+tee: Copia o input para um standard output e outros arquivos
+tr: Traduz caracteres
+umask: Muda as proteções de arquivos
+uncompress: Restaura um arquivo comprimido
+
+
+fdisk -l: lista discos e partições  
+
+df -h | grep ^/dev
+
+lsblk: Lista todos os blocos de armazenamento, incluindo partições de disco e unidades óticas. Os detalhes incluem o tamanho total da partição/bloco e o ponto de montagem, se houver. Não relata o espaço em disco usado / livre nas partições.
+
+wc:          Conta linhas, palavras e mesmo caracteres num arquivo
+wc -c        Exibe o número de bytes contados (--bytes)
+wc -m        Exibe o número de caracteres contados (--chars)
+wc -l        Exibe o número de linas contadas (--lines)
+wc -L        Exibe a linha mais extensa (--max-line-length)
+wc -w        Exibe o número de palavras contadas
+
+sort:        Ordena, une ou compara texto, podendo ser usado para extrair informações dos arquivos de texto ou mesmo para ordenar dados de outros comandos
+uniq:        Reporta ou apaga linhas repetidas num arquivo
+
+ps -ef | grep DSD.RUN | grep -v | sort -k5
+
+ps -ef | grep DSD.RUN | grep -v | wc -l
+
+ps -ef | grep -i DSD.RUN | grep -v grep                                             Lista todos os processos
+
+ps -ef | grep -i DSD.RUN | grep -v grep | awk '(print $2)' | xargs -i kill -9 {}    Mata todos os processos 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+****Comandos de Controlo de Processos
+
+kill: Mata um processo, como por exemplo kill -kill 100 ou kill -9 100 ou kill -9 %1
+bg: Coloca um processo suspenso em background
+fg: Ao contrário do comando bg, o fg traz de volta um processo ao foreground
+jobs: Permite-nos visualizar jobs em execução, quando corremos uma aplicação em background, poderemos ver esse job com este comando, e terminá-lo com um comando kill -9 %1, se for o job número 1, por exemplo
+top: Lista os processos que mais cpu usam, útil para verificar que processos estão a provocar um uso excessivo de memória, e quanta percentagem decpu cada um usa em dado momento
+^y: Suspende o processo no próximo pedido de input
+^z: Suspende o processo actual
+iostat: lista os processos em execução com mais detalhes
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos de Informação de Estado
+
+clock: Define a hora do processador
+date: Exibe a data e hora
+df: Exibe um resumo do espaço livre em disco
+du: Exibe um resumo do uso do espaço em disco
+du * -hs:Exibe um resumo do uso do espaço em disco
+env: Exibe as variáveis de ambiente
+finger: Pesquisa informações de utilizadores
+history: Lista os últimos comandos usados, muito útil para lembrar também de que comandos foram usados para fazer determinada acção no passado ou o que foi feito em dada altura
+last: Indica o último login de utilizadores
+lpq: Examina a spool queue
+manpath: Mostra a path de procura para as páginas do comando man
+printenv: Imprime as variáveis de ambiente
+pwd: Mostra-nos o caminho por inteiro do diretório em que nos encontramos em dado momento, ou seja um pathname
+set: Define variáveis da sessão, ou seja, da shell, na C shell, na bash ou na ksh
+spend: Lista os custos ACITS UNIX até à data
+time Mede o tempo de execução de programas
+uptime: Diz-nos há quanto tempo o sistema está funcional, quando foi ligado e o seu uptime
+w: Mostra-nos quem está no sistema ou que comando cada job está a executar
+who: Mostra-nos quem está logado no sistema
+whois: Serviço de diretório de domínios da Internet, permite-nos saber informações sobre determinados domínios na Internet, quando um domínio foi registado, quando expira, etc
+whoami: Diz-nos quem é o dono da shell
+uname-a: exibe a versao do SO e do kernell instalada
+dstat: exibe informaoes resumidas da máquina
+
+du -h --max-depth=1  Sumariza a utilização da pasta, o =1 está relacionado com o nível que estamos no diretório.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos de Controle e Acesso
+
+exit:     Terminar a sessão, ou seja, a shell (mais ajuda digitando man sh ou man csh)
+logout:   Deslogar, ou seja, terminar a sessão atual, mas apenas na C shell e na bash shell
+passwd:   Mudar a password do nosso utilizador (usuário logado)
+rlogin:   Logar de forma segura em outro sistema Unix/Linux
+ssh:      Sessão segura, vem de secure shell, e permite-nos logar num servidor remoto através do protocolo ssh
+slogin:   Versão segura do rlogin
+yppasswd: Mudar a password do nosso utilizador nas páginas amarelas (yellow pages)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos de Comunicações
+
+mail: Enviar e receber emails
+mesg: Permitir ou negar mensagens de terminal e pedidos de conversação (talk requests)
+pine: Outra forma de enviar e receber emails, uma ferramenta rápida e prática
+talk: Falar com outros utilizadores que estejam logados no momento
+write: Escrever para outros utilizadores que estejam logados no momento
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EDITAR E FILTRAR TEXTOS
+
+Comandos Descrição
+rev Inverte o conteúdo de um arquivo texto. Exemplo: “TALES” para “SELAT”.
+grep Faz pesquisa dentro de arquivo texto.
+egrep "t\." arquivo Retorna busca por palavras que tiverem “t.”.
+egrep "carr?o" arquivo Filtra apenas por “carro” e “caro” dentro do “arquivo” texto.
+grep "[hG]" arquivo Filtra por todas palavras que contenha “h” minúsculo e “G” maiúsculo.
+grep "[a-e]" arquivo Filtra por todas as palavras que contenham as letras: “a, b, c, d, e”, e minúsculas.
+grep "[A-Za-z0-9]" arquivo Filtra por todas as letras maiúsculas, minúsculas e números, deixando de fora apenas caracteres especiais.
+grep "[^gb]ato" arquivo Ignora as letras “g” e “b” minúsculas, seguidas dos caracteres “ato”, ou seja considera válida a palavra jato, mas não considera a palavra gato.
+grep "^a" arquivo Filtra palavras que contenham a letra “a” desde que apareçam no início da linha.
+grep "t$" arquivo Filtra palavras que contenham a letra “t” no fim da linha.
+grep "a\b" arquivo Filtra apenas palavras que contenha letra “a” no fim da palavra.
+grep "ar\B" arquivo Filtra o meio das palavras que contenha “ar”, ignora o início e fim.
+grep -c "a" arquivo Exibe a quantidade de linhas que contenha a letra “a”.
+grep -n la arquivo Exibe o número das linhas que a aparecem as letras “la”.
+grep -v a arquivo Exibe as linhas que não apresentam a letra “a” minúscula.
+grep -A 2 "TV" arquivo Exibe duas linhas após a ocorrência “TV”.
+grep -B 2 "TV" arquivo Exibe duas linhas antes da ocorrência “TV”.
+grep -i "a" arquivo Exibe todas as linhas que contenham as letras “a” e “A”.
+cat lista-MAC | grep Tales Filtra o conteúdo do arquivo “lista-MAC” buscando pelas palavras “Tales”.
+cut Recorta pedaços de texto.
+cut -d":" -f1,7 /etc/passwd Exibe o primeiro e sétimo campo do arquivo /etc/passwd, delimitados por dois pontos “:”.
+echo "Testando o cut." | cut -d" " -f1 Como saída terá apenas a palavra “Testando”, o corte foi feito pelo cut.
+
+.                    Qualquer letra
+^                    Inicio da Linha
+$                    Final da Linha
+[xyz]                Qualquer um dos caracteres dentro dos conchetes
+[^xyz]               Qualquer caracter com exeção dos que estão dentro dos conchetes
+[t-z]                Qualquer caracter dentro do intervalo
+z*                   Letra z zero ou mais vezes
+z+                   Letra z uma ou mais vezes
+?{0,1}               Pode aparecer ou não (opcional)
+*{0,}                Pode aparecer em qualquer quantidade
++{1,}                Deve aparecer no mínimo uma vez
+a{2}                 Casa a letra "a" duas vezes
+a{2,4}               Casa a letra "a" de duas a quatro vezes
+a{2,}                Casa a letra "a" no mínimo duas vezes
+.*                   Qualquer coisa, tudo ou nada
+
+sed Editor de textos não interativo.
+sed '2d' arquivo Deleta a segunda linha do “arquivo”.
+sed '1,3d' arquivo Apaga as linhas do “arquivo” no intervalo 1-3.
+sed '2,4!d' arquivo Apaga todas as linhas do “arquivo”, exceto o intervalo entre 2-4.
+sed '3,$d' arquivo Apaga da linha informada (3) até o final do arquivo.
+sed '/livro/d' arquivo Apaga as linhas que tiveram a palavra “livro”.
+sed 's/.\{7\}//' arquivo Apaga os 7 primeiros caracteres de todas as linhas.
+sed 's/troca isso/por isso/g' arquivo Substitui todas as frases “troca isso” pelas frases “por isso”.
+sed '2s/^/Incluído no início da linha 2 /' arquivo Inclui o texto no início da linha informada.
+sed '2s/$/Incluído no final da linha 2 /' arquivo Inclui texto no final da linha informada.
+sed '3s/.*/Novo texto da linha 3/' arquivo Substitui todo o conteúdo de uma linha específica.
+sed -e '3a\' -e 'Nova linha inserida após a linha 3' arquivo Insere uma nova linha de texto após linha especificada.
+sed -e '3i\' -e 'Nova linha inserida antes da linha 3' arquivo Insere uma nova linha de texto antes de uma linha especificada.
+sed 's/[ ]\+/ /g' arquivo Apaga espaços em branco consecutivos.
+sed ':a;$!N;s/\n//;ta;' arquivo Remove todas as quebras de linha, deixando todo o texto em apenas uma linha.
+echo "Livro de Linux" | tr '[a-z]' '[A-Z]' Converte todas as letras para maiúsculas.
+sed 'y/abcdefghijklmnopqrstuvwxyzàáâãéêíóôõúç/ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁ ÃÉÊÍÓÔÕÚÇ/' arquivo Converte todas as letras para maiúsculas.
+sed 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁ ÃÉÊÍÓÔÕÚÇ/abcdefghijklmnopqrstuvwxyzàáâãéêíóôõúç/' arquivo Converte todas as letras para minúsculas.
+sed 's/^/§ /;:a;s/\(.*\)§ \+\([^ ]\+\)/\2 \1§/;ta;s/§//' arquivo Inverte a ordem das palavras em cada frase.
+sed 's|^ *\bNAME\b *=.*|NAME=Debian|' arquivo Modelo para troca de parâmetros em arquivos de configuração, no exemplo troca o valor que estiver na variável NAME por Debian
+sed '/tag>/,/<\/tag>/d' arquivo Apaga as linhas que possuem as tags e as linhas que estiverem entre as tags
+awk Linguagem de programação interativa.
+awk '{print $1}' arquivo Exibe as primeiras palavras de cada linha.
+awk '{print $2 ", preço " $4}' arquivo Adiciona a palavra “preço” entre a coluna 2 e 4 de cada linha.
+awk -F ":" '{print $2}' arquivo Filtra o segundo campo com o delimitador dois pontos.
+awk -F " |-" '{if ($3 >= "18") print}' arquivo Filtra valores especificados em uma condição
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+GERENCIAR PACOTES
+
+Comandos Descrição
+apt-get update Atualiza o repositório de pacotes DEB.
+apt-get dist-upgrade Atualiza todo o sistema de uma distribruição Debian ou derivadas.
+apt-cache search pacote Procura um por determinado “pacote” DEB.
+apt-get install pacote Instala um “pacote” DEB.
+apt-get remove pacote Remove um “pacote” DEB.
+apt-get autoremove Remove pacotes DEB não mais utilizados pelo sistema.
+apt-get clean Limpa o cache dos pacotes DEB baixados.
+dpkg -l | grep ii Exibe todos os pacotes DEB instalados.
+dpkg -l | grep ii | grep pacote Verifica se o “pacote” DEB está instalado.
+dpkg -L pacote Exibe a lista de arquivos contidos no “pacote” DEB instalado.
+dpkg -S arquivo Pesquisa a qual “pacote” DEB pertence um arquivo no sistema.
+dpkg -i pacote.deb Instala um pacote DEB.
+dpkg --force-all -i pacote.deb Força a instalação de um pacote DEB.
+dpkg -r pacote Remove um pacote DEB.
+dpkg -P pacote Remove um pacote DEB junto com os arquivos de configuração.
+apt-get source pacote Baixa o código fonte de um pacote DEB.
+dpkg-reconfigure pacote Reconfigura um pacote DEB.
+dpkg --configure -a Configura pacotes DEB que foram mal instalados.
+apt-get install -f Sana problemas de pacotes DEB mal instalados.
+rpm -qa pacote Verifica se o pacote RPM está instalado.
+rpm -ivh pacote Instala um pacote RPM.
+rpm -qi pacote Demonstra informações sobre um pacote RPM.
+rpm -e pacote Remove um pacote RPM.
+yum install pacote Instala um pacote RPM.
+yum remove pacote Remove um pacote RPM.
+yum search pacote Pesquisa por um pacote RPM.
+yum update Atualiza todo o sistema RedHat e derivados.
+yum groups list Lista grupo de pacotes RPM.
+yum groupinstall "nome do grupo" Instala um grupo de pacotes RPM.
+equo update Atualiza o repositório do Sabayon.
+equo upgrade -a Atualiza todo o sistema do Sabayon.
+equo s pacote Pesquisa por um pacote do Sabayon.
+equo i pacote -a Instala um pacote no Sabayon.
+equo r pacote -a Remove um pacote no Sabayon.
+equo r --deep pacote -a Remove um pacote com suas dependências, no Sabayon.
+equo cleanup Limpa o cache dos pacotes baixados, no Sabayon.
+equo conf update Atualiza arquivo de configuração do Sabayon.
+equo dt -a Procura por dependências não resolvidas e as resolve, no Sabayon.
+equo lt -a Procura por bibliotecas não resolvidas e as resolve, no Sabayon.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MULTIMÍDIA
+Comandos	Descrição
+mpg123	Reproduz arquivos de áudio.
+mpg123 -C -z ~/Músuca/*	Reproduz todos os arquivos do diretório “Música” aleatoriamente, ativando controles.
+mplayer	Reproduz vídeo.
+mplayer -vo caca arquivo.avi	Reproduz o “arquivo.avi” em formado ASCII.
+alsamixer	Ajusta os controles de áudio.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+WEB
+
+html2ps: Conversor de html para ps
+latex2html: Conversor de LaTeX para html
+lynx: Navegador web baseado em modo de texto, ou seja, é um web browser que nos permite abrir todo o tipo de páginas visualizando apenas os textos elinks, não vendo assim as imagens, e sendo por isso bastante rápido, mas requere prática para ser manuseado
+netscape: Navegador web da Netscape
+sitecopy: Aplicação que nos permite manter fácil e remotamente web sites
+weblint: Verificador de sintaxes e de estilos html
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos de Processamento de Texto
+
+abiword: Processador de Texto Open Source
+addbib: Cria ou modifica bases de dados bibliográficas
+col: Reverte o filtro a line feeds
+diction: Identifica sentenças com palavras
+diffmk: Marca diferenças entre arquivos
+dvips: Converte arquivos TeX DVI em arquivos PostScript
+explain: Explica frases encontradas pelo programa diction
+grap: Preprocessador pic para desenhar gráficos, usado em tarefas elementares de análises de dados
+hyphen: Encontra palavras com hífens
+ispell: Verifica a ortografia de forma interativa
+latex: Formata texto em LaTeX, que é baseado no TeX
+pdfelatex: Para documentos LaTeX em formato pdf
+latex2html: Converter LaTeX para html
+lookbib: Encontra referências bibliográficas
+macref: Cria uma referência cruzada listando arquivos de macros nroff/troff
+ndx: Cria uma página de indexação para um documento
+neqn: Formata matemáticas com nroff
+nroff: Formata texto para exibição simples
+pic: Produz simples imagens para troff input
+psdit: Filtra um output troff para a Apple LaserWriter
+ptx: Cria uma indexação permutada mas não em CCWF
+refer: Insere referências de bases de dados bibliográficas
+roffbib: Faz o run off de uma base de dados bibliográfica
+sortbib: Ordena uma base de dados bibliográfica
+spell: Encontra erros de ortografia
+style: Analisa as características superficiais de um documento
+tbl: Formata tabelas para nroff/troff
+tex: Formata texto
+tpic: Converte arquivos pic source em comandos TeX
+wget: Permite-nos fazer o download completo de páginas web, com todos os arquivos, de forma fácil e não interactiva, sem exigir por isso presença do utilizador, respeitando também o arquivorobots.txt
+
+
+
+
+
+
