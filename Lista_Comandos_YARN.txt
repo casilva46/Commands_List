@@ -1,0 +1,48 @@
+YARN
+
+yarn application -list                                                      Lista todos os Jobs
+
+yarn application -list | grep SPARK | wc -l                                 Lista os Jobs inserindo algum parametro como filtro
+
+yarn application -appStates RUNNING -list                                   Lista todos os Jobs em execução 
+
+yarn application -appStates KILLED -list                                    Lista todos os Jobs interrompidos
+
+yarn application -list -appStates all                                       Lista todos os Jobs incluindo jobs que foram concluidos 
+
+yarn application -status <application_ID>                                   Lista apenas o Job com o applications_ID especificdo
+
+yarn application -appStates RUNNING -list | grep XXXXXXXXXXXXXXX            Lista todos os Jobs em execução com algum tipo de filtro 
+
+yarn logs -application <application_ID>                                                                     Exibe os logs de um Job
+
+yarn logs --application <application_ID>                                                                    Exibe os logs de um Job
+
+yarn application -kill <application_ID>                                                                     Mata um Job especifico
+
+yarn application -list | grep -w <usuário> | awk ' { print $1 } '                                           Exibe todos os jobs de um usuário especifico
+
+yarn application -list | grep -w <usuário> | awk ' { print $1 } ' ; do yarn application -kill $i; done      Mata todos os Jobs de um usuário especifico
+
+yarn application -list -appStates FINISHED | grep 'word count'
+
+yarn application -appStates RUNNING -list | grep XXXXXXXXXXXXXXXXX                                          Verifica os jobs ativos 
+
+yarn application -appStates RUNNING -list | awk 'NR > 2 { print $1 " - " $2 " - " $4 " - " $6 " - " $8 }'
+
+yarn application -appStates RUNNING -list | grep "usuário" | awk ' { print $1 " - " $2 " - " $4 " - " $6 " - " $8 }'
+
+Opçoes que podem ser usadas para todos os comandos acima (RUNNING, ALL, NEW, NEW_SAVING, SUBMITTED, ACCEPTED, FINISHED, FAILED, KILLED)
+
+
+Exemplo de comando para listar todos os jobs de um usuario especifico:
+O parametro print $1 vai mostrar só a primeira coluna do application_id.   Pois este comando pode ser usado em um outro comando de loop para fazer kill em massa.
+
+yarn application -list | grep -w <USER_NAME> | awk ' { print $1 }'
+
+
+Este seria o comando que faz o kill em loop de todos os jobs de um usuario:
+
+for i in `yarn application -list | grep -w bdi_p_b<USER_NAME> | awk ' { print $1 }'`; do yarn application -kill $i; done
+
+for i in `yarn application -list | grep -w <USER_NAME> | awk ' { print $1 }'`; do yarn application -kill $i; done
