@@ -1,150 +1,482 @@
-**************************************************************************** | COMANDOS SQL | ***********************************************************************************
+SQL
+
+>>>>>  Definição Banco de dados
+
+- Um Banco de Dados ou Base de Dados é uma coleção de dados (fatos conhecidos) logicamente relacionados entre si, com algum significado.
+- Propriedades
+- Associações aleatórias de dados não podem ser chamadas de BD;
+- Um BD é projetado, construído e preenchido com dados para um propósito específico. 
+- tem um grupo de usuários e algumas aplicações para atender esses usuários;
+
+CRUD: Create, Read, Update and Delete
+
+DQL - Data query Language
+      SELECT
+
+DML - Data Manipulation language (comandos que afetam apenas os dados tais como leitura, gravação, remoção os CRUDS)	
+	INSERT
+	UPDATE
+	DELETE
+	MERGE
+
+DDL - Data Defination Language (comandos que afetam os objetos no BD)
+	CERATE
+	ALTER
+	DROP
+	
+DCL -  Data Control Language (comandos envolvidos na concessão de privilégios e remoção de acesso aos dados)
+	GRANT
+	REVOKE
+	
+DTL -  Data Transation Language
+    BEGIN - Usado no inicio de uma trasação
+    COMMIT - finaliza uma transação
+    ROLLBACK - Faz com as mudanças de dados existentes desde o último commit sejam descartadas
+
+	
+PROCEDURES: São procedimentos Armazenados do Sistema (system stored procedures): são armazenados no BD master e automatizam várias tarefas comuns de gerenciamento
+
+Exemplos:
+
+sp_help [objeto] informações sobre um objeto do BD
+sp_helpdb [bd] informações sobre um BD
+sp_helpindex [tabela] informações sobre índices de uma tabela
+
+>>>>> Cada BD contém vários objetos (componentes lógicos):
+
+- Tabelas: correspondem as relações do Modelo Relacional;
+- Índices: otimizam o acesso a linhas das tabelas;
+- Visões (Views): fornecem uma maneira alternativa de visualizar os dados de uma ou mais tabelas
+- Procedimentos Armazenados (Stored Procedures): conjunto de comandos SQL que são compilados e armazenados no servidor em determinado BD;
+- Gatilhos (Triggers): tipo especial de procedimentos armazenados que são executados automaticamente pelo SGBD quando ocorre algum tipo de alteração (insert, update, delete) na tabela a qual estejam vinculados;
+
+>>>> TIPOS DE DADOS
+
+Tipo de Dado			Tipo SQL-Server					Tamanho
+Caractere 				char(n), varchar(n) 			até n bytes
+Numérico Exato 			decimal(p,e) ou numeric(p,e) 	depende
+Numérico Aproximado 	float, real 					8, 4 bytes
+Numérico Inteiro 		int, smallint, tinyint 			4, 2, 1 byte
+Monetário 				money, smallmoney 				8, 4 bytes
+Data e Hora 			datetime, smalldatetime 		8, 4 bytes
+Binário 				binary(n), varbinary(n) 		n bytes
+Texto e Imagens 		text, image, ntext 				variável
+Outros 					bit, timestamp 1 bit, 			8 bytes
+
+>>>> MODELAGEM CONCEITUAL, LÓGICA E FÍSICA
+
+    Modelos de BD são usados para descrever mais detalhadamente a estrutura de um banco de dados. Eles servem como parte importante da documentação do sistema. Esses modelos são baseados em tres níveis (conceitual, lógico e físico). OBS: um dodelo de dados não informa quais dados contem, mas sim o seu tipo.
+	
+- Modelos Conceitual: Modelo de mais alto nível, alto nível de abstração feito a partir dos requesitos do sistema e extraído na fase de levantamento de requesitos. Esse modelo pode ser feito de forma textual ou através de diagramas. Em outras palavras é um esboço do banco de dados. Independente da implementação e do tipo de BD relacional. 
+
+- Modelo Lógico: Esse modelo descreve como os dados serão armazenados no BD e os seus relacionamentos, nesse modelo ainda pode ser definido a tecnologia que será utilizada para armazenamento dos dados(SQL, NoSQL).
+
+Modelo Físico: Chamado de implementação, descreve por meio de alguma linguagem como será feita a armazenagem no banco. Nesse nível que se escolhe qual o SGBD que será implantado levando em consideração o modelo lógico. 
+
+>>>> NORMALIZAÇÃO DE DADOS
+
+    Chamamos de normalização de dados o processo formal e passo a passoqueexaminaodocumento descritivo gerado pelos analistas de sistemas durante a análisederequisitosembusca de definir as entidades, atributos, relacionamentos, chaves primáriasechavesestrangeiras do banco de dados a ser modelado. Um dos objetivos principais da normalização é evitar ou pelo menos amenizar anomaliaseinconsistências que podem ocorrer durante a inclusão, exclusão, alteração e consultaderegistros em um banco de dados.
+
+- Primeira Forma Normal(1FN): O processo de normalização aplica uma série de regras sobre as tabelas de umbancodedados para verificar se estas estão corretamente projetadas. Embora existam cinco formas normais (ou regras de normalização), na práticausamosumconjunto de três Formas Normais, ou seja, um banco de dados é consideradonormalizadosenele foram aplicadas as regras destas três formas normais.
+   Uma entidade estará na primeira forma normal (IFN) se todos os campos forematômicos(simples) e não multivalorados (com múltiplos valores).
+   
+- Segunda Forma Normal (2FN): Uma entidade estará na 2FN se ela já se encontrar na 1FN e todos os atributos não chave forem totalmente dependentes da chave primária.
+
+- Terceira Forma Normal (3FN): Cada uma das formas normais tende a ir refinando a modelageme deixando aestruturadedados mais íntegra e exclusiva, evitando repetições desnecessárias e possíveis sobrecarganogerenciador de banco de dados. Uma tabela estará na 3FN se ela estiver na 2FN e se nenhuma coluna não-chavedependerdeoutra coluna não-chave. Ou seja, na 3FN temos simplesmente que eliminar os campos que podemser obtidospelaequação de outros campos da mesma tabela.
+
+
+* Subqueries
+	- Uma subconsulta é uma instrução SELECT aninhada dentro de outra instrução SQL.
+	- Cada parte da consulta de uma instrução é chamada de bloco de consulta.
+	
+SELECT first_name, last_name 
+FROM employees 
+WHERE department_id
+IN (SELECT department_id 
+	FROM departments
+	WHERE location = 1800);
+
+**************************************************************************** | COMANDOS SQL | *********************************************************************************
+
 FUNÇÃO SELECT
 
-SELECT * FROM CUSTOMER;                                                 (SELECT * FROM Nome_Tabela;)
+SELECT * FROM CUSTOMER;                                        (SELECT * FROM Nome_Tabela;)
 
-SELECT CUSTOMER_id, NAME FROM CUSTOMER;                                   SELECT Nome_Coluna_A, Nome_Coluna_B FROM Nome_Tabela;
+SELECT * FROM CUSTOMER LIMIT 10;                              Limita a quantidade de registros retornados
 
-SELECT PRODUCT_ID, DESCRIPTION, PRICE, PRICE * 1.07 AS TAXED_PRICE FROM PRODUCT;
+SELECT CUSTOMER_id, NAME FROM CUSTOMER;                       Seleciona apenas colunas especificas de uma tabela  ( SELECT *  Nome_Coluna_A, Nome_Coluna_B FROM Nome_Tabela;)
 
-SELECT PRODUCT_ID, DESCRIPTION, PRICE AS UNTAXED_PRICE, PRICE * 1.07 AS TAXED_PRICE FROM PRODUCT;
+SELECT 
+PRODUCT_ID, 
+DESCRIPTION, 
+PRICE, 
+PRICE * 1.07 AS TAXED_PRICE 
+FROM PRODUCT;
 
-SELECT PRODUCT_ID, DESCRIPTION, PRICE, ROUND(PRICE * 1.07, 2) AS TAXED_PRICE FROM PRODUCT;     (Arrendonda para 02 casas decimais)
+SELECT 
+PRODUCT_ID,
+DESCRIPTION, 
+PRICE AS UNTAXED_PRICE, 
+PRICE * 1.07 AS TAXED_PRICE 
+FROM PRODUCT;                                               ( AS TAXED_PRICE adiciona uma nova colona na consulta)
 
-SELECT NAME, CITY || ', ' || STATE AS LOCATION FROM CUSTOMER;	(Concatenação de 02 colunas: Nome_Coluna_A || ', ' || Nome_Coluna_B )
+SELECT 
+PRODUCT_ID, 
+DESCRIPTION, 
+PRICE, 
+ROUND(PRICE * 1.07, 2) AS TAXED_PRICE 
+FROM PRODUCT;                                               (Arrendonda para 02 casas decimais)
 
-SELECT NAME, STREET_ADDRESS || ' ' || CITY || ', ' || STATE || ' ' || ZIP AS SHIP_ADDRESS FROM CUSTOMER;
+SELECT NAME, 
+CITY || ', ' || STATE AS LOCATION 
+FROM CUSTOMER;	                                            (Concatenação de 02 colunas: Nome_Coluna_A || ', ' || Nome_Coluna_B )
+
+SELECT NAME, 
+STREET_ADDRESS || ' ' || CITY || ', ' || STATE || ' ' || ZIP 
+AS SHIP_ADDRESS 
+FROM CUSTOMER;
+
+
+SELECT MIN (price) 
+FROM product;
+
+SELECT AVG (price) 
+FROM product;
+
+SELECT ROUND (AVG(price), 2)                                   Faz Arrendondo para duas casas
+FROM product;
+
+select productLine, 
+    MAX (buyPrice) 
+FROM products 
+GROUP BY productLine;
+
+select productLine, 
+    MAX (buyPrice) 
+    FROM products 
+    GROUP BY productLine 
+    HAVING MAX(buyPrice) > 48.00;
+
+
+select count(*) as contagem 
+FROM products 
+WHERE productLine = 'Motorcycles';
+
+SELECT COUNT (buyPrice) AS quantidade 
+FROM products
+WHERE productLine = 'Motorcycles';
+
+select  order_id, 
+        order_date, 
+        order_qty 
+from customer_order;
+
+select  order_id, 
+        order_date, 
+        order_qty 
+from customer_order 
+ORDER BY order_qty DESC;
+
+
+SELECT DATE ('NOW');
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 FUNÇÃO WHERE
+INSTRUÇÕES AND, OR e IN 
+INSTRUÇÕES BETWEEN
 
-SELECT * FROM STATION_DATA WHERE YEAR = 2010;   (Seleciona todos os dados onde o ano é igual a 2010)
+SELECT * FROM STATION_DATA 
+WHERE YEAR = 2010;                              (Seleciona todos os dados onde o ano é igual a 2010)
 
-SELECT * FROM STATION_DATA WHERE YEAR != 2010; 	(Seleciona todos os anos com exceção "!=" aos do ano de 2010)
+SELECT * FROM STATION_DATA 
+WHERE YEAR != 2010; 	                        (Seleciona todos os anos com exceção "!=" aos do ano de 2010)
 
-SELECT * FROM STATION_DATA WHERE YEAR <> 2010;   (Seleciona todos os anos com exceção "<>" aos do ano de 2010)
+SELECT * FROM STATION_DATA 
+WHERE YEAR <> 2010;                             (Seleciona todos os anos com exceção "<>" aos do ano de 2010)
 
-SELECT * FROM STATION_DATA WHERE YEAR BETWEEN 2005 AND 2010;  (Seleciona os dados entre os anos de 2005 e 2010)
+SELECT * FROM STATION_DATA 
+WHERE YEAR BETWEEN 2005 AND 2010;               (Seleciona os dados entre os anos de 2005 e 2010)
 
-SELECT * FROM STATION_DATA WHERE YEAR >= 2005 AND YEAR <= 2010; (Seleciona os dados em que o ano deve ser maior ou igual a 2005 e menor ou igual a 2010)
+SELECT * FROM STATION_DATA 
+WHERE YEAR >= 2005 AND YEAR <= 2010;            (Seleciona os dados em que o ano deve ser maior ou igual a 2005 e menor ou igual a 2010)
 
-SELECT * FROM STATION_DATA WHERE YEAR > 2005 AND YEAR < 2010; (Seleciona os dados excluindo os anos de 2005 e 2010, isto é apenas 2006 a 2009)
+SELECT * FROM STATION_DATA 
+WHERE YEAR > 2005 AND YEAR < 2010;              (Seleciona os dados excluindo os anos de 2005 e 2010, isto é apenas 2006 a 2009)
 
-SELECT * FROM STATION_DATA WHERE MONTH = 3 OR MONTH = 6 OR MONTH = 9 OR MONTH = 12;
+SELECT * FROM STATION_DATA 
+WHERE MONTH = 3 
+OR MONTH = 6 
+OR MONTH = 9 
+OR MONTH = 12;
 
-SELECT * FROM STATION_DATA WHERE MONTH IN (3,6,9,12);  (mesma coisa que a query acima, porém mais resumida)
+SELECT * FROM STATION_DATA 
+WHERE MONTH IN (3,6,9,12);                      (mesma coisa que a query acima, porém mais resumida)
 
-SELECT * FROM STATION_DATA WHERE MONTH NOT IN (3,6,9,12); (Todos os meses menos os que estão entre () )
+SELECT * FROM STATION_DATA 
+WHERE MONTH NOT IN (3,6,9,12);                  (Todos os meses menos os que estão entre () )
 
-SELECT * FROM STATION_DATA WHERE MONTH % 3 = 0 ( Me dê todos os meses em que o resultado da divisão por 3 seja igual a zero)
+SELECT * FROM STATION_DATA 
+WHERE MONTH % 3 = 0                             ( Me dê todos os meses em que o resultado da divisão por 3 seja igual a zero)
 
-SELECT * FROM STATION_DATA WHERE report_code = '513A63'; (Busca por um registro especifico ' ' )
+SELECT * FROM STATION_DATA 
+WHERE report_code = '513A63';                   (Busca por um registro especifico ' ' )
 
-SELECT * FROM STATION_DATA WHERE report_code IN ('513A63','1F8A7B','EF616A'); (busca por mais de um registro )
+SELECT * FROM STATION_DATA 
+WHERE report_code 
+IN ('513A63','1F8A7B','EF616A');                (busca por mais de um registro )
 
-SELECT * FROM STATION_DATA WHERE LENGTH(REPORT_CODE) != 6; (LENGTH conta a quantidade de caracteres, com exeção a aqueles que tem 6)
+SELECT * FROM STATION_DATA 
+WHERE LENGTH(REPORT_CODE) != 6;                 (LENGTH conta a quantidade de caracteres, com exeção a aqueles que tem 6)
 
-SELECT * FROM STATION_DATA WHERE REPORT_CODE LIKE 'B%';  (faz uma busca por todos os registros na coluna REPORT_CODE iniciados com a letra B)
+SELECT * FROM STATION_DATA 
+WHERE REPORT_CODE LIKE 'B%';                    (faz uma busca por todos os registros na coluna REPORT_CODE iniciados com a letra B)
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-BOOLEANOS  (TABELA VERDADE), No mundo de banco de dados falso é 0 e verdadeiro é 1
+WHERE com BOOLEANOS  (TABELA VERDADE), No mundo de banco de dados falso é 0 e verdadeiro é 1
+INSTRUÇÕES NULL
 
-SELECT * FROM STATION_DATA WHERE TORNADO = TRUE AND HAIL = TRUE;
+SELECT * FROM STATION_DATA 
+WHERE TORNADO = TRUE AND HAIL = TRUE;
 
-SELECT * FROM STATION_DATA WHERE TORNADO = 1 AND HAIL = 1;
+SELECT * FROM STATION_DATA 
+WHERE TORNADO = 1 AND HAIL = 1;
 
-SELECT * FROM STATION_DATA WHERE TORNADO AND HAIL;
+SELECT * FROM STATION_DATA 
+WHERE TORNADO AND HAIL;
 
-SELECT * FROM STATION_DATA WHERE TORNADO = 0 AND HAIL = 1;
+SELECT * FROM STATION_DATA 
+WHERE TORNADO = 0 AND HAIL = 1;
 
-SELECT * FROM STATION_DATA WHERE NOT TORNADO AND HAIL;
+SELECT * FROM STATION_DATA 
+WHERE NOT TORNADO AND HAIL;
 
-SELECT * FROM STATION_DATA WHERE SNOW_DEPTH IS NULL;     			(Busca por valores nulos "em branco" em uma coluna)
+SELECT * FROM STATION_DATA 
+WHERE SNOW_DEPTH IS NULL;     			                        (Busca por valores nulos "em branco" em uma coluna)
 
-SELECT * FROM STATION_DATA WHERE SNOW_DEPTH IS not NULL;            (Busca por valores não nulos "em branco" em uma coluna)
+SELECT * FROM STATION_DATA 
+WHERE SNOW_DEPTH IS not NULL;                                   (Busca por valores não nulos "em branco" em uma coluna)
 
-SELECT * FROM STATION_DATA WHERE PRECIPITATION <= 0.5;
+SELECT * FROM STATION_DATA 
+WHERE PRECIPITATION <= 0.5;
 
-SELECT * FROM STATION_DATA WHERE PRECIPITATION IS NULL OR PRECIPITATION <= 0.5;
+SELECT * FROM STATION_DATA 
+WHERE PRECIPITATION IS NULL 
+OR PRECIPITATION <= 0.5;
 
-SELECT * FROM STATION_DATA WHERE RAIN = 1 AND TEMPERATURE <= 32 OR SNOW_DEPTH > 0;
+SELECT * FROM STATION_DATA 
+WHERE RAIN = 1 
+AND TEMPERATURE <= 32 OR SNOW_DEPTH > 0;
 
-SELECT * FROM STATION_DATA WHERE (RAIN = 1 AND TEMPERATURE <= 32) OR SNOW_DEPTH > 0;
+SELECT * FROM STATION_DATA 
+WHERE (RAIN = 1 AND TEMPERATURE <= 32) OR SNOW_DEPTH > 0;
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ORDER BY E GROUP BY  (Agrupamento de registros)
 
-SELECT COUNT(*) AS RECORD_COUNT FROM STATION_DATA;  (Conta todos os registros da tabela STATION_DATA e cria um alias RECORD_COUNT)
+SELECT COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA;                                                  (Conta todos os registros da tabela STATION_DATA e cria um alias RECORD_COUNT)
 
-SELECT COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1;
+SELECT COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA WHERE TORNADO = 1;
 
-SELECT YEAR, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR;
+SELECT YEAR, COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR;
 
-SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH;
+SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH;
 
-SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY 1, 2;  (MESMA COISA QUE A QUERY ACIMA)
-
-
-SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH ORDER BY YEAR, MONTH;  (ORDEM CRESCENTE (PADRÃO) POR ANO)
-
-SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR, MONTH ORDER BY YEAR DESC, MONTH; (ORDEM ANO DECRESCENTE)
+SELECT YEAR, MONTH, COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA WHERE TORNADO = 1 GROUP BY 1, 2;              (MESMA COISA QUE A QUERY ACIMA)
 
 
-SELECT COUNT(SNOW_DEPTH) AS RECORDED_SNOW_DEPTH_COUNT FROM STATION_DATA;   (CONTA OS VALORES NULOS DE UMA COLUNA ESPECIFICA QUE ESTÁ ENTRE ())
+SELECT  YEAR, 
+        MONTH, 
+        COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA 
+WHERE TORNADO = 1
+GROUP BY YEAR, 
+         MONTH 
+ORDER BY YEAR,
+         MONTH;                                                    (ORDEM CRESCENTE (PADRÃO) POR ANO)
 
-SELECT MONTH, AVG(TEMPERATURE) AS AVG_TEMP FROM STATION_DATA WHERE YEAR >= 2000 GROUP BY MONTH;  (CALCULA AS MÉDIAS 'avg' EM UMA COLUNA ESPECIFICA ENTRE ())
+SELECT YEAR, 
+        MONTH, 
+        COUNT(*) AS RECORD_COUNT 
+FROM STATION_DATA 
+WHERE TORNADO = 1 
+GROUP BY YEAR, 
+         MONTH ORDER BY YEAR DESC, 
+         MONTH;                                                     (ORDEM ANO DECRESCENTE)
 
-SELECT MONTH, ROUND(AVG(TEMPERATURE),2) AS AVG_TEMP FROM STATION_DATA WHERE YEAR >= 2000 GROUP BY MONTH;  (FAZ O ARREDONDAMENTO PARA DUAS CASAS DECIMAIS)
 
-SELECT YEAR, SUM(SNOW_DEPTH) AS TOTAL_SNOW FROM STATION_DATA WHERE YEAR >= 2000 GROUP BY YEAR;    (SOMA O QUE ESTÁ ENTRE ())
+SELECT COUNT(SNOW_DEPTH) AS RECORDED_SNOW_DEPTH_COUNT 
+FROM STATION_DATA;                                                  (CONTA OS VALORES NULOS DE UMA COLUNA ESPECIFICA QUE ESTÁ ENTRE ())
 
-SELECT YEAR, SUM(PRECIPITATION) AS TORNADO_PRECIPITATION FROM STATION_DATA WHERE TORNADO = 1 GROUP BY YEAR;
 
-SELECT DISTINCT STATION_NUMBER FROM STATION_DATA;    (OBTEM VALORES DISTINTOS SEM DUPLICATAS)
+SELECT MONTH, AVG(TEMPERATURE) AS AVG_TEMP 
+FROM STATION_DATA WHERE YEAR >= 2000 
+GROUP BY MONTH;                                                     (CALCULA AS MÉDIAS 'avg' EM UMA COLUNA ESPECIFICA ENTRE ())
+
+SELECT MONTH, 
+    ROUND(AVG(TEMPERATURE),2) AS AVG_TEMP 
+FROM STATION_DATA 
+WHERE YEAR >= 2000 
+GROUP BY MONTH;                                                     (FAZ O ARREDONDAMENTO PARA DUAS CASAS DECIMAIS)
+
+SELECT YEAR, 
+        SUM(SNOW_DEPTH) AS TOTAL_SNOW 
+FROM STATION_DATA 
+WHERE YEAR >= 2000 
+GROUP BY YEAR;                                                      (SOMA O QUE ESTÁ ENTRE ())
+
+SELECT YEAR, 
+        SUM(PRECIPITATION) AS TORNADO_PRECIPITATION 
+FROM STATION_DATA WHERE TORNADO = 1 
+GROUP BY YEAR;
+
+SELECT DISTINCT STATION_NUMBER FROM STATION_DATA;                   (OBTEM VALORES DISTINTOS SEM DUPLICATAS)
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 FUNÇÃO CASE
 
 Mapeia um ou mais condições para um valor. Ela inicia com CASE e finaliza END
 
-SELECT REPORT_CODE, YEAR, MONTH, DAY, WIND_SPEED,
-
-CASE
-
-    WHEN WIND_SPEED >= 40 THEN 'HIGH'
-    WHEN WIND_SPEED >= 30 AND WIND_SPEED < 40 THEN 'MODERATE'
-
-    ELSE 'LOW'
-    
-END AS WIND_SEVERITY
-
+SELECT  REPORT_CODE, 
+        YEAR, 
+        MONTH, 
+        DAY, 
+        WIND_SPEED,
+        CASE
+            WHEN WIND_SPEED >= 40 THEN 'HIGH'
+            WHEN WIND_SPEED >= 30 
+                AND WIND_SPEED < 40 THEN 'MODERATE'
+            ELSE 'LOW'  
+        END AS WIND_SEVERITY
 FROM STATION_DATA;
 
-======================================================================================================
 
 SELECT YEAR,
+    CASE
+        WHEN WIND_SPEED >= 40 THEN 'HIGH'
+        WHEN WIND_SPEED >= 30 THEN 'MODERATE'
+        ELSE 'LOW'
+    END AS WIND_SEVERITY,
+    COUNT(*) AS RECORD_COUNT
+FROM STATION_DATA 
+GROUP BY 1, 
+        2;
 
-CASE
-
-    WHEN WIND_SPEED >= 40 THEN 'HIGH'
-    WHEN WIND_SPEED >= 30 THEN 'MODERATE'
-
-    ELSE 'LOW'
-    
-END AS WIND_SEVERITY,
-
-COUNT(*) AS RECORD_COUNT
-
-FROM STATION_DATA GROUP BY 1, 2;
+SELECT  year, 
+        month,
+        SUM(precipitation) as TORNADO_PRECIPITATION
+FROM STATION_DATA
+WHERE TORNADO = 1
+GROUP BY year, 
+         month;
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-FUNÇÃO JOIN
+FUNÇÕES JOIN
+
+INNER JOIN - Permite mesclar duas tabelas. Porém para que isso ocorra precisamos definir um atributo em comum entre as tabelas para que os registros se alinhem. 
+
+SELECT ORDER_ID,
+    CUSTOMER.CUSTOMER_ID,
+    ORDER_DATE,
+    SHIP_DATE,
+    NAME,
+    STREET_ADDRESS,
+    CITY,
+    STATE,
+    ZIP,
+    PRODUCT_ID,
+    ORDER_QTY
+FROM CUSTOMER 
+        INNER JOIN CUSTOMER_ORDER
+            ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
 
 
+LEFT JOIN - Associação externa a esquerda 
+
+SELECT ORDER_ID,
+    CUSTOMER.CUSTOMER_ID,
+    ORDER_DATE,
+    SHIP_DATE,
+    NAME,
+    STREET_ADDRESS,
+    CITY,
+    STATE,
+    ZIP,
+    PRODUCT_ID,
+    ORDER_QTY
+FROM CUSTOMER 
+        LEFT JOIN CUSTOMER_ORDER
+            ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
+
+AGRUPANDO JOINS
+
+SELECT CUSTOMER.CUSTOMER_ID,
+    NAME AS CUSTOMER_NAME_0001,
+    SUM(ORDER_QTY * PRICE) AS TOTAL_REAVENUE_1111
+FROM CUSTOMER_ORDER
+    INNER JOIN CUSTOMER
+        ON CUSTOMER.CUSTOMER_ID = CUSTOMER_ORDER.CUSTOMER_ID
+    INNER JOIN PRODUCT
+        ON CUSTOMER_ORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID
+GROUP BY 1, 
+        2;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INSERT - Comando que insere um registro em uma tabela do BD.
+
+INSERT INTO ATENDENTE (PRIMEIRO_NOME, ULTIMO_NOME)
+VALUES ('Airton','Senna');
+
+INSERINDO MULTIPLOS VALORES
+
+INSERT INTO ATENDENTE (PRIMEIRO_NOME, ULTIMO_NOME)
+VALUES  ('Airton','Senna'),
+        ('Jose','Silva')
+        ('Edson','Santos')
+        ('Silvio','Santos');
+
+--------------------------------------------------------------------------------------
+
+DELETE - Exclui registros de uma tabela ou toda a tabela (Usar com muito cuidado)
+
+DELETE FROM Nome_Tabela                     Apaga toda a tabela
+
+DELETE FROM Nome_Tabela                     
+WHERE Phone_Number IS NULL
+        AND email is NULL;                  Apaga registro (os) especificos que atendam as condições da Claúsula WHERE
 
 
+DELETE * FROM Nome_Tabela                   Apaga registro (os) especificos que atendam as condições da Claúsula WHERE
+WHERE Phone_Number IS NULL
+        AND email is NULL; 
 
+--------------------------------------------------------------------------------------
 
+TRUNCATE TABLE - Exclui todos os registros de uma tabela. 
+
+TRUNCATE TABLE  Nome_Tabela
+
+--------------------------------------------------------------------------------------
+
+UPDATE - Altera os registros existentes de uma tabela
+
+UPDATE Nome_Tabela SET PRIMEIRO_NOME = UPPER(PRIMEIRO_NOME),
+ULTIMO_NOME = UPPER(ULTIMO_NOME)
+
+UPDATE Nome_Tabela SET VIP = 1 
+WHERE ATENDENTE_ID IN (3,4)
+
+--------------------------------------------------------------------------------------
+
+DROP TABLE - Exclui toda a tabela (Usar com muito cuidado)
+
+DROP TABLE Nome_Tabela;
+
+--------------------------------------------------------------------------------------
