@@ -84,6 +84,16 @@ Modelo Físico: Chamado de implementação, descreve por meio de alguma linguage
 
 - Terceira Forma Normal (3FN): Cada uma das formas normais tende a ir refinando a modelageme deixando aestruturadedados mais íntegra e exclusiva, evitando repetições desnecessárias e possíveis sobrecarganogerenciador de banco de dados. Uma tabela estará na 3FN se ela estiver na 2FN e se nenhuma coluna não-chavedependerdeoutra coluna não-chave. Ou seja, na 3FN temos simplesmente que eliminar os campos que podemser obtidospelaequação de outros campos da mesma tabela.
 
+* Todas as consultas em SQL possuem alguma combinação dessas clausulas, memorize essa ordem.
+
+- SELECT            Colunas a serem exibidas
+- FROM              Tabelas de onde será executada a extração
+- WHERE             Filtra as linhas
+- GROUP BY          Divide as linhas em grupos
+- HAVING            Filtra as linhas agrupadas
+- ORDER BY          Colunas a serem classificadas
+
+* OBS: As palvras em MAIÚSCULAS são reservadas do SQL e para nomes de colunas e tabelas usamos minúsculas  (EX: SELECT * FROM minha_tabela) 
 
 * Subqueries
 	- Uma subconsulta é uma instrução SELECT aninhada dentro de outra instrução SQL.
