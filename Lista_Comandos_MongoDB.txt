@@ -1,0 +1,606 @@
+MONGODB
+
+OBS.: O MONGODB é case sensitive
+
+
+● É o banco não relacional mais utilizado;
+● Os dados são inseridos em formato de objeto (JSON);
+● Os comandos, em vez de queries, são métodos;
+● Podemos criar relações entre entidades;
+● Facilmente adaptado para diversas linguagens através de drivers;
+● Possui uma proximidade com JavaScript;
+
+Principais entidades
+
+● Database: é onde ficam as nossas collections e dados;
+● Collections: são como as tabelas nos bancos relacionais, nelas vamos inserir os dados;
+● Documents: são os dados, no MongoDB tem esta nomenclatura;
+● Collections podem ser criadas livremente a qualquer momento e não possuem colunas fixas para os dados;
+
+MongoDB e JSON
+
+● O tipo de dado inserido na tabela é o BSON, uma variação de JSON;
+● O BSON é semelhante ao JSON, porém com recursos a mais;
+● A forma de criar um BSON é igual ao JSON, veja:
+
+{
+nome: “Matheus”,
+idade: 30
+}
+
+Banco Relacional x MongoDB
+
+Relacional			NoSQL
+Banco de dados 		Banco de dados
+Tabela 				Coleção
+Registro (Linha) 	Documento
+Coluna 				Atributo
+Índice 				Índice
+
+OBS:	Informaões entre "" ou '' indica que o campo é um texto ou String
+		Informaões sem aspas são do tipo inteiro
+		
+		
+CRUD = (Create, Remove, Update, Delete)
+
+
+RELACIONAMENTOS
+
+● São registros que possuem ligações (relacionamentos) entre si.
+● São tipos de relação one to one,  one to many e many to many
+
+Embedding Documents = Embedding (Incorporado ou embarcado)
+
+● Com Embedding, um documento contém outro documento.
+● Esta abordagem é semelhante a aninhar um documento dentro de outro, permitindo uma estrutura hierárquica.
+● A incorporação é adequada para relacionamentos um-para-um e um-para-muitos, onde o documento incorporado é logicamente parte do documento pai.
+● Não funciona bem com relacionamentos many to many
+● É eficiente para operações de leitura, pois todos os dados relacionados são armazenados juntos, reduzindo a necessidade de múltiplas consultas.
+● No entanto, a incorporação pode levar à duplicação de dados e ao aumento do tamanho do documento, o que pode afetar o desempenho de gravação e os requisitos de armazenamento.
+
+EX_01:
+
+Embedding one to one. O campo endereço está inserido dentro do document. 
+
+db.<collection>.insertOne({
+	nome: "Matheus",
+	Idade: 30,
+	Endereco: {
+		Rua: "Rua das Flores",
+		Numero: "1256",
+		CEP: "05145-000",
+		Complemento: "Fundos"	
+	}
+});
+
+EX_02 
+
+Embedding one to many. O campo endereços está inserido dentro do document com dois registros
+
+db.<collection>.insertOne({
+	nome: "João",
+	Idade: 40,
+	Enderecos: {
+		Casa:{
+			Rua: "Rua das Flores",
+			Numero: "1256",
+			CEP: "05145-000",
+			Complemento: "Fundos"
+			},
+		Comercial:{
+			Rua: "Rua das Arvores",
+			Numero: "78",
+			CEP: "02345-100",
+			Complemento: "1 andar"
+			}		
+	}
+});
+
+
+ONE TO ONE
+
+● A relação one to one é quando u registro possui uma ligação única com outro registro. 
+
+TIPOS DE DADOS
+
+● Strings - caracteres limitados pelo uso de aspas simples ou duplas '' ou ""
+● Arrays - também chamados de listas, são usados para inserir varios itens em um  grupo e são limitados pos cochetes e separados por virgulas [ 'nononono', 'xxxxxx', 12536, ]
+● Datas - as datas são salvas no formato ISO, Podemos criar uma nova data com newDate(). EX db.<Collection>.insertOne({data: newDate()})
+● Documents - Parecido com o javascript, guarda os dados no formato chave e valor, os itens são separados por virgulas
+● Boolean - dado que aceita somente dois valores true e false. EX db.<collection>.insertOne({nome: "Matheus", trabalhando: true})
+● Numbers - Todos os numeros no mongodb são classificados como doubles a não ser que estejam explicitamente declarados como inteiros. No exemplo abaixo os dois primeiros estão classificados como double e o terceiro como inteiro.
+
+EX. numbers. 
+
+db.<collection>.insertOne({double: 12.2, outro_double: 50.1, inteiro: NumberInt("5")})
+
+
+
+EX. Datas.
+
+db.<Collection>.insertOne({nome: "Matheus", data_criacao: newDate()})
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Comandos para usar no mongoDB rodando com docker
+
+Instalando MongoDB server usando Docker:  
+docker run --name mymongo -d -p 27017:27017 mongo:7 
+
+Como parar o servidor 
+docker stop mymongo
+ 
+Como iniciar o servidor 
+docker start mymongo
+
+Usando o mongosh para conectar 
+docker exec -it mymongo mongosh
+
+service mongodb status 
+	
+	/etc/mongodb.conf 
+	
+	bind_ip = 127.0.0.1
+	#port = 27017
+	
+/etc/init.d/mongodb start
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+mongo																Acesso ao shell do mongodb 	
+
+>cls																Limpa a tela
+															
+>db																	Exibe o banco de dados em uso
+> show dbs  														Exibe todos os DB (OBS: Um DB sem collection não é exebido nessa lista)
+> use <nomeBD> 														Muda para um DB ou Cria banco de dados caso ele não exista
+> db.createCollection('NomeCollection')   							Cria uma collection
+> show collections													Exibe as collections que estao dentro de um DB
+> db. <nomeCollection>.drop()										Excluir Collection
+> db.dropDatabase()													Excluir Banco de dados na qual se encontra 
+> db. <nomeCollection>.renameCollection(‘<nomeNovaCollection>’)		Renomear Collection
+> db.stats()														Exibe estatisticas do banco
+> db. <nomeCollection>.findOne()
+> db. <nomeCollection>.find({ name: "June" })
+>Exit																sai do mongodb
+>it																	pula de uma página para outra
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Lista de Operadores
+
+Operator 	Description
+$eq 		Valores iguais a um valor especificado. igual
+$gt 		Valores maiores que um valor especificado. maior que
+$gte 		Valores maiores ou iguais a um valor especificado. maior que ou igual
+$in 		Qualquer um dos valores especificados em um array. Dentro de 
+$lt 		Valores menores que um valor especificado. Menor que
+$lte 		Valores menores ou iguais a um valor especificado. Menor que ou igual
+$ne 		Todos os valores que não são iguais a um valor especificado. Não igual 
+$nin 		Nenhum dos valores especificados em um array. Não está dentro de 
+$not 		Documentos que não correspondem à expressão. Não está em 
+$exists		Retorna apenas os dados que possuem determinado campo. Existe em 
+$text		Faz uma busca sobre o texto informado no filtro. Porém é preciso criar um indice em algum dos campos, se não ele não funciona.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MONITORAMENTO DO MongoDB
+
+>mongostat
+
+> db.restaurants.find().count()												Conta a quantidade de documentos em uma collection
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+WRITE CONCERN
+
+O comando write concern é uma configuração que pode ser inserida no insertMany. Podemos limitar o tempo de duração (ms) de uma inserção e retornando o erro de time out caso exceda o tempo 
+
+EX. {w: 'majority', wtimeout: 100}
+
+
+db.<collection>.insertMany( [ 
+{ 
+ name: "Camille", 
+ city: "Rotterdam", 
+ products: ["Chocolate"] 
+}, 
+{ 
+ name: "Miriam", 
+ city: "Utrecht", 
+ products: ["Soap", "Orange juice", "Sugar"] 
+}
+], {w: 'majority', wtimeout: 100});
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SORT
+
+db.restaurants_small.find().sort( { name: 1 } ) 				"Sort" especifica a ordem em que a consulta retorna documentos correspondentes. No caso 1 ordem crescente
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+COUNT
+
+db.restaurants_small.find({borough: "Manhattan"}).count(); 
+
+db.restaurants_small.find().count() 											"count" retorna o número de documentos encontrados
+Or 
+db.restaurants_small.countDocuments()
+
+db.Album.find().count()
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CRUD - CREATE (Insert), READ (Find), UPDATE, DELETE
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE
+
+> db.createCollection('NomeCollection')   							Cria uma collection
+
+
+Criação de uma collection implicita
+
+> db.createCollection('nome',{'Opções'})   							Podemos definir alguns parametros de configuração como: numero de registros, tamanho máximo da collection etc. 
+
+> db.createCollection('Collection_exemplo',{capped: true, size: 1000, max: 3})  Onde;
+
+capped: true, Collection limitada
+size: 1000,		Bytes 
+max: 3			numero de registros, caso o valor ultrapasse o limite maximo o mais antigo será substituído pelo mais novo
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INSERT
+
+db.<collection>.insertOne({<document>})														insertOne cria um documento na coleção. 
+
+EX:
+
+db.customer.insertOne( 
+{ 
+ name: "Peter", 
+ city: "Amsterdam", 
+ products: ["Banana", "Milk"] 
+} 
+);
+
+db.<collection>.insertMany([{<document1>}, {<document2>}, ... ])							insertMany pode criar vários documentos na coleção. 
+
+EX:
+
+db.customer.insertMany( [ 
+{ 
+ name: "Camille", 
+ city: "Rotterdam", 
+ products: ["Chocolate"] 
+}, 
+{ 
+ name: "Miriam", 
+ city: "Utrecht", 
+ products: ["Soap", "Orange juice", "Sugar"] 
+} 
+] );
+
+
+EX
+
+db.Album.insertMany( [ 
+{ 
+ name: "Discovery", 
+ artist: "Daft Punk", 
+ genre: "Electronic",
+ year: 2001,
+ Tracks: ["One More Time", "Aerodynamic", "Digital Love"]
+},
+{ 
+ name: "Visions", 
+ artist: "Grimes", 
+ genre: "Indie",
+ year: 2012,
+ Tracks: ["Genesis", "Oblivion"] 
+}, 
+{ 
+ name: "Lust for Life", 
+ artist: "Lana Del Rey", 
+ genre: "Pop",
+ year: 2017,
+ Tracks: ["Love", "13 Beaches"] 
+} 
+] );
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ComandoS FIND - leitura de dados
+
+db.<collection>.find({})
+
+db.<collection>.find()
+
+db.restaurants_small.find({$text: {$search: "pizza"}}).pretty()								Faz a busca por um texto especificado. Porém é preciso criar um indice em algum dos campos. 
+
+db.<collection>.find({name: "June"})														Fazer uso de "" para fazer consultas com strings
+
+db.movies.find({year: 1916})
+
+db.<collection>.find({name: "June"}).limit (10)												Consulta com numero limitado de retorno	
+
+db.restaurants_small.find({"cuisine": "French"}).limit(10)	
+
+db.restaurants_small.find( { cuisine : "American" } )										Retorna todos os documentos onde "cuisine" = "American"	
+
+db.restaurants_small.find( { "address.zipcode": "10075" } )									Para se referir a um sub-documento precisamos usar aspas (") e referenciar o sub-documento na consulta
+
+db.restaurants.find({"address.state": "DE"})
+
+db.restaurants.find({'address.state': 'DE', 'address.city': 'Sirawo'})
+
+db.produto.find().sort({nome: 1}).pretty() 													Retorna a pesquisa em ordem alfabética de uma forma mais organizada (identado)
+
+
+Comandos de Projeção (exibir ou não uma informação)
+
+db.<collection>.find({<query>},{<project>})													Após a expressão de filtro (query), podemos especificar a projeção.
+
+db.movies.find({"awards.wins": {$gte: 5} }, { title: 1, year: 1, genres: 1})
+
+db.movies.find({"awards.wins": {$gte: 5} }, {_id: 0, title: 1, year: 1, genres: 1})			O "_id" é sempre retornado, a menos que você remova explicitamente
+
+db.movies.find({"awards.wins": {$gte: 5} }, {fullplot: 0, poster: 0, consensus: 0})			Podemos usar uma projeção para excluir campos específicos
+
+db.movies.find( {},{"released_year": {$year: "$released" } } )								Também podemos aplicar operadores à projeção.
+
+Find Avançado
+
+db.movies.find({cast: "William S. Hart"})													Podemos também filtrar usando campos que são array.
+
+db.movies.find({year: {$gt: 2000}})															podemos usar expressões, como "$gt" (greater than)
+
+db.movies.find({year: {$in: [1930, 1940]}})													Retorna todos os documentos onde "year" é 1930 ou 1940.
+
+db.movies.find({countries: "Canada", languages: "French"})							O MongoDB fornece uma operação AND implícita ao especificar uma lista de expressões separadas por vírgulas.
+
+db.movies.find({																	Para aplicar um AND ao mesmo campo você deve listá-lo apenas uma vez. 
+ year: { 
+ $gte: 1930, 
+ $lt: 1960 
+ } 
+})
+
+
+db.movies.find({ 																	Ou use o operador $and
+ $and: [ 
+ {year: {$gte: 1930}}, 
+ {year: {$lt: 1960}} 
+ ] 
+})
+
+db.movies.find({ 																	No entanto, se você especificar o mesmo campo mais de uma vez, ele executará um OR.
+ year: {$gte: 1930}, 
+ year: {$lt: 1960} 
+})
+
+
+db.restaurants_small.find({ 														Use $or para especificar múltiplas condições "OR".
+ $or: [ 
+ {"cuisine": "Italian"}, 
+ {"address.zipcode":"10075"} 
+ ] 
+})
+
+db.restaurants_small.find({"cuisine": { $not: { $eq: "Hamburgers" } } })		Para retornar documentos que não correspondem a uma expressão podemos usar o operador "$not"
+
+db.restaurants_small.find({"cuisine": "French"}).skip(10)						Com "skip" pulamos os primeiros n documentos.
+
+db.inventory.find( { item: null } )										Usar "nul" em uma igualdade corresponde a documentos que contêm o campo com valor igual a nulo ou que não contêm o campo.
+
+db.inventory.find( { item : { $type: "null" } } )
+
+db.inventory.find( { item : { $exists: false } } )						Para retornar apenas documentos onde o campo é inexistente usamos o operador "$exists"
+
+db.restaurants_small.find({cuisine: { $nin: [ "Italian", "Russian" ] } })
+
+db.Produtos.find({Categoria: {$eq: 'Automovel'}})
+
+db.Produtos.find({Categoria: "Automovel"})
+
+db.Produtos.find({Categories: {$in: ["Automovel", "Multimidia"]}})			Faz a busca em um array
+
+db.books.find({pageCount: {$gt: 1}, pageCount: {$lt: 120}}).pretty()			Não podemos ter dois operadores iguais na mesma consulta
+
+db.books.find({status: "PUBLISH", $or [{pageCount: 500}, {authors: "Robin Sen"}]}).pretty()   Faz uma bunsca com OR e AND
+
+db.alunos.find({matematica: {$all:[8, 7]}})											Faz a busca por elementos parciais na lista
+
+db.alunos.find({matematica: {$size: 4}})											Faz a busca pelo tamanho do array ou lista 
+
+db.produtos.find({"variacoes": {cor: "verde", tamanho: "GG", qtd: 48}})				Faz uma busca dos elementos na lista variações
+
+db.produtos.find({"variacoes": {$eleMatch: {tamanho: {$gt:40}, cor: "azul"}}})		Retorna resultados que possuem variações com tamanho > que 40 e também na cor azul
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPDATE
+
+Operadores de update
+
+$inc				Pode acrescentar ou diminuir uma quantidade especifica a um valor. Increase
+$min				Atualiza um valor, caso o especificado seja menor que o registro
+$max				Atualiza um valor, caso o especificado seja maior que o registro
+$mul				Multiplica o número de alguma propriedade por outro número definido
+$rename				Renomeia um campo por outro nome que definimos
+$unset				Remove um campo de um item
+$addToset			Adiciona mais valores em um array
+$pop				Remove o último ou primeiro elemento de um array. Para remover o primeiro elemento utilize -1 e para remover o último utilize 1
+$push				Adiciona um ou mais valores a um array
+$pullAll			Remove vários itens de um array
+
+
+db.produtos.updateOne({author: "Matheus"}, {$inc: {postCount: 2}})								No exemplo adcionamos 2 a quantidade de postcount
+
+db.produtos.updateOne({author: "Maycon Santos"}, {$min: postCount: 0, likesReceived: 0}})		No exemplo os valores postCount e likesReceived serão zerados caso os valores estajem maiores que 0
+
+db.produtos.updateOne({author: "Maycon Santos"}, {$max: maxPosts: 250}})						Nesse caso aumentamos o número de posts permitidos por meio do $max
+
+db.produtos.updateOne({author: "Maycon Santos"}, {$mul: maxPosts: 2}})							Multiplicamos o valor do maxPosts por 2
+
+db.produtos.updateMany({},{$rename: {author: "author_full_name"}})								nesse caso iremos atualizar o campo author de todos os documentos da collection
+
+db.produtos.updateMany({},{$unset: {active: ""}})												Nesse caso removeremos o campo active em todos os registros
+
+db.produtos.updateOne({author_full_name: "Maycon Santos"}, {$addToset: {categories: {$each: ["PHP", "VUE"]}}})	Nesse caso foram adicionados PHP e VUE
+
+db.produtos.updateOne({author_full_name: "Maycon Santos"}, {$pop: {categories: -1}})			Nesse caso removemos o primeiro elemento de categories
+
+db.produtos.updateOne({author_full_name: "Maycon Santos"}, {$push: {categories: "LINUX"}})		Nesse caso adicionamos o valor LINUX ao array categories
+
+db.produtos.updateMany({}, {$push: {categories: "PROGAMACAO"}})									Nesse caso adicionamos o valor PROGAMACAO ao array categories em todos os documentos da collection
+
+db.produtos.updateOne({author: "Maria Marin"}, {$pullAll: {categories: ["LINUX", "DOCKER"]}})	Nesse caso estamos removendo LINUX e DOCKER do campo categories do author Maria
+
+
+db.<collection>.updateOne({<query>},{<update>})													"updateOne" atualiza um documento da coleção
+
+EX: 
+
+db.products.updateOne( 
+ { _id: 100 }, 
+ { $set:																						Usando o operador $set podemos atualizar quaisquer atributo do documento 
+ { 
+ quantity: 500, 
+ details: { model: "2600", make: "Fashionaires" }, 
+ tags: [ "coats", "outerwear", "clothing" ] 
+ } 
+ } 
+)  
+
+
+db.<collection>.updateMany({<query>},{<update>})												"updateMany" atualiza múltiplos documentos da coleção
+
+EX: 
+
+db.restaurants_small.updateMany( 
+ {cuisine: "Hamburgers"}, 
+ {$set: { 																						O operador $set é onde ficam os valores a serem atualizados
+ cuisine: "American Hamburgers" 
+ } 
+});
+
+
+EX: 
+
+db.Album.updateOne( { _id:  ObjectId('65f8ad73e030b06d70ee7892') }, { $set: { genre: "Rock"}} )
+
+db.books.updateMany({categories: "java"}, {$set: {status: "UNPUBLISHED"}})
+
+
+REPLACE
+
+Podemos trocar (substituir) todos os dados de um documento com o comando Replace
+
+>db.books.repalceOne( { _id:  ObjectId('65f8ad73e030b06d70ee7892') }, {foi: "substituído"} )
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DELETE	
+
+>db.books.deleteMany({})																		Com filtro vazio todos os dados de uma collections são removidos. MUITO CUIDADO AO USAR ESSE COMANDO
+
+>db.books.deleteOne({ _id:  ObjectId('65f8ad73e030b06d70ee7892') })								Remove um registro de uma collection
+
+db.<collection>.deleteMany({<query>})															Remove de uma coleção todos os documentos que correspondem ao filtro
+
+db.restaurants_small.deleteMany({borough: "Manhattan"});										Neste exemplo todos os documentos onde "borough" = "Manhattan" serão removidos 
+
+db.restaurants_small.deleteMany({ 
+ restaurant_id: {$in: ["40363289", "40363093"]													Operadores também podem ser usados com deleteMany 
+}});
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DROP
+
+Removendo uma collection
+
+>db.<collection>.drop()																			Remove uma coleção do banco de dados e todos os dados dentro dela. Tomar cuidado. 
+
+>db.customer.drop()																				Por exemplo, podemos remover a coleção "customer"
+
+Removendo um banco de dados
+
+>db.dropDatabase()																				Remove o database e todas as collections que estão dentro dele. Tomar cuidado.
+
+>db.dropDatabase()																				Tem que estar dentro do database que se deseja remover
+
+
+Deletar Documentos
+
+> db.teste.deleteOne({"_id" : ObjectId("614395031466b8c92b0caf87")})							Deletar o documento criado pelo id. Forma mais eficaz evita erros
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IMPORT E EXPORT BANCO DE DADOS
+
+IMPORT
+
+>mongoimport<arquivo> -d<nome_database> -c<nome_collection>
+
+
+EXPORT
+
+>mongoexport -c <nome_collection> -d <nome_database> -o <nome_output>
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INDEX - INDICES
+
+Os indices são recursos que podem aumentar a eficiência de uma consulta. Podemos adicionar indices a um dado em uma collection. O dado _id já vem com indice. Os dados com indice são checados primeiro na hora de uma seleção por exemplo.
+
+OBS: o indice _id é default da collection, não tente remover ele. 
+
+
+Criar um indice no MongoDB.
+
+>db.restaurants_small.createIndex({name: "text"})												Cria um indice com o nome text
+
+>db.movies.createIndex({year: 1})
+
+>db.restaurants_small.find({$text: {$search: "pizza"}})											Faz a busca do item dentro do indice criado
+
+
+
+
+>db.movies.getIndexes()																			Verifica a quantidade de indexes em uma collection
+
+>db.movies.dropIndex({year: 1})																	Remove um indice em uma collection
+
+>db.movies.dropIndexes()																		Remove todos os indices de uma collection
+
+
+EXPLAIN
+
+Podemos obter informações interessantes e saber como o mongoDB faz uma consulta com o comando explain()
+
+db.restaurants.find({cuisine: 'Belgian'}).explain()
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AGGREGATION FRAMEWORK
+
+O Aggregation é um  framework do MOngoDB. O seu principal objetivo é o de agregar resultados e retornar resultados qua não temos somente a partir dos dados. Isso nos permite criar relatórios mais complexos dos dados que estão no sistema. 
+
+PIPELINE
+
+Pipeline é um termo que está associado ao aggregation, é o modo que construimos o resultado da agrregation. 
+Unir diversos metodos gera um pipeline e podemos entender um pipeline como uma segmentação. 
+
+
+$bucket
+
+O $bucket tem como função agrupar os resultados e recebemos uma contagem de dados nesse grupo. 
+
+
+db.movies.aggregate([ 
+	{$match: {directors: { $exists: true}}},
+	{$group: {_id: "$directors", number_movies: {$sum: 1} }},
+	{$sort: {"number_movies": -1}},
+	{$limit: 10}
+]);
+
+
+
+db.getCollection("t1").aggregate([{"$group" : {_id: "$uf" , count:{$sum:1}}}]);

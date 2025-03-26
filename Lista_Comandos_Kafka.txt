@@ -1,0 +1,249 @@
+KAFKA
+
+https://www.confluent.io/certification/   - prova de certificação
+
+Fator de replicação: primeiro criamos o leader (nó) e depois as replicas (nós), podemos ter quantas partições quisermos em um tópico
+
+kafka-topics --version 					Exibe a versão do confluent qque está sendo utilizada
+5.5.2-ce (Commit:417a2e7a085d90a7)
+ 
+kafka-topics --bootstrap-server localhost:9092 --list						Listar tópicos  ( bootstrap: servidor onde estão localizados os tópicos)
+
+kafka-topics --zookeeper localhost:2181 --list								Listar tópicos	(com o zookeeper nenhum tópico que é criado automáticamente é exibido)
+
+kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --create --partitions 3 --replication-factor 1				Criar tópico
+OBS: (nome do tópico sempre começando e com letras minusculas, sem espaço, números no começo ou caracteres especiais)
+
+kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --describe													Descrever tópico
+
+kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --delete													Deletar tópico
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+PRODUTOR CONSOLE - O producer tem que estar mesmo local onde executamos os tópicos ou seja dentro Broker
+
+
+kafka-console-producer --broker-list localhost:9092 --topic <nomeTópico>									Enviar dados para um tópico
+
+
+kafka-console-producer --broker-list localhost:9092 --topic <nomeTópico> --producer-property acks=all		Enviar dados para todos reconhecerem (Leader e ISR)
+Forma padrão de envio de dados: apenas para o leader
+ISR: são as réplicas
+acks=all: todos recebem e confirmam o recebimento da mensagem (leader e réplicas)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONSUMER CONSOLE
+
+
+kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico>								Receber mensagens em tempo real
+
+kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico> --from-beginning				Receber mensagens desde a criação do tópico
+
+kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico> --group <nomeGrupo>			Criar grupo de consumidores
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+GRUPOS DE CONSUMERS CONSOLE
+
+
+kafka-consumer-groups –-bootstrap-server localhost:9092 --list											Listar grupos
+
+kafka-consumer-groups –-bootstrap-server localhost:9092 --describe --group <nomeGrupo>					Descrever grupo
+
+Redefinir o deslocamento do mais antigo
+
+kafka-consumer-groups –-bootstrap-server localhost:9092 --group <nomeGrupo> --reset-offsets --to-earliest --execute --topic <nomeTópico>
+
+Alterar o deslocamento
+
+kafka-consumer-groups –-bootstrap-server localhost:9092 --group <nomeGrupo>--reset-offsets --shift-by 2 --execute --topic <nomeTópico>
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+AULA 02
+
+1. Criar o tópico msg-cli com 2 partições e 1 réplica
+
+root@broker:/# kafka-topics --bootstrap-server localhost:9092 --create --topic msg-cli --partitions 2 --replication-factor 1
+Created topic msg-cli.
+
+2. Descrever o tópico msg-cli (as duas formas descritas abaixo são válidas)
+
+root@broker:/# kafka-topics --bootstrap-server localhost:9092 --describe --topic msg-cli
+Topic: msg-cli  PartitionCount: 2       ReplicationFactor: 1    Configs:
+        Topic: msg-cli  Partition: 0    Leader: 1       Replicas: 1     Isr: 1  Offline:
+        Topic: msg-cli  Partition: 1    Leader: 1       Replicas: 1     Isr: 1  Offline:
+
+root@broker:/# kafka-topics --bootstrap-server localhost:9092 --topic msg-cli --describe
+Topic: msg-cli  PartitionCount: 2       ReplicationFactor: 1    Configs:
+        Topic: msg-cli  Partition: 0    Leader: 1       Replicas: 1     Isr: 1  Offline:
+        Topic: msg-cli  Partition: 1    Leader: 1       Replicas: 1     Isr: 1  Offline:
+
+3. Criar o consumidor do grupo app-cli
+root@broker:/# kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-cli --group app-cli
+
+4. Criar e enviar as seguintes mensagens do produtor Msg 1 e Msg 2
+
+root@broker:/# kafka-console-producer --broker-list localhost:9092 --topic msg-cli
+>msg01
+>msg02
+>msg03
+>msg04
+>msg05
+>msg06
+>msg07
+>msg08
+>msg09
+>msg10
+>msg11
+
+
+5. Criar grupo de consumidor app-cli (01) e (02) para consumir as menssagens enviadas pelo producer ao topic msg-cli 
+
+(01) root@broker:/# kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-cli --group app-cli
+msg01
+msg02
+msg04
+msg06
+msg08
+msg10
+
+(02) root@broker:/# kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-cli --group app-cli
+msg03
+msg05
+msg07
+msg09
+msg11
+
+OBS: essa separação das menssagens acontece porque embora o producer escreva os dados em um tópico (tabela), os consumers leem partições diferentes da mesma tabela.
+
+7. Criar outro consumidor do grupo app2-cli
+
+(03) root@broker:/# kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-cli --group app2-cli
+
+OBS: Para consumers 01 e 02 que estão no mesmo grupo (msg-cli) as partições são intercaladas, quando os consumers sao de dois ou mais grupos diferentes as menssagens são enviadas para todos os consumers groups.
+
+9. Parar o app-cli
+root@broker:/# kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-cli
+ --group app-cli
+msg03
+msg05
+msg07
+msg09
+msg11
+mgs013
+mgs013
+msg013
+^CProcessed a total of 8 messages
+
+10. Definir o deslocamento para -2 offsets do app-cli   (para definir o deslocamento é neessário parar os grupos de consumidores)
+
+root@broker:/# kafka-consumer-groups --bootstrap-server localhost:9092 --reset-offsets --shift-by -2 --execute --topic msg-cli --group app-cli
+
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+app-cli                        msg-cli                        0          5
+app-cli                        msg-cli                        1          7
+
+
+11. Descrever grupo
+
+root@broker:/# kafka-consumer-groups --bootstrap-server localhost:9092 --group app-cli --describe
+
+Consumer group 'app-cli' has no active members.
+
+GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+app-cli         msg-cli         0          5               7               2               -               -               -
+app-cli         msg-cli         1          7               9               2               -               -               -
+
+12. Iniciar o app-cli
+
+root@broker:/# kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-cli --group app-cli
+msg012
+
+mgs013
+msg013
+
+13. Redefinir o deslocamento o app-cli desde o inicio.
+
+root@broker:/# kafka-consumer-groups --bootstrap-server localhost:9092 --reset-offsets --to-earliest --execute --topic msg-cli --group app-cli
+
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+app-cli                        msg-cli                        0          0
+app-cli                        msg-cli                        1          0
+root@broker:/#
+
+15. Listar grupo
+
+root@broker:/# kafka-consumer-groups --bootstrap-server localhost:9092 --list
+_confluent-controlcenter-5-5-2-1
+_confluent-controlcenter-5-5-2-1-command
+app-cli
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+KSQL
+
+Pode ser acessado via interface gráfica ou via terminal (shell)
+
+#docker exec –it ksqldb-cli bash
+#ksql>																			Shell do ksql
+
+#ksql> list topics;																Visualizar tópicos
+
+#ksql> print “<nomeTopico>” <propriedades>;										Mostrar conteúdo do tópico em tempo real
+
+• Propriedades
+o from beginning;
+o interval
+o limit
+
+Ex.:
+#ksql> print “topic-produto” from beginning interval 5 limit 10;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+KSQL Stream - Sequencia de dados estruturados
+
+#Ksql> list streams;									 Comando para visualizar Streams
+
+Criar Stream
+
+#Ksql> create stream <nomeStream> (<campo> <tipo>, ..., <campo> <tipo>) with ( Kafka_topic=‘<nomeTopic>’, value_format=‘<formato>’, KEY=‘<campoChave>’, 
+TIMESTAMP=‘<campoTimestamp> ...');
+
+Formato
+
+o DELIMITED ( , CSV)
+o JSON
+o AVRO
+
+Tipos de dados
+
+o BOOLEAN
+o INTEGER ou INT
+o BIGINT
+o DOUBLE
+o VARCHAR ou STRING
+o Array
+o Map
+o Struct
+
+
+EX: Criação de stream.
+
+Ksql> create stream cad_str_csv (nome varchar, cidade varchar) with (Kafka_topic=‘cadastro’, value_format=‘delimited’);
+
+o Tópico CSV
+• Informação do tópico cadastro
+o Rodrigo, São José dos Campos
+o Augusto, São Paulo
+• Criar tópico
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+KAFKA DATAGEN
+
+o Argumentos – Cluster em Docker
+
+$ ksql-datagen bootstrap-server=broker:29092 quickstart= <orders, users, pageviews> schema=<ArquivoAvro> schemaRegistryUrl=schema-registry:8081 key-format=<avro, json, Kafka ou delimited> value-format=<avro, json ou delimited> topic=<nomeTopico> key=<campoChave> iterations=<númeroLinhas>  msgRate=<TaxaMsg/segundo>
+
+o Criação de dados no tópico orders_topic
+
+$ ksql-datagen bootstrap-server=broker:29092 schemaRegistryUrl=schema-registry:8081 quickstart=orders topic=orders_topic
