@@ -127,3 +127,6 @@ git config credential.helper store				Salva as configurações de user para o re
 git clone <URL_do_repositório>					Cria um clone do repositório remoto para a máquina local. 
 git rm <nome_do_arquivo>						Apaga um arquivo
 git rm -r <nome_do_diretório>					Apaga um diretório	
+
+git merge --abort								Desfaz um merge  [Desde a versão 1.7.4 do git]
+git reset --merge 								[versões anteriores do git]
