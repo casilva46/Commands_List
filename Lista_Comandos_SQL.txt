@@ -8,6 +8,7 @@ SQL
 - Um BD é projetado, construído e preenchido com dados para um propósito específico. 
 - tem um grupo de usuários e algumas aplicações para atender esses usuários;
 
+
 CRUD: Create, Read, Update and Delete
 
 DQL - Data query Language
@@ -75,14 +76,17 @@ Modelo Físico: Chamado de implementação, descreve por meio de alguma linguage
 
 >>>> NORMALIZAÇÃO DE DADOS
 
-    Chamamos de normalização de dados o processo formal e passo a passoqueexaminaodocumento descritivo gerado pelos analistas de sistemas durante a análisederequisitosembusca de definir as entidades, atributos, relacionamentos, chaves primáriasechavesestrangeiras do banco de dados a ser modelado. Um dos objetivos principais da normalização é evitar ou pelo menos amenizar anomaliaseinconsistências que podem ocorrer durante a inclusão, exclusão, alteração e consultaderegistros em um banco de dados.
+Chamamos de normalização de dados o processo formal e passo a passo que examina o documento descritivo gerado pelos analistas de sistemas durante a análise derequisitos em busca de definir as entidades, atributos, relacionamentos, chaves primárias e chavese strangeiras do banco de dados a ser modelado. Um dos objetivos principais da normalização é evitar ou pelo menos amenizar anomalias e inconsistências que podem ocorrer durante a inclusão, exclusão, alteração e consulta de registros em um banco de dados. 
 
-- Primeira Forma Normal(1FN): O processo de normalização aplica uma série de regras sobre as tabelas de umbancodedados para verificar se estas estão corretamente projetadas. Embora existam cinco formas normais (ou regras de normalização), na práticausamosumconjunto de três Formas Normais, ou seja, um banco de dados é consideradonormalizadosenele foram aplicadas as regras destas três formas normais.
-   Uma entidade estará na primeira forma normal (IFN) se todos os campos forematômicos(simples) e não multivalorados (com múltiplos valores).
+- Primeira Forma Normal(1FN): 
+    Uma tabela não tem colunas repetidas, pois cada coluna tem extamente uma definição na tabela
+    Uma entidade estará na primeira forma normal (IFN) se todos os campos forem atômicos(simples) e não multivalorados (com múltiplos valores).
    
-- Segunda Forma Normal (2FN): Uma entidade estará na 2FN se ela já se encontrar na 1FN e todos os atributos não chave forem totalmente dependentes da chave primária.
+- Segunda Forma Normal (2FN): 
+    Uma entidade estará na 2FN se ela já se encontrar na 1FN e não possuir campos que sejam funcionalmente dependentes de parte de chave
 
-- Terceira Forma Normal (3FN): Cada uma das formas normais tende a ir refinando a modelageme deixando aestruturadedados mais íntegra e exclusiva, evitando repetições desnecessárias e possíveis sobrecarganogerenciador de banco de dados. Uma tabela estará na 3FN se ela estiver na 2FN e se nenhuma coluna não-chavedependerdeoutra coluna não-chave. Ou seja, na 3FN temos simplesmente que eliminar os campos que podemser obtidospelaequação de outros campos da mesma tabela.
+- Terceira Forma Normal (3FN): 
+    A terceira forma normal determina que não deve existir atributos com dependencia funcional transitiva em uma tabela. Podemos afirmar que uma estrutura estará na 3FN se ela estiver na 2FN e não possuir campos dependentes de outros não chaves. 
 
 * Todas as consultas em SQL possuem alguma combinação dessas clausulas, memorize essa ordem.
 
