@@ -7,46 +7,57 @@ https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSComman
 Command								Description
 
 hdfs dfs -ls						List files with permissions and other details
+hdfs dfs -ls /caminho               Lista arquivos e diretórios no caminho especificado
+hdfs dfs -ls -R /	                Lista recursivamente todos os arquivos e diretórios
 hdfs dfs -mkdir						Creates a directory named path in HDFS
+hdfs dfs -mkdir /caminho	        Cria um novo diretório no HDFS
 hdfs dfs -rm						To Remove File or a Directory
 hdfs dfs -rmr						Removes the file that identified by path / Folder and subfolders
 hdfs dfs -rmdir						Delete a directory
 hdfs dfs -put						Upload a file / Folder from the local disk to HDFS
+hdfs dfs -put arquivo.txt /caminho	Envia um arquivo local para o HDFS
 hdfs dfs -cat						Display the contents for a file
 hdfs dfs -du						Shows the size of the file on hdfs.
-hdfs dfs -dus						Directory/file of total size
+hdfs dfs -du /caminho	            Mostra o uso de espaço dos arquivos/diretórios
+hdfs dfs -count /caminho	        Conta arquivos, diretórios e tamanho
 hdfs dfs -get						Store file / Folder from HDFS to local file
+hdfs dfs -get /caminho/arquivo.txt .	Baixa um arquivo do HDFS para o local
 hdfs dfs -getmerge					Merge Multiple Files in an HDFS
 hdfs dfs -count						Count number of directory, number of files and file size
 hdfs dfs -setrep					Changes the replication factor of a file
 hdfs dfs -mv						HDFS Command to move files from source to destination
-hdfs dfs -moveFromLocal					Move file / Folder from local disk to HDFS
-hdfs dfs -moveToLocal					Move a File to HDFS from Local
+hdfs dfs -moveFromLocal				Move file / Folder from local disk to HDFS
+hdfs dfs -moveToLocal				Move a File to HDFS from Local
 hdfs dfs -cp						Copy files from source to destination
 hdfs dfs -tail						Displays last kilobyte of the file
 hdfs dfs -touch						create, change and modify timestamps of a file
 hdfs dfs -touchz					Create a new file on HDFS with size 0 bytes
-hdfs dfs -appendToFile					Appends the content to the file which is present on HDF
-hdfs dfs -copyFromLocal					Copy file from local file system
-hdfs dfs -copyToLocal					Copy files from HDFS to local file system
+hdfs dfs -appendToFile				Appends the content to the file which is present on HDF
+hdfs dfs -copyFromLocal				Copy file from local file system
+hdfs dfs -copyToLocal				Copy files from HDFS to local file system
 hdfs dfs -usage						Return the Help for Individual Command
 hdfs dfs -checksum					Returns the checksum information of a file
 hdfs dfs -chgrp						Change group association of files/change the group of a file or a path
 hdfs dfs -chmod						Change the permissions of a file
+hdfs dfs -chmod 755 /caminho	    Altera permissões
 hdfs dfs -chown						change the owner and group of a file
-hdfs dfs -df						Displays free space
-hdfs dfs -head						Displays first kilobyte of the file
+hdfs dfs -chown user:grupo /caminho	    Altera dono e grupo
+hdfs dfs -df						    Displays free space
+hdfs dfs -df -h	                        Mostra o uso do espaço no HDFS (modo human-readable)
+hdfs dfs -head						    Displays first kilobyte of the file
 hdfs dfs -Create Snapshots				Create a snapshot of a snapshottable directory
 hdfs dfs -Delete Snapshots				Delete a snapshot of from a snapshottable directory
 hdfs dfs -Rename Snapshots				Rename a snapshot
-hdfs dfs -expunge					create new checkpoint
-hdfs dfs -Stat						Print statistics about the file/directory
-hdfs dfs -truncate					Truncate all files that match the specified file pattern to the specified length
-hdfs dfs -find						Find File Size in HDFS
-hdfs dfs -help  					Ajuda
-hdfs dfs -help ls					Ajuda
-
-hdfs dfs -cat /user/Nome_arquivo                  	Exibe o conteúdo do arquivo
+hdfs dfs -expunge					    create new checkpoint
+hdfs dfs -Stat						    Print statistics about the file/directory
+hdfs dfs -stat /caminho/arquivo.txt	    Exibe informações do arquivo (data, tamanho, etc.)
+hdfs dfs -truncate					    Truncate all files that match the specified file pattern to the specified length
+hdfs dfs -find						    Find File Size in HDFS
+hdfs dfs -find / -name data
+hdfs dfs -find / -iname Data -print
+hdfs dfs -help  					        Ajuda
+hdfs dfs -help ls					        Ajuda
+hdfs dfs -cat /user/Nome_arquivo            Exibe o conteúdo do arquivo
 hdfs dfs -tail /user/Nome_arquivo			Exibe as últimas linhas de um arquivo	
 
 -------------------------------------------------------------------------|Comandos Informações|-------------------------------------------------------------------------------------------
@@ -84,7 +95,32 @@ hdfs dfs -find input/ -name \*.txt -print input/teste1.txt, input/teste2.txt
 getfacl <Nome_arquivo>							    Verifica as permissões em um arquivo
 hdfs dfs -getfac /RAW/SILVER						Verifica as permissões em um Path
 
+-------------------------------------------------------------------------|Administração e Diagnóstico|-------------------------------------------------------------------------------------------
 
+hdfs dfsadmin -report                             List the information about HDFS on a per-datanode basis
+hdfs dfsadmin -safemode get                       get a safemode status
+hdfs dfsadmin -safemode enter                     Enter in mode safemode
+hdfs dfsadmin -leave                              Exit the mode safemode
+hdfs dfsadmin -fetchImage fsimage.backup          Perform a namenode metadata backup (must be in safemode)
+hdfs dfsadmin -setSpaceQuota n-bytes somedir      Set a quota on the storage in a specific HDFS directory
+hdfs fsck /	                                      Verifica integridade dos arquivos no HDFS
+
+CHECKS FOR MISSING OR CORRUPT DATABLOCKS
+
+hdfs dfs -fsck /
+hdfs dfs -fsck / -files
+hdfs dfs -fsck / -files -blocks
+hdfs dfs -fsck / -files -block -locations
+hdfs dfs -fsck / -files -block -locations -racks
+
+-------------------------------------------------------------------------|Rebalance|-------------------------------------------------------------------------------------------
+
+Rebalance de discos no datanode
+
+https://blog.cloudera.com/how-to-use-the-new-hdfs-intra-datanode-disk-balancer-in-apache-hadoop/
+
+
+hdfs diskbalancer -plan <nome FQDN do host> -thresholdPercentage 1 -bandwidth 80    (80 Mbps/s)
 
 
 
