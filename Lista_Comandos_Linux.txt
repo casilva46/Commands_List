@@ -128,6 +128,13 @@ Verificar o serviço do agent cloudera
 sudo service cloudera-scm-agent restart
 sudo service cloudera-scm-agent status
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+VALIDAÇÃO DOS SERVIÇOS MySQL
+
+sudo systemctl start mysqld
+sudo systemctl stop mysqld
+sudo systemctl status mysqld
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Verificar a memória swap da máquina
 

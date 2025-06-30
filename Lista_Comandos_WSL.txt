@@ -1,0 +1,42 @@
+Comandos básicos:
+
+wsl: 																Inicia uma nova sessão WSL com a distribuição padrão. 
+wsl -l ou wsl --list: 												Lista todas as distribuições WSL instaladas. 
+wsl -l -v ou wsl --list --verbose: 									Lista todas as distribuições WSL instaladas com informações detalhadas (versão, status). 
+wsl -d <distro_name> ou wsl --distribution <distro_name>: 			Inicia uma nova sessão WSL com a distribuição especificada. 
+wsl --shutdown: 													Desliga todas as sessões WSL em execução. 
+wsl --terminate <distro_name>: 										Encerra a sessão WSL para a distribuição especificada. 
+wsl --set-version <distro_name> <version>: 							Define a versão do WSL (1 ou 2) para a distribuição especificada. 
+wsl --set-default <distro_name>: 									Define a distribuição padrão do WSL. 
+wsl --status: 														Exibe o status de todas as sessões WSL em execução. 
+wsl --help ou wsl -h: 												Exibe uma lista de todos os comandos e opções do WSL. 
+wsl --export <distro_name> <tar_file_path>: 						Exporta uma distribuição WSL para um arquivo TAR. 
+wsl --import <distro_name> <install_location> <tar_file_path>: 		Importa uma distribuição WSL de um arquivo TAR. 
+wsl --mount <source_path> <mount_point>: 							Monta um disco ou partição do Windows no WSL. 
+wsl --unmount <mount_point>: 										Desmonta um ponto de montagem do WSL. 
+wsl -u <user>: 														Inicia uma nova sessão WSL com o usuário especificado. 
+wsl --exec <command>: 												Executa um comando específico dentro da distribuição WSL. 
+
+Comandos adicionais:
+
+wsl --upgrade: 														Atualiza o sistema de arquivos para a versão mais recente. 
+wsl --unregister <distro_name>: 									Remove uma distribuição WSL. 
+wsl --system: 														Executa um comando no contexto do sistema. 
+wsl --system -d <distro_name>: 										Executa um comando no contexto do sistema e da distribuição. 
+wsl --install: 														Instala uma nova distribuição WSL. 
+wsl --install -d <distro_name>: 									Instala uma nova distribuição WSL especificada. 
+wsl --install -d <distro_name> --web-ui: 							Instala uma nova distribuição WSL especificada com interface web. 
+wsl --install -d <distro_name> --no-launch: 						Instala uma nova distribuição WSL especificada sem iniciar a distribuição. 
+wsl --install -d <distro_name> --no-web-ui: 						Instala uma nova distribuição WSL especificada sem interface web. 
+
+
+Comandos para interação com o Windows:
+
+explorer.exe .: 													Abre o diretório atual do WSL no Explorador de Arquivos do Windows, de acordo com o Reddit. 
+notepad.exe <file_name>: 											Abre o arquivo especificado no Bloco de Notas do Windows. 
+<tool_name>.exe: 													Executa uma ferramenta do Windows diretamente da linha de comando do WSL. 
+
+Observações:
+
+Substitua <distro_name> pelo nome da distribuição (ex: Ubuntu, Debian, etc.). 
+Substitua <tar_file_path> pelo caminho completo do arquivo TAR. 

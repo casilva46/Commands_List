@@ -81,7 +81,7 @@ hdfs dfs -find input/ -name \*.txt -print input/teste1.txt, input/teste2.txt
 
 --------------------------------------------------------------------------|Verificar Permissões|-----------------------------------------------------------------------------------------
 
-getfacl <Nome_arquivo>							Verifica as permissões em um arquivo
+getfacl <Nome_arquivo>							    Verifica as permissões em um arquivo
 hdfs dfs -getfac /RAW/SILVER						Verifica as permissões em um Path
 
 

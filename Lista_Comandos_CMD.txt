@@ -5,3 +5,13 @@ net user XXXXXXXXX /do                                           Faz toda a pesq
 net user xxxxxxxxxx /do | findstr /i XXXXXXXX | sort             Filtra a busca por um grupo especifico
 
 net group xxxxxxxxxxxxxx /do                                     Busca por grupo
+
+dir							Lista arquivos e pastas do diretório atual
+cd nome_da_pasta			Entra em uma pasta
+cd ..						Sobe um nível (volta para a pasta anterior)
+cd \						Vai para o diretório raiz da unidade atual
+cd caminho\completo			Vai direto para um caminho específico
+D:							Muda para a unidade D
+C:							Muda para a unidade C
+cls							Limpa a tela do prompt
+exit						Fecha o prompt de comando

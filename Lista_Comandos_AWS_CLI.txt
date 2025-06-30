@@ -1,0 +1,130 @@
+AWS CLI
+
+	A AWS CLI (Command Line Interface) oferece um conjunto abrangente de comandos para gerenciar serviços da AWS a partir da linha de comando. Os comandos são organizados por serviço, e cada serviço possui seus próprios subcomandos para tarefas específicas. A lista completa de comandos e seus respectivos serviços pode ser encontrada na documentação oficial da AWS. 
+	
+Comandos básicos e exemplos:
+
+aws configure 									Configura as credenciais e configurações padrão da AWS CLI, como região e formato de saída. 
+aws s3 ls 										Lista os buckets S3 ou objetos dentro de um bucket. 
+aws s3 cp 										Copia arquivos ou objetos entre locais, incluindo o sistema de arquivos local e buckets S3. 
+aws ec2 describe-instances 						Lista as instâncias EC2. 
+aws ec2 describe-instances --region us-east-1	Lista as instâncias EC2 por região
+aws lambda invoke 								Invoca uma função lambda. 
+aws cloudwatch get-metric-data 					Recupera dados de métricas do CloudWatch. 
+aws iam list-users 								Lista os usuários do IAM. 
+aws ssm send-command 							Envia comandos para instâncias gerenciadas pelo AWS Systems Manager. 
+
+Estrutura dos comandos:
+A maioria dos comandos segue a estrutura: aws [serviço] [subcomando] [opções]. Por exemplo:
+
+aws s3 ls s3://meu-bucket															 	Lista os objetos no bucket S3 chamado "meu-bucket". 
+aws ec2 run-instances --image-id ami-xxxxxxxx --count 1 --instance-type t2.micro		Cria uma instância EC2. 
+
+A AWS CLI oferece comandos para uma vasta gama de serviços, incluindo: 
+
+Amazon S3: 				aws s3
+Amazon EC2: 			aws ec2
+AWS Lambda: 			aws lambda
+Amazon CloudWatch: 		aws cloudwatch
+AWS IAM: 				aws iam
+AWS Systems Manager: 	aws ssm
+Amazon RDS: 			aws rds
+Amazon DynamoDB: 		aws dynamodb
+
+Dicas:
+
+Use a opção --help após qualquer comando para obter informações sobre suas opções e parâmetros. 
+
+Explore a documentação oficial da AWS CLI para obter informações detalhadas sobre cada comando e serviço. 
+
+Configure a AWS CLI com suas credenciais e região usando aws configure. 
+
+Considere o uso de perfis para gerenciar diferentes configurações e credenciais. 
+
+Use a opção --debug para obter informações detalhadas sobre a execução dos comandos, o que pode ser útil para solucionar problemas. 
+
+=========================================================================================================================================
+
+A saída abaixo, significa que não existem instâncias EC2 na região padrão configurada no seu perfil da AWS CLI.
+
+{
+    "Reservations": []
+}
+
+
+A AWS CLI consulta por padrão a região definida no seu arquivo de configuração (~/.aws/config ou C:\Users\SeuUsuario\.aws\config).
+
+Se você estiver usando um perfil diferente (não o default), adicione --profile:
+
+aws ec2 describe-instances --region us-east-1 --profile meu-perfil
+
+* Comandos Gerais
+
+aws configure                     	# Configura credenciais, região e formato de saída
+aws sts get-caller-identity      	# Mostra o usuário/profissional conectado
+aws help                         	# Ajuda geral
+
+* EC2 (Instâncias)
+
+aws ec2 describe-instances                           # Lista todas as instâncias
+aws ec2 describe-instances --region sa-east-1        # Lista instâncias em uma região específica
+aws ec2 start-instances --instance-ids i-xxxxxxxxx   # Inicia uma instância
+aws ec2 stop-instances --instance-ids i-xxxxxxxxx    # Para uma instância
+aws ec2 terminate-instances --instance-ids i-xxx     # Termina uma instância
+aws ec2 describe-instance-status                     # Mostra status de saúde das instâncias
+
+* S3 (Armazenamento)
+
+aws s3 ls                                             # Lista todos os buckets
+aws s3 ls s3://meu-bucket/                            # Lista arquivos dentro do bucket
+aws s3 cp arquivo.txt s3://meu-bucket/                # Envia arquivo para o S3
+aws s3 cp s3://meu-bucket/arquivo.txt ./              # Baixa arquivo do S3
+aws s3 rm s3://meu-bucket/arquivo.txt                 # Remove arquivo do bucket
+aws s3 sync ./local/dir s3://meu-bucket/              # Sincroniza diretório local com bucket
+
+* IAM (Usuários e permissões)
+
+aws iam list-users                                    # Lista todos os usuários
+aws iam create-user --user-name nome-do-usuario       # Cria novo usuário
+aws iam delete-user --user-name nome-do-usuario       # Deleta um usuário
+aws iam list-groups                                   # Lista grupos IAM
+aws iam list-attached-user-policies --user-name nome  # Lista políticas de um usuário
+
+* VPC e Rede
+
+aws ec2 describe-vpcs                                 # Lista VPCs
+aws ec2 describe-subnets                              # Lista subnets
+aws ec2 describe-security-groups                      # Lista grupos de segurança
+aws ec2 describe-route-tables                         # Lista tabelas de rota
+
+* CloudWatch (Monitoramento)
+
+aws cloudwatch list-metrics                           # Lista métricas disponíveis
+aws cloudwatch get-metric-statistics                  # Coleta dados de métricas (CPU, memória)
+
+* Lambda
+
+aws lambda list-functions                             # Lista funções Lambda
+aws lambda invoke --function-name MinhaFunc output.txt # Executa uma função Lambda
+
+* ECS (Containers)
+
+aws ecs list-clusters                                 							# Lista clusters ECS
+aws ecs list-tasks --cluster meu-cluster              							# Lista tasks rodando
+aws ecs describe-services --cluster meu-cluster --services meu-servico
+
+* CloudFormation
+
+aws cloudformation list-stacks                        # Lista stacks
+aws cloudformation describe-stacks                    # Detalha uma stack
+aws cloudformation delete-stack --stack-name nome     # Deleta stack
+
+* Outros úteis
+
+aws elb describe-load-balancers                       # Lista load balancers clássicos
+aws elbv2 describe-load-balancers                     # Lista load balancers v2 (ALB/NLB)
+aws ecr get-login-password | docker login ...         # Autentica no ECR (Docker)
+
+* Dica Extra: usar --query e --output 
+
+aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId" --output text
