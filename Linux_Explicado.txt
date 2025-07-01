@@ -1,0 +1,236 @@
+
+Linux
+
+	O Linux começou em 1991 como um projeto pessoal de um estudante finlandês chamado Linus Torvalds para ser um sistema operacional semelhante ao Unix, porém com o código aberto. A idéia inicial que era para ser apenas um hobby logo se tornou um sucesso e hoje o Linux é muito utilizado para as mais diversass finalidades. 
+	O código aberto permite que o Linux seja estudado, modificado e evolua constantemente através de voluntários (comunidade). O código aberto permite várias versões do sistema operacional até mesmo o caso de versões pagas como é o caso do Red Hat. 
+	
+	Existem muitas versões do Linux que no caso são chamadas de distribuições ou "distros" as mais comuns são: 
+	
+		- Debian (Livre)
+		- Ubuntu (Livre)
+		- Kubuntu (Livre)
+		- CentOs (Livre)
+		- RedHat (Paga)
+		- OpenSuse (Livre)
+		- Suse (Paga)
+		
+Linux x Unix
+
+	O Linux é um sistema operacional baseado em outro sistema operacional o Unix, alguns profissionais chegam a afirmar que o Linux é uma outra versão do Unix. Embora se assemelhem bastante na operação eles tem origens e histórias distintas. 
+	Podemos dizer que o Unix é o sistema operacional original, de onde muitos conceitos nasceram, mas Linux é sua reimplementação gratuita, moderna e aberta, amplamente usada hoje.
+	
+		1. Origem e História
+		
+			Sistema		Origem				Criado por						Ano
+			Unix		Sistema original	AT&T Bell Labs					1969
+			Linux		Inspirado no Unix	Linus Torvalds (comunidade)		1991
+
+		2. Código-fonte e Licenciamento
+	
+			Aspecto				Unix												Linux
+			
+			Código-fonte		Proprietário (na maioria das versões)				Open source
+			Licença	Variada 	(BSD, comercial, etc.)								GPL (Licença Pública Geral)
+			Distribuição		Vem de empresas (IBM AIX, HP-UX, Solaris)			Comunidades e empresas (Ubuntu, Fedora, RHEL, etc.)
+
+		3. Compatibilidade e Portabilidade
+		
+			Aspecto					Unix							Linux
+			
+			Compatível com POSIX	Sim								Sim
+			Portabilidade			Baixa (hardware específico)		Alta (diversas arquiteturas: x86, ARM, etc.)
+
+		4. Uso no Mercado
+		
+			Área									Unix								Linux
+			
+			Empresas tradicionais / legado			Muito comum (bancos, mainframes)	Ainda usado, mas migrando para Linux
+			Servidores web, nuvem, containers		Pouco usado hoje					Domina (ex: 90% dos servidores web)
+			Dispositivos móveis (Android)			Não roda							Baseado em Linux
+
+		5. Exemplos de Sistemas
+		
+			Unix: AIX (IBM), HP-UX (Hewlett-Packard), Solaris (Oracle)
+
+			Linux: Ubuntu, Debian, Red Hat, CentOS, Fedora, Arch Linux
+			
+Kernel
+
+	O kernel ou núcleo é a parte principal de um sistema operacional que pode até ser vista como o próprio sistema operacional em si, sendo que os demais softwares são programs do sistema. Um sistema operacional utilizável para os usuários depende de pelo menos alguns programas básicos como um prompt de comandos. 
+	O Linux é distribuído normalmente como um conjnto de programas básicos GNU, daí o nome GNU/Linux para o sistema completo (Kernel + sistemas básicos). As distribuições Linux ainda podem incluir além dos programas GNU muitos outros softwares de diferentes empresas ou comunidades (Dependendo da versão)
+	O Kernel do Linux é monolitíco, porém a sua arquitetura é modular. Isso significa que mesmo sendo um kernel monolitíco todas as suas funções não precisam necessariamente estar todo tempo carregadas na memória. Por exemplo o Kernel pode ser configurado para trabalhar com dispositivos USB, mas não precisa manter todas as funções desse dispositivo na memória. Essas funções são mantidas em módulos e só são carregadas quando necessárias. 
+	O Linux é um sistema monolítico porque seu kernel agrupa e executa todas as funções essenciais do sistema operacional em um único espaço de execução, mesmo podendo carregar e descarregar módulos dinamicamente.
+	
+Estrutura de diretórios (Pastas) no Linux
+
+	No Linux, todos os arquivos e diretórios estão organizados sob a raiz /, formando uma estrutura em forma de árvore. A organização segue o padrão FHS (Filesystem Hierarchy Standard), o que facilita a padronização entre diferentes distribuições.
+	
+	Visão Geral em Forma de Árvore
+
+			/
+			── bin      → Binários essenciais do sistema. Contém os comandos essenciais do sistema, como ls, cp, mv, cat
+			── boot     → Arquivos de boot, incluindo o kernel. Arquivos necessários para inicialização do sistema, incluindo o kernel (vmlinuz) e o GRUB.
+			── dev      → Arquivos de dispositivos. Contém arquivos especiais que representam dispositivos de hardware, como /dev/sda, /dev/tty
+			── etc      → Arquivos de configuração do sistema. Ex: /etc/passwd, /etc/hostname, /etc/network/interfaces.o
+			── home     → Diretórios dos usuários comuns. Ex: /home/carlos, /home/maria.
+			── lib      → Bibliotecas compartilhadas necessárias para execução dos binários em /bin e /sbin. 
+			── media    → Montagem automática de dispositivos removíveis, como pendrives e CDs.
+			── mnt      → Montagem manual de dispositivos
+			── opt      → Programas de terceiros instalados manualmente ou comercialmente. Ex: Oracle, VMware.
+			── proc     → Informações do sistema e processos (virtual). Sistema de arquivos virtual com informações sobre o sistema e processos em tempo real. Ex: /proc/cpuinfo, /proc/meminfo.
+			── root     → Diretório pessoal do superusuário (root). Diferente de /home/root
+			── run      → Informações temporárias usadas no momento da execução do sistema. Substitui partes de /var/run.
+			── sbin     → Binários administrativos
+			── srv      → Dados servidos por serviços do sistema. Ex: páginas web (/srv/www), arquivos FTP (/srv/ftp).
+			── sys      → Informações e controle do kernel (virtual). Sistema de arquivos virtual usado para interagir com o kernel. Complementa o /proc.
+			── tmp      → Arquivos temporários criados por aplicações. Podem ser apagados automaticamente após reinicialização.
+			── usr      → Programas e bibliotecas de usuário (Não não essenciais para boot)
+			── var      → Contém arquivos variáveis: logs (/var/log), spools de impressão, arquivos temporários de cache, etc.
+			
+Descrição dos Principais Diretórios
+
+	O diretório raiz (/)
+	
+		Todos os arquivos e diretórios do sistema Linux instalado no computador partem de uma única origem: o diretório raiz. Mesmo que estejam armazenados em outros dispositivos físicos, é a partir do diretório raiz – representado pela barra (/) – que você poderá acessá-los. Também vale lembrar que o único usuário do sistema capaz de criar ou mover arquivos do diretório raiz é o root, ou seja, o usuário-administrador. Isso evita que usuários comuns cometam erros e acabem comprometendo a integridade de todo o sistema de arquivos.
+		
+	Binários executáveis: /bin
+	
+		No diretório /bin estão localizados os binários executáveis que podem ser utilizados por qualquer usuário do sistema. São comandos essenciais, usados para trabalhar com arquivos, textos e alguns recursos básicos de rede, como o cp, mv, ping e grep.
+		
+	Binários do sistema: /sbin
+	
+		Assim como o /bin, este diretório armazena executáveis, mas com um diferencial: são aplicativos utilizados por administradores de sistema com o propósito de realizar funções de manutenção e outras tarefas semelhantes. Entre os comandos disponíveis estão o ifconfig, para configurar e controlar interfaces de rede TCP/IP, e o fdisk, que permite particionar discos rígidos, por exemplo.
+		
+	Programas diversos: /usr
+	
+		Se você não encontrar um comando no diretório /bin ou /sbin, ele certamente está aqui. O /usr reúne executáveis, bibliotecas e até documentação de softwares usados pelos usuários ou administradores do sistema. Além disso, sempre que você compilar e instalar um programa a partir do código-fonte, ele será instalado nesse diretório.
+		
+		Dados e aplicativos de usuário (não essenciais para boot). Inclui:
+		
+			- /usr/bin: programas de usuário
+			
+			- /usr/sbin: programas administrativos
+			
+			- /usr/lib: bibliotecas
+			
+			- /usr/share: arquivos independentes de arquitetura
+		
+	Configurações do sistema: /etc
+	
+		No diretório /etc ficam arquivos de configuração que podem ser usados por todos os softwares, além de scripts especiais para iniciar ou interromper módulos e programas diversos. É no /etc que se encontra, por exemplo, o arquivo resolv.conf, com uma relação de servidores DNS que podem ser acessados pelo sistema, com os parâmetros necessários para isso.
+		
+	Bibliotecas: /lib
+	
+		Neste ponto do sistema de arquivos ficam localizadas as bibliotecas usadas pelos comandos presentes em /bin e /sbin. Normalmente, os arquivos de bibliotecas começam com os prefixos ld ou lib e possuem "extensão" so.
+		
+	Opcionais: /opt
+	
+		Aplicativos adicionais, que não são essenciais para o sistema, terminam neste diretório.
+		
+	Aquivos pessoais: /home
+	
+		No diretório /home ficam os arquivos pessoais, como documentos e fotografias, sempre dentro de pastas que levam o nome de cada usuário. Vale notar que o diretório pessoal do administrador não fica no mesmo local, e sim em /root.
+		
+	Inicialização: /boot
+	
+		Arquivos relacionados à inicialização do sistema, ou seja, o processo de boot do Linux, quando o computador é ligado, ficam em /boot.
+		
+	Volumes e mídias: /mnt e /media
+	
+		Para acessar os arquivos de um CD, pendrive ou disco rígido presente em outra máquina da rede, é necessário "montar" esse conteúdo no sistema de arquivos local, isso é, torná-lo acessível como se fosse apenas mais um diretório no sistema.
+
+		Em /media ficam montadas todas as mídias removíveis, como dispositivos USB e DVDs de dados. Já o diretório /mnt fica reservado aos administradores que precisam montar temporariamente um sistema de arquivos externo.
+		
+	Serviços: /srv
+	
+		Dados de servidores e serviços em execução no computador ficam armazenados dentro desse diretório.
+		
+	Arquivos de dispositivos: /dev
+	
+		No Linux, tudo é apresentado na forma de arquivos. Ao plugar um pendrive no computador, por exemplo, um arquivo será criado dentro do diretório /dev e ele servirá como interface para acessar ou gerenciar o drive USB. Nesse diretório, você encontra caminhos semelhantes para acessar terminais e qualquer dispositivo conectado ao computador, como o mouse e até modems.
+		
+	Arquivos variáveis: /var
+	
+		Todo arquivo que aumenta de tamanho ao longo do tempo está no diretório de arquivos variáveis. Um bom exemplo são os logs do sistema, ou seja, registros em forma de texto de atividades realizadas no Linux, como os logins feitos ao longo dos meses.
+		
+	Processos do sistema: /proc
+	
+		Lembra da história de que tudo funciona como um arquivo no Linux? Pois o /proc é a prova disso. Nesse diretório são encontrados arquivos que revelam informações sobre os recursos e processos em execução no sistema. Quer um exemplo? Para saber há quanto tempo o Linux está sendo usado desde a última vez em que foi iniciado, basta ler o arquivo /proc/uptime.
+		
+	Arquivos temporários: /tmp
+	
+		Arquivos e diretórios criados temporariamente tanto pelo sistema quanto pelos usuários devem ficar nesse diretório. Boa parte deles é apagada sempre que o computador é reiniciado.
+		
+Ordem de Inicialização do Linux
+
+1. BIOS / UEFI
+2. MBR / GPT
+3. Bootloader (GRUB, LILO, etc.)
+4. Kernel
+5. initramfs / initrd
+6. Sistema init (Systemd, SysVinit, etc.)
+7. Login (TTY, GUI ou SSH)
+	
+	1. BIOS ou UEFI
+	
+		Executado assim que o computador é ligado.
+		Realiza o POST (Power-On Self Test) para verificar o hardware.
+		Localiza o disco de boot e carrega o bootloader (via MBR ou EFI).
+		
+	2. MBR (Master Boot Record) ou GPT
+	
+		Área especial do disco que contém:
+
+			Partição de boot
+			Endereço do bootloader (ex: GRUB)
+
+		MBR: usado em BIOS
+		GPT: usado em UEFI
+		
+	3. Bootloader (ex: GRUB)
+	
+		Mostra o menu de escolha de sistemas operacionais (multi-boot).
+		Carrega o kernel Linux e a initramfs/initrd para a memória.
+		Exemplo: /boot/vmlinuz-* (kernel) e /boot/initrd.img-*
+		
+	4. Kernel Linux
+	
+		Inicializa drivers, sistema de arquivos, rede, processos e segurança.
+		Monta o sistema de arquivos root (/).
+		Inicia o processo PID 1 (init).
+		
+	5. initramfs ou initrd
+	
+		Um sistema de arquivos temporário em RAM, usado para:
+		Ajudar o kernel a montar o sistema de arquivos real.
+		Carregar drivers de discos e controladores de hardware.
+		
+	6. Sistema init (PID 1)
+	
+		Responsável por iniciar os serviços e preparar o sistema para uso.
+
+		Sistema init				Descrição
+		
+		Systemd (atual padrão)		Mais moderno e rápido, com unidades de serviço (.service)
+		SysVinit					Script-based (init.d) – mais antigo
+		Upstart						Usado por algumas versões antigas do Ubuntu
+
+		No Systemd, esse processo inclui:
+
+			Montar sistemas de arquivos adicionais
+			Ativar rede
+			Iniciar serviços (ex: SSH, cron, dbus)
+			Preparar o ambiente gráfico (GDM, SDDM, LightDM, etc.)
+			
+	7. Login
+	
+		Pode ser:
+
+			TTY (modo texto): login direto no terminal.
+			Display Manager (modo gráfico): tela de login visual.
+			SSH: login remoto via rede.
+
+
+
+
+	
