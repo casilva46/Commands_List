@@ -1,5 +1,7 @@
 DOCKER
 
+* Comandos
+
 • docker-compose pull					            Baixar as imagens
 • docker image ls					                Listar as imagens
 • docker-compose up –d  				            Executar os containers / Iniciar todos os serviços em background (-d)
@@ -25,4 +27,117 @@ docker container rm <container ID>
 
 optionalfeatures.exe (habilita e desabilita recursos do windows)
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    O Docker funciona como uma plataforma de virtualização leve baseada em containers, permitindo empacotar aplicações com todas as suas dependências em um único pacote isolado do sistema operacional host. Ele foi criado para facilitar o desenvolvimento, a entrega e a execução de aplicações de forma consistente em qualquer ambiente.
+
+    Um container é como uma “mini-máquina virtual”, mas mais leve e rápida, porque não precisa carregar um sistema operacional completo — ele compartilha o kernel do sistema operacional do host, mas isola o processo.
+
+* Arquitetura Interna do Docker
+
+Componente	            Função
+Docker Engine	        Serviço principal que executa containers. Inclui daemon, API e CLI.
+Dockerfile	            Script com instruções para criar uma imagem (base para o container).
+Imagem (Image)	        Snapshot de uma aplicação com todas as dependências.
+Container	            Instância em execução de uma imagem.
+Docker Hub	            Repositório público (ou privado) de imagens Docker.
+
+    * Docker Engine
+
+        A peça central. Inclui:
+
+        * Docker Daemon (dockerd): serviço que gerencia containers, imagens, volumes e redes. Ele escuta requisições da CLI e da API.
+        * Docker CLI (docker): ferramenta de linha de comando que o usuário usa.
+        * REST API: interface que permite comunicação entre CLI, ferramentas externas e o daemon.
+
+        [Usuário] ⇄ [CLI] ⇄ [Docker API] ⇄ [Docker Daemon] ⇄ [Container Runtime]
+
+    * Imagens e Dockerfile
+
+    * O que é uma imagem Docker?
+
+        É uma pilha de camadas somente leitura, contendo:
+
+            * Sistema base (ex: ubuntu, alpine)
+            * Bibliotecas e dependências (ex: Python, Node)
+            * Código da aplicação
+            * Configurações
+
+            Exemplo de Dockerfile
+
+            FROM python:3.11         ← base (layer 1)
+            COPY . /app              ← cópia de arquivos (layer 2)
+            RUN pip install -r ...   ← instalação (layer 3)
+            CMD ["python", "app.py"] ← comando de execução (layer 4)
+
+    * Build: Criando a imagem
+
+        docker build -t minha-aplicacao .
+        
+* O Docker:
+
+1 - Lê o Dockerfile.
+2 - Executa cada instrução (como um script).
+3 - Cria camadas intermediárias.
+4 - Salva a imagem com um hash único.
+5 - Armazena localmente em /var/lib/docker/.
+
+* Container: Instanciando a imagem
+
+    Um container é uma instância em tempo de execução de uma imagem. Ele é criado com:
+
+    docker run -d -p 5000:5000 minha-aplicacao
+
+* O Docker faz:
+
+    1 - Verifica a imagem: se não existir localmente, baixa do Docker Hub (ou outro registro).
+
+    2 - Cria um container:
+
+        * Aloca um filesystem com UnionFS (overlay de camadas + layer de escrita).
+        * Cria um namespace isolado (processos, rede, usuários, etc.).
+        * Define limites com cgroups (CPU, memória, I/O).
+        * Atribui uma interface de rede virtual (por padrão, bridge).
+
+    3 - Executa o processo principal da imagem (ex: python app.py).
+
+Quando abrimos o RUN e executamos um hello-world o Docker primeiro procura localmente se a imagem existe, caso a imagem não exista localmente ele irá até o Docker Hub (repositório de imagens na internet) e faz o download da imagem (que é um arquivo). Ele então executa a imagem e cria o container. 
+	É possivel criar varios containers a partir de uma unica imagem (template)
+	
+	Para criar um container precisamos de uma imagem, porém a imagem é independentemente do container
+	
+	OBS: Não se cria containers para ficar armazenando dados. Caso necessite de armazenamento (persistencia de dados) deve-se criar um volume. 
+
+* Fluxo Completo: Exemplo
+
+    Imagine que você faz:
+
+    docker run -it ubuntu bash
+
+O que acontece:
+
+    1 - Docker verifica se a imagem ubuntu existe.
+    2 - Baixa do Docker Hub, se necessário.
+    3 - Cria camadas de sistema de arquivos.
+    4 - Aloca namespaces e cgroups para o container.
+    5 - Inicializa o bash como processo principal.
+    6 - Te conecta ao terminal dentro do container.
+
+* Resumo Final
+
+Etapa	            Descrição
+Build	            Transforma um Dockerfile em uma imagem com camadas.
+Run	                Cria um container com isolamento de processo, rede e sistema.
+Isolamento	        Namespaces + cgroups + OverlayFS.
+Rede	            Containers podem se comunicar entre si via redes virtuais.
+Armazenamento	    Volumes são usados para persistência de dados.
+
+* Diferenças entre VM e Container
+
+Característica	                    Máquina Virtual (VM)	       Docker (Container)
+Sistema operacional	                Inclui um SO completo	       Compartilha o SO do host
+Consumo de recursos	                Alto	                        Baixo
+Velocidade de inicialização	        Lenta	                        Rápida
+Isolamento	                        Total (nível de hardware)	    Parcial (nível de processo)
+
+
