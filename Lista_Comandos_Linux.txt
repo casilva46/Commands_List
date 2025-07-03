@@ -42,16 +42,12 @@ id <usuario>                   Identifica quais as permissões que o usuário po
 
 dos2unix <nome_arquivo>        Faz a convesão de um arquivo para formato Unix
 
-
-
 mv ./arquivo ./arquivo_bkp    renomeia um arquivo ou diretório
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CRONTAB
 
-sudocrontab -u root -e      para criar uma tabela de agendamentos cron com a permissão do superusuário (root)
-
-
+sudo crontab -u root -e      para criar uma tabela de agendamentos cron com a permissão do superusuário (root)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Listar diretórios recursivamente e salvar a saída em arquivo
@@ -88,8 +84,14 @@ ps aux |head -1 ; ps aux | sort -nk 4 -r | head -n 1
 ps -eo user,pid,pmem,pcpu,comm --sort= -pcpu | head
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Como listar todos os comandos do sistema
 
-comando1 ; comando2 ; comando3 ; comandoN 		  executa os comandos indiferente do resultado do comando anterior
+compgen -c | sort | uniq
+compgen -c | wc -l                      conta quantos comandos existem
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+comando1 ; comando2 ; comando3 ; comandoN 		executa os comandos indiferente do resultado do comando anterior
 
 comando1 && comando2 && comando3 && comandoN 	executa o comando seguinte apenas se o anterior tiver sucesso, retorno 0
 
@@ -165,33 +167,32 @@ systemctl list-units -all --state=inactive: lista todos os serviços que estão 
 
 systemctl list-units -all --state=running: lista todos os serviços que estão em execução
 
-dmesg: mostra informações do sistema)
+dmesg  mostra informações do sistema)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 MANIPULANDO ARQUIVOS E DIRETÓRIOS
 
-cd ..		                   Sobe um nível na árvore de diretórios.
+cd ..		              Sobe um nível na árvore de diretórios.
 c-                        Volta para o diretótio anterior
-ls			                     Lista arquivos e diretórios.
-ls -lh		                  Lista arquivos e diretórios com mais detalhes.
-ls -lSrh	                 Lista os arquivos por tamanho
-ls -Fltr	                 Lista os arquivos por data
-ls -a		                   Lista arquivos e diretórios, inclusive ocultos.
-ls -d */	                 Lista apenas diretórios.
+ls			              Lista arquivos e diretórios.
+ls -lh		              Lista arquivos e diretórios com mais detalhes.
+ls -lSrh	              Lista os arquivos por tamanho
+ls -Fltr	              Lista os arquivos por data
+ls -a		              Lista arquivos e diretórios, inclusive ocultos.
+ls -d */	              Lista apenas diretórios.
 ls -l *.XXXX              Lista os arquivos com uma extensão especifica
-mkdir		                   Cria um diretório.
-mkdir -p	                 Cria vários diretórios simultâneos.
-rm			                     Remove um arquivo.
-rm -r		                   Remove um arquivo, exige uma confirmação antes da remoção
-rm -rf		                  Remove um arquivo ou diretório sem perguntar
-rmdir		                   Remove um diretorio desde que esteja vazio
-cp			                     Copia um arquivo.
-cp -r		                   Copia um diretório recursivamente.
-cp -p		                   Copia um arquivo ou diretório mantendo as suas propriedades originais (data, owner etc)
+mkdir		              Cria um diretório.
+mkdir -p	              Cria vários diretórios simultâneos.
+rm			              Remove um arquivo.
+rm -r		              Remove um arquivo, exige uma confirmação antes da remoção
+rm -rf		              Remove um arquivo ou diretório sem perguntar
+rmdir		              Remove um diretorio desde que esteja vazio
+cp			              Copia um arquivo.
+cp -r		              Copia um diretório recursivamente.
+cp -p		              Copia um arquivo ou diretório mantendo as suas propriedades originais (data, owner etc)
 cp -i                     Copia e pergunta se deseja sobreescrever o arquivo caso haja outro com o mesmo nome no destivo
-mv			                     Move um arquivo/diretório ou renomeia. Se o caminho-destino for o mesmo local, irá renomear, se for diferente, irá mover.
-pwd			                    Exibe o caminho completo até o diretório atual.
-
+mv			              Move um arquivo/diretório ou renomeia. Se o caminho-destino for o mesmo local, irá renomear, se for diferente, irá mover.
+pwd			              Exibe o caminho completo até o diretório atual.
 
 -l: exibe em forma de lista
 -t: exibe por ordem de modificação
@@ -211,85 +212,102 @@ ls -lt | grep jul" "(dia)"   Filtra por uma data especifica
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 DATA E HORA
 
-date			                Exibe e altera a data e a hora do sistema.
-date -s			             Altera a data e a hora do sistema por extenso.
-date -r			             Exibe a última data e hora de modificação de um arquivo.
+date			       Exibe e altera a data e a hora do sistema.
+date -s			       Altera a data e a hora do sistema por extenso.
+date -r			       Exibe a última data e hora de modificação de um arquivo.
 cal                    Exibe o calendário
-touch			               Modifica a data e hora de um arquivo.
-touch -m arquivo	      Altera a data e hora de modificação do arquivo.
+touch			       Modifica a data e hora de um arquivo.
+touch -m arquivo	   Altera a data e hora de modificação do arquivo.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 INFORMAÇÕES GERAIS
 
-free -m			                  Mostra o uso (livre/usado) das memórias.
-df -h			                    Mostra o espaço utilizado pelos dispositivos.
-df -hi 			                  Mostra a quantidade de inodes ocupando espaço em um disco
-du -h			                    Mostra o espaço utilizado pelos arquivos.
-cat /proc/cpuinfo	          Informações do processador do computador.
-cat /proc/meminfo	          Informações da memória do computador.
-cat /proc/partitions	       Informações sobre discos e partições.
+free -m			            Mostra o uso (livre/usado) das memórias.
+df -h			            Mostra o espaço utilizado pelos dispositivos.
+df -hi 			            Mostra a quantidade de inodes ocupando espaço em um disco
+du -h			            Mostra o espaço utilizado pelos arquivos.
+cat /proc/cpuinfo	        Informações do processador do computador.
+cat /proc/meminfo	        Informações da memória do computador.
+cat /proc/partitions	    Informações sobre discos e partições.
 ps                          Lista a lista de processos em execução, útil para saber o pid de um processo para o mandar abaixo com o comando kill, entre outras coisas
-pstree -p		                 Mostra cada processo em execução, em forma de árvore, contendo o PID de cada processo.
+pstree -p		            Mostra cada processo em execução, em forma de árvore, contendo o PID de cada processo.
 ps -a                       Mostra os processos de todos os usuários (permissão de root para tal)
 ps -x                       Mostra processos que não estejam associados ao terminal de comandos
 ps -u                       Mostra a lista detalhada contendo o usuário que é dono do processo
 ps -aux | grep XXXX         Mostra a lista de processos, o | grep realiza um filtro para uma busca mais especifica
-lspci			                    Exibe informações dos dispositivos da máquina.
-lsusb			                    Exibe informações dos dispositivos USB da máquina.
+lspci			            Exibe informações dos dispositivos da máquina.
+lsusb			             Exibe informações dos dispositivos USB da máquina.
 lscpu                       Exibe a quantidade de CPU que a máquina possui
 ls -la /dev/sd*             Lista dos discos que estão fisicamente conectados na máquina
 sudo fdisk /dev/sda
 fsck /dev/sda               Faz uma verificaão na saúde da Partição 
-sensors		                   Exibe informações de temperatura da máquina, CPU, cooler, placa mãe
+sensors		                Exibe informações de temperatura da máquina, CPU, cooler, placa mãe
 hddtemp /dev/[sh]d[a-z]	    Exibe informações sobre temperatura dos dispositivos de armazenamento.
-inxi -v7			                 Informações completas sobre o hardware da máquina.
-w  			                      Exibe os usuários logados, com sessão aberta no sistema.
+inxi -v7			        Informações completas sobre o hardware da máquina.
+w  			                Exibe os usuários logados, com sessão aberta no sistema.
 whoami                      Exibe com qual usuário estou conectado
-iotop -Pak		                Analisa a leitura e gravação dos discos.
+iotop -Pak		            Analisa a leitura e gravação dos discos.
 sar -q                      Exibe o uso da máquina
-cut -d: -f1 /etc/group	     Exibe todos os grupos disponíveis no sistema.
+cut -d: -f1 /etc/group	    Exibe todos os grupos disponíveis no sistema.
 
 sar -q -s 06:00:00 | head
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 DESLIGAR OU REINICIAR O SISTEMA
 
-shutdown		               Desliga a máquina.
-shutdown -r		            Reinicia a máquina. Use a palavra “now” para reiniciar imediatamente. Exemplo: shutdown -r now
-shutdown -h		            Desliga a máquina. Use a palavra “now” para desligar imediatamente. Exemplo: shutdown -h now
-shutdown -c		            Cancela a execução do shutdown. Apenas se não for usado a palavra “now”.
-shutdown -h +30	         Desliga o sistema em 30 minutos.
+shutdown		                                                        Desliga a máquina.
+shutdown -r                                                             Reinicia o sistema no tempo padrão	
+shutdown -r now	                                                        Reinicia a máquina imediatamente
+shutdown -h	                                                            Desliga a máquina no tempo padrão
+shutdown -h now	                                                        Desliga a máquina imediatamente
+shutdown -c		                                                        Cancela a execução do shutdown. Apenas se não for usado a palavra “now”.
+shutdown -h +30	                                                        Desliga o sistema em 30 minutos.
 shutdown -r 04:37 "Prezados, o servidor será reiniciado em 1:30h min"	Reinicia o sistema na hora informada.
-reboot			                Reinicia o sistema.
+reboot			                                                        Reinicia o sistema.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GERENCIAR USUÁRIOS E GRUPOS
 
-id  						                identifica os grupos do usuário
-adduser XXXXXXX				       Cria o usuário “XXXXX”.
-passwd -a user grupo      Adiciona o usuário ao grupo
-passwd -d user grupo      Remove o usuário do grupo
-adduser XXX YYYY			       Adiciona o usuário XXXX ao grupo YYYY.
-deluser XXX YYYY          Remove o usuário XXXX ao grupo YYYY.
+id  						             Identifica os grupos do usuário
+adduser XXXXXXX				             Cria o usuário “XXXXX”.
+passwd -a user_name nome_grupo           Adiciona o usuário ao grupo
+gpasswd -d user_name nome_grupo           Remove o usuário do grupo
+adduser XXX YYYY			             Adiciona o usuário XXXX ao grupo YYYY.
+deluser XXX YYYY                         Remove o usuário XXXX ao grupo YYYY.
+groupdel nome_grupo                      Deleta o grupo (Os usuários não são deletados)
+userdel -r nome_user                     Deleta o usuário e o seu diretório /home
+
+cat /etc/passwd                          Lista todos os usuários criados (usuários nologin são usuários de sistema)
+cat /etx/group                           Lista os grupos
+cut -d: -f1 /etc/passwd                  Tras somente os nomes sem as informações
+getend passwd user_name                  Trás somente as informaçoes de um usuário
 
 GRUPOS
 
-gpasswd -a Nome_usuário Nome_grupo        Inclui o usuário em um grupo
-gpasswd -d Nome_usuário Nome_grupo        Exclui o usuário de um grupo
+groupadd Nome_grupo                             Cria um grupo de usuários 
+gpasswd -a Nome_usuário Nome_grupo              Inclui o usuário em um grupo
+gpasswd -d Nome_usuário Nome_grupo              Exclui o usuário de um grupo
+groupmod -n novo_Nome_grupo antigo_Nome_grupo   renomeia o nome do grupo
+
+passwd user_name                        Redefinir senha
+
+usermod -l novo_nome nome_antigo        Renomeia um usuário (a pasta no /home não muda de nome)
+usermod -d /home/aluno3 aluno3          Para trocaro /home de um usuário após renomear o user (Primeiro crie uma pasta no /home e depois mude o apontamento)
+usermod -aG nome_grupo nome_user        Muda o usuário de grupo / inclui um usuário a um grupo
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 COMANDOS DE EDIÇÃO DE TEXTO
 
-emacs: Editor de texto screen-oriented
-pico: Editor de texto screen-oriented, também chamado de nano
-sed: Editor de texto stream-oriented
-vi: Editor de texto full-screen
-vim: Editor de texto full-screen melhorado (vi improved)
+emacs:      Editor de texto screen-oriented
+pico:       Editor de texto screen-oriented, também chamado de nano
+sed:        Editor de texto stream-oriented
+vi:         Editor de texto full-screen
+vim:        Editor de texto full-screen melhorado (vi improved)
 
-:w salvar na memória para o disco
-:q sair do editor
-:wq salvar e sair do editor
-:x salvar e sair do editor
-:e! reeditar, desprezando as mudanças
-ZZ salvar e sair do editor
+:w          salvar na memória para o disco
+:q          sair do editor
+:wq         salvar e sair do editor
+:x          salvar e sair do editor
+:e!         reeditar, desprezando as mudanças
+ZZ          salvar e sair do editor
 
 U                                     Desfaz o último comando
 :set number                           visualiza o número de linhas
@@ -300,21 +318,21 @@ G                                     Desloca imediatamente para a última linha
 :xx,xxw arquivo_teste [enter]         Copia um intervalo desajado de linhas para um novo arquivo
 /XXXXXXXXXXX                          Pesquisa por uma palavra especifica no arquivo
 n ou N                                Navega entre as palavras pesquisadas
-:%s/XXXXXXX/YYYYYYYY/gc                Faz a busca pela palavra XXXXXXX e substitui pela palavra YYYYYYYY. O "gc" faz isso para todas e solicita confirmação 
+:%s/XXXXXXX/YYYYYYYY/gc               Faz a busca pela palavra XXXXXXX e substitui pela palavra YYYYYYYY. O "gc" faz isso para todas e solicita confirmação 
    
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 VISUALIZAR TEXTOS
 
-cat			     Exibe o conteúdo de um arquivo texto.
-cat -n		   Exibe o conteúdo do arquivo texto, enumerando as linhas.
-head		     Lê as primeiras linhas ou caracteres de um arquivo de texto.
-head -n 7	 Lê as sete primeiras linhas de um arquivo de texto.
-head -c 33	Lê os primeiros 33 caracteres de um arquivo texto.
-tail		     Lê as últimas Linhas de um arquivo texto.
-tail -n 2	 Lê as duas últimas linhas de um arquivo texto.
-tail -c 33	Lê os últimos 33 caracteres de um arquivo texto.
-more		     Visualiza um arquivo texto de forma interativa.
-less		     Visualiza um arquivo texto de forma interativa. Possui mais opções e é mais otimizado que o more.
+cat			    Exibe o conteúdo de um arquivo texto.
+cat -n		    Exibe o conteúdo do arquivo texto, enumerando as linhas.
+head		    Lê as primeiras linhas ou caracteres de um arquivo de texto.
+head -n 7	    Lê as sete primeiras linhas de um arquivo de texto.
+head -c 33	    Lê os primeiros 33 caracteres de um arquivo texto.
+tail		    Lê as últimas Linhas de um arquivo texto.
+tail -n 2	    Lê as duas últimas linhas de um arquivo texto.
+tail -c 33	    Lê os últimos 33 caracteres de um arquivo texto.
+more		    Visualiza um arquivo texto de forma interativa.
+less		    Visualiza um arquivo texto de forma interativa. Possui mais opções e é mais otimizado que o more.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos de Ajuda e Documentação
@@ -329,76 +347,72 @@ whereis:  Localizar a página de ajuda (man page), código fonte, ou arquivos bi
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 MONTAR E DESMONTAR DISPOSITIVOS
 
-mount		    Monta um dispositivo.
-umount	    Desmonta um dispositivo.
-umount -l	 Desmonta um dispositivo mesmo que o mesmo esteja em uso;
-mount -o loop,ro arquivo.iso /mnt/	Monta uma imagem “.iso”.
-mount -o remount,rw /	Remonta o diretório raiz em modo de leitura e gravação.
+mount		                            Monta um dispositivo.
+umount	                                Desmonta um dispositivo.
+umount -l	                            Desmonta um dispositivo mesmo que o mesmo esteja em uso;
+mount -o loop,ro arquivo.iso /mnt/	    Monta uma imagem “.iso”.
+mount -o remount,rw /	                Remonta o diretório raiz em modo de leitura e gravação.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 COMPACTAÇÃO E DESCOMPACTAÇÃO
 
 Comandos							Descrição
-tar									                         Junta vários arquivos e gera um arquivo.tar.
+tar									      Junta vários arquivos e gera um arquivo.tar.
 tar -cvf arquivo.tar Músicas/		      Gera um “arquivo.tar” do diretório “Músicas”.
-tar -tvf arquivo.tar				             Exibe o conteúdo do “arquivo.tar”, sem extraí-lo.
-tar -xvf arquivo.tar -C /tmp		       Extrai o conteúdo do “arquivo.tar” no diretório /tmp.
-tar -cvzf arquivo.tar.gz Músicas/	   Gera um “arquivo.tar.gz” compactando o diretório “Músicas”.
-tar -tvzf arquivo.tar.gz			          Exibe o conteúdo do “arquivo.tar.gz”, sem extraí-lo.
-tar -xvzf arquivo.tar.gz			          Extrai o conteúdo do “arquivo.tar.gz”.
-tar -cvjf arquivo.tar.gz Músicas/	Gera um “arquivo.tar.bz2” compactando o diretório “Músicas”.
-tar -tvjf arquivo.tar.gz			          Exibe o conteúdo do “arquivo.tar.bz2”, sem extraí-lo.
-tar -xvjf arquivo.tar.gz			          Extrai o conteúdo do “arquivo.tar.bz2”.
-zip -r arquivo.zip arquivo			        Compacta um arquivo ou diretório para o formato .zip.
+tar -tvf arquivo.tar				      Exibe o conteúdo do “arquivo.tar”, sem extraí-lo.
+tar -xvf arquivo.tar -C /tmp		      Extrai o conteúdo do “arquivo.tar” no diretório /tmp.
+tar -cvzf arquivo.tar.gz Músicas/	      Gera um “arquivo.tar.gz” compactando o diretório “Músicas”.
+tar -tvzf arquivo.tar.gz			      Exibe o conteúdo do “arquivo.tar.gz”, sem extraí-lo.
+tar -xvzf arquivo.tar.gz			      Extrai o conteúdo do “arquivo.tar.gz”.
+tar -cvjf arquivo.tar.gz Músicas/	      Gera um “arquivo.tar.bz2” compactando o diretório “Músicas”.
+tar -tvjf arquivo.tar.gz			      Exibe o conteúdo do “arquivo.tar.bz2”, sem extraí-lo.
+tar -xvjf arquivo.tar.gz			      Extrai o conteúdo do “arquivo.tar.bz2”.
+zip -r arquivo.zip arquivo			      Compacta um arquivo ou diretório para o formato .zip.
 
-
-gzip Nome_arquivo                    Compacta um arquivo
-gunzip arquivo.zip					              Descompacta um arquivo .zip
+gzip Nome_arquivo                         Compacta um arquivo
+gunzip arquivo.zip					      Descompacta um arquivo .zip
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROCESSOS
 
-top				      Trabalha com processos em tempo real.
-top -c: 		   Mostra o uso de recursos de forma detalhada
-htop			      Trabalha com processos em tempo real de forma mais amigável.
-kill			      Mata processos através.
-kill -9			   Mata processos de forma forçada.
+top				Trabalha com processos em tempo real.
+top -c: 		Mostra o uso de recursos de forma detalhada
+htop			Trabalha com processos em tempo real de forma mais amigável.
+kill			Mata processos através.
+kill -9			Mata processos de forma forçada.
 killall		    Mata o aplicativo e todos processos ligados a ele.
 kill all -9 	Mata o aplicativo de forma forçada e todos processos ligados a ele. Apaga o que já existe.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 REDE E DOWNLOADS
 
-ifconfig	 Informação e configuração da rede.
+ifconfig	                                        Informação e configuração da rede.
 ifconfig eth0 192.168.25.200 netmask 255.255.255.0	Configura o dispositivo “eth0” para o IP “192.168.25.200” e máscara para “255.255.255.0”.
-ifconf eth0 down Desativa a rede do dispositivo “eth0”.
-ifconf eth0 up Ativa a rede do dispositivo “eth0”.
-iwlist	Recolhe informações de redes wireless.
-iwlist wlan0 scan	Pesquisa por redes wireless disponíveis, usando o dispositivo “wlan0”.
-wget		Baixa arquivos da internet.
-wget -c	 Baixa arquivos da internet com “resume”, ou seja, recomeçando de onde parou.
-wget --limit-rate=200k	Baixa arquivos da internet limitando a velocidade de download a “200k”.
-wget -m -p -k -P Diretório Site	Baixa um site completo.
-youtube-dl Baixa vídeos da internet.
-ssh -p 2782 talesam@talesam.org Acessa via ssh o servidor talesam.org com o usuário talesam utilizando a porta 2782.
+ifconf eth0 down                                    Desativa a rede do dispositivo “eth0”.
+ifconf eth0 up                                      Ativa a rede do dispositivo “eth0”.
+iwlist	                                            Recolhe informações de redes wireless.
+iwlist wlan0 scan	                                Pesquisa por redes wireless disponíveis, usando o dispositivo “wlan0”.
+wget		                                        Baixa arquivos da internet.
+wget -c	                                            Baixa arquivos da internet com “resume”, ou seja, recomeçando de onde parou.
+wget --limit-rate=200k	                            Baixa arquivos da internet limitando a velocidade de download a “200k”.
+wget -m -p -k -P                                    Diretório Site	Baixa um site completo.
+youtube-dl                                          Baixa vídeos da internet.
+ssh -p 2782 talesam@talesam.org                     Acessa via ssh o servidor talesam.org com o usuário talesam utilizando a porta 2782.
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Comandos de Notícias ou Rede
-
-netstat: Mostra o estado da rede
+netstat                                              Mostra o estado da rede
 netstat -a | grep LISTEN
 netstat -a | grep CLOSE_WAIT
 netstat -a | grep ESTABLISHED
 
-netstat -i: lista as interfaces de rede e e suas respctivas estatisticas de trafego
-netstat -s: lista as estatisticas de trafego para cada protocolo de rede
-netstat -r: lista as tabelas de roteamento
-netstat -l: lista as portas que estão sendo ouvidas
+netstat -i                                          lista as interfaces de rede e e suas respctivas estatisticas de trafego
+netstat -s                                          lista as estatisticas de trafego para cada protocolo de rede
+netstat -r                                          lista as tabelas de roteamento
+netstat -l                                          lista as portas que estão sendo ouvidas
 
-rsh: Um shell em outros sistemas UNIX
-ssh: Versão segura do rsh
-nmap: Poderoso port-scan, para visualizarmos portas abertas num dado host
-ifconfig: Visualizar os ips da nossa máquina, entre outras funções relacionadas com ips
-ping: Pingar um determinado host, ou seja, enviar pacotes icmp para um determinado host e medir tempos de resposta, entre outras coisas
+rsh                                                 Um shell em outros sistemas UNIX
+ssh                                                 Versão segura do rsh
+nmap                                                Poderoso port-scan, para visualizarmos portas abertas num dado host
+ping                                                Pingar um determinado host
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROCURAR ARQUIVOS E DIRETÓRIOS
 
@@ -452,6 +466,12 @@ O comando fica assim
 
 sudo chmod 777 arquivo/diretório
 
+Exemplo:
+
+- - -
+r w x
+4 2 1
+
 Tipo  Dono   Grupo  Outros  Arquivo 
 -     ---    ---    ---     arquivo.extensão
 
@@ -501,13 +521,44 @@ chmod	700	-rwx------	Leitura gravação e execução para o dono e nada para os 
 chmod	770	-rwxrwx---	Leitura e gravação e execução para o dono, leitura gravação e execução para o grupo e nada para outros
 chmod	777	-rwxrwxrwx	Permissão total para dono, grupo e outros
 
+---------------------------------------------------------------
+
+Dar permissões com chmod (forma simbólica)
+
+u = usuario Owner
+g = grupo do owner
+o = outros
+a = todos
+
+chmod u+x nome_arquivo      Execução apenas para o owner
+chmod u+rw nome_arquivo     Leitura e escrita apenas para o owner
+chmod u+rwx nome_arquivo    Leitura, escrita e execução apenas para o owner 
+chmod g+x nome_arquivo      Execução apenas para o grupo
+chmod g+rw nome_arquivo     Leitura e escrita apenas para o grupo
+chmod g+rwx nome_arquivo    Leitura, escrita e execução apenas para o grupo
+chmod o+x nome_arquivo      Execução apenas para os outros usuários
+chmod o+rw nome_arquivo     Leitura e escrita para os outros usuários
+chmod o+rwx nome_arquivo    Leitura, escrita e execução apenas para os outros usuários
+
+chmod a+x nome_arquivo      Execução para todos (owner, grupo e outros)
+chmod a+rw nome_arquivo     Leitura e escrita para todos (owner, grupo e outros)
+chmod a+rwx nome_arquivo    Leitura, escrita e execução para todos (owner, grupo e outros)
+
+OBS: da mesma maneira que usamos o sinal de mais (+) para dar privilégios, também podemos usar o sinal de menos (-) para remover privilégios.
+
+chmod          Mudar a proteção de um arquivo ou diretório, como por exemplo chmod 777, parecido com o attrib do MS-DOS
+chown          Mudar o dono ou grupo de um arquivo ou diretório, vem de change owner
+chgrp          Mudar o grupo de um arquivo ou diretório
+
+chown nome_user nome_arquivo            Mudar owner do arquivo ou pasta
+chgrp nome_grupo nome_arquivo           Mudar grupo do arquivo ou pasta
+
+chown -R nome_user:nome_grupo  diretorio/   Altera o usuário e grupo em uma arvore de diretórios de maneira recursiva
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 *****Comandos de Gestão de Arquivos e Diretórios
 
 cd: Mudar de diretório atual, como por exemplo cd diretório, cd .., cd /
-chmod: Mudar a proteção de um arquivo ou diretório, como por exemplo chmod 777, parecido com o attrib do MS-DOS
-chown: Mudar o dono ou grupo de um arquivo ou diretório, vem de change owner
-chgrp: Mudar o grupo de um arquivo ou diretório
 cmp: Compara dois arquivos
 comm: Seleciona ou rejeita linhas comuns a dois arquivos selecionados
 cp: Copia arquivos, como o copy do MS-DOS
@@ -690,48 +741,55 @@ awk -F ":" '{print $2}' arquivo Filtra o segundo campo com o delimitador dois po
 awk -F " |-" '{if ($3 >= "18") print}' arquivo Filtra valores especificados em uma condição
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-GERENCIAR PACOTES
+GERENCIADOR DE  PACOTES
 
-Comandos Descrição
-apt-get update Atualiza o repositório de pacotes DEB.
-apt-get dist-upgrade Atualiza todo o sistema de uma distribruição Debian ou derivadas.
-apt-cache search pacote Procura um por determinado “pacote” DEB.
-apt-get install pacote Instala um “pacote” DEB.
-apt-get remove pacote Remove um “pacote” DEB.
-apt-get autoremove Remove pacotes DEB não mais utilizados pelo sistema.
-apt-get clean Limpa o cache dos pacotes DEB baixados.
-dpkg -l | grep ii Exibe todos os pacotes DEB instalados.
-dpkg -l | grep ii | grep pacote Verifica se o “pacote” DEB está instalado.
-dpkg -L pacote Exibe a lista de arquivos contidos no “pacote” DEB instalado.
-dpkg -S arquivo Pesquisa a qual “pacote” DEB pertence um arquivo no sistema.
-dpkg -i pacote.deb Instala um pacote DEB.
-dpkg --force-all -i pacote.deb Força a instalação de um pacote DEB.
-dpkg -r pacote Remove um pacote DEB.
-dpkg -P pacote Remove um pacote DEB junto com os arquivos de configuração.
-apt-get source pacote Baixa o código fonte de um pacote DEB.
-dpkg-reconfigure pacote Reconfigura um pacote DEB.
-dpkg --configure -a Configura pacotes DEB que foram mal instalados.
-apt-get install -f Sana problemas de pacotes DEB mal instalados.
-rpm -qa pacote Verifica se o pacote RPM está instalado.
-rpm -ivh pacote Instala um pacote RPM.
-rpm -qi pacote Demonstra informações sobre um pacote RPM.
-rpm -e pacote Remove um pacote RPM.
-yum install pacote Instala um pacote RPM.
-yum remove pacote Remove um pacote RPM.
-yum search pacote Pesquisa por um pacote RPM.
-yum update Atualiza todo o sistema RedHat e derivados.
-yum groups list Lista grupo de pacotes RPM.
-yum groupinstall "nome do grupo" Instala um grupo de pacotes RPM.
-equo update Atualiza o repositório do Sabayon.
-equo upgrade -a Atualiza todo o sistema do Sabayon.
-equo s pacote Pesquisa por um pacote do Sabayon.
-equo i pacote -a Instala um pacote no Sabayon.
-equo r pacote -a Remove um pacote no Sabayon.
-equo r --deep pacote -a Remove um pacote com suas dependências, no Sabayon.
-equo cleanup Limpa o cache dos pacotes baixados, no Sabayon.
-equo conf update Atualiza arquivo de configuração do Sabayon.
-equo dt -a Procura por dependências não resolvidas e as resolve, no Sabayon.
-equo lt -a Procura por bibliotecas não resolvidas e as resolve, no Sabayon.
+apt-get                             update Atualiza o repositório de pacotes DEB.
+apt-get dist-upgrade                Atualiza todo o sistema de uma distribruição Debian ou derivadas.
+apt-cache search pacote_NAME        Procura um por determinado “pacote” DEB.
+apt-get install pacote_NAME         Instala um “pacote” DEB.
+apt-get remove pacote_NAME          Remove um “pacote” DEB.
+apt-get autoremove                  Remove pacotes DEB não mais utilizados pelo sistema.
+apt-get clean                       Limpa o cache dos pacotes DEB baixados.
+dpkg -l | grep ii                   Exibe todos os pacotes DEB instalados.
+dpkg -l | grep ii | grep pacote     Verifica se o “pacote” DEB está instalado.
+dpkg -L pacote                      Exibe a lista de arquivos contidos no “pacote” DEB instalado.
+dpkg -S arquivo                     Pesquisa a qual “pacote” DEB pertence um arquivo no sistema.
+dpkg -i pacote.deb                  Instala um pacote DEB.
+dpkg --force-all -i pacote.deb      Força a instalação de um pacote DEB.
+dpkg -r pacote_NAME                 Remove um pacote DEB.
+dpkg -P pacote_NAME                 Remove um pacote DEB junto com os arquivos de configuração.
+apt-get source pacote_NAME          Baixa o código fonte de um pacote DEB.
+dpkg-reconfigure pacote_NAME        Reconfigura um pacote DEB.
+dpkg --configure -a                 Configura pacotes DEB que foram mal instalados.
+apt-get install -f                  Resolve problemas de pacotes DEB mal instalados.
+rpm -qa pacote                      Verifica se o pacote RPM está instalado.
+rpm -ivh pacote                     Instala um pacote RPM.
+rpm -qi pacote                      Demonstra informações sobre um pacote RPM.
+rpm -e pacote                       Remove um pacote RPM.
+yum install pacote                  Instala um pacote RPM.
+yum remove pacote                   Remove um pacote RPM.
+yum search pacote                   Pesquisa por um pacote RPM.
+yum update                          Atualiza todo o sistema RedHat e derivados.
+yum groups list                     Lista grupo de pacotes RPM.
+yum groupinstall "nome do grupo"    Instala um grupo de pacotes RPM.
+equo update                         Atualiza o repositório do Sabayon.
+equo upgrade -a                     Atualiza todo o sistema do Sabayon.
+equo s pacote                       Pesquisa por um pacote do Sabayon.
+equo i pacote -a                    Instala um pacote no Sabayon.
+equo r pacote -a                    Remove um pacote no Sabayon.
+equo r --deep pacote -a             Remove um pacote com suas dependências, no Sabayon.
+equo cleanup                        Limpa o cache dos pacotes baixados, no Sabayon.
+equo conf update                    Atualiza arquivo de configuração do Sabayon.
+equo dt -a                          Procura por dependências não resolvidas e as resolve, no Sabayon.
+equo lt -a                          Procura por bibliotecas não resolvidas e as resolve, no Sabayon.
+
+* Gerenciamento de Pacotes
+
+Gerenciador	                Comando	                                        Descrição
+APT (Ubuntu/Debian)	        apt install, apt update, apt upgrade, dpkg -i	Instalação de pacotes
+YUM/DNF (Red Hat/CentOS)	yum install, dnf update	                        Instalação de pacotes
+Pacman (Arch)	            pacman -S, pacman -R	                        Instalação e remoção
+Snap	                    snap install, snap list	                        Gerenciamento de snaps
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 MULTIMÍDIA

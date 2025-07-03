@@ -5,31 +5,64 @@ DOCKER
 • docker-compose pull					            Baixar as imagens
 • docker image ls					                Listar as imagens
 • docker-compose up –d  				            Executar os containers / Iniciar todos os serviços em background (-d)
-• docker container ls					            Lista os containers
+• docker container ls					            Lista os containers em execução
+• docker container -a                               Lista todos os containers (execução, parados, encerrados e com falhas), pode-se usar também -all no final do comando
 • docker-compose stop					            Parar os serviços (todos os containers)
 • docker-compose start					            Iniciar os serviços (todos os containers)
 • docker-compose dowm					            Matar os serviços
-• docker volume prune					            Apagar todos os volumes sem uso 
+• docker volume prune					            Apagar todos os volumes sem uso
+• docker container prune                            Apaga todos os containers parados 
 • docker system prune --all				            Apagar tudo (image, volume, network)
 • docker exec -it <container> bash			        Acesso ao Shell (linux) de um container especifico
+• docker exec -it <container> /bin/bash			    Acesso ao Shell (linux) de um container especifico
 • docker ps 						                Visualiza todos containers Ativos
 • docker ps –a						                Visualiza todos containers Ativos e Parados
+• docker exec -it <Container_name> bash             Acessar o terminal interativo do container
+• docker stop <Container_name>                      Parar o container
+• docker start <Container_name>                     Parar o container
 • docker exec -it <container> <comando>		        Executar comandos no container
 • docker logs <container>				            Visualizar os logs de um container especifico
 • docker-compose logs					            Visualizar os logs de todos os containers
 • docker cp <diretório> <container>:/<diretório>  	Enviar arquivos de um container para outro
 
+• docker build -t <Name_Image> .                Execute o comando em um prompt de comando na mesma pasta onde se encontra o arquivo Dockerfile para criar a imagem (OBS o ponto no final faz parte do comando, o nome da imagem deve ser todo em minusculo)
+
+• docker run -dit --name <Container_name> <Name_Image>
+
+EX: docker run -dit --name dsa-container-lab1 dsa-img-lab1
+
+docker run	                Cria e inicia um novo container a partir de uma imagem
+-d	                        Executa o container em background (modo detached)
+-i	                        Mantém a entrada padrão (stdin) aberta, mesmo sem interação
+-t	                        Aloca um terminal TTY para o container
+--name dsa-container-lab1	Dá um nome personalizado ao container
+dsa-img-lab1	            É o nome da imagem usada para criar o containe
+
+
 docker run -d -p 8080:80 nginx
 
-docker container -a
+docker rm <Container_name>                          Remover o container
+docker container rm <container ID>                  Apaga um container pelo numero do ID
+docker rm $(docker ps -a -q)                        Para remover todos os containers (inclusive parados)
 
-docker container rm <container ID>
 
 optionalfeatures.exe (habilita e desabilita recursos do windows)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    O Docker funciona como uma plataforma de virtualização leve baseada em containers, permitindo empacotar aplicações com todas as suas dependências em um único pacote isolado do sistema operacional host. Ele foi criado para facilitar o desenvolvimento, a entrega e a execução de aplicações de forma consistente em qualquer ambiente.
+Imagem - Funciona como se fosse um template (Um pacote pronto para rodar determinado serviço)
+
+Container - Instancia de execução de uma imagem. Podemos criar vários containers a partir de uma única imagem 
+
+Para começar a trabalhar com containers primeiro temos que ter (criar) uma imagem. Não é possivel ter um container sem a imagem. Para isso temos duas opções
+
+    * Buscar uma imagem pronta no docker hub (repositório de imagens). https://hub.docker.com/ 
+    * Criar uma imagem do zero com o arquivo Dockerfile
+
+OBS: Usar sempre imagens oficiais (Marcadas na cor verde)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    O Docker funciona como uma plataforma de virtualização baseado em microserviços na qual trabalhamos com máquinas virtuais leves chamadas de containers, permitindo empacotar aplicações com todas as suas dependências em um único pacote isolado do sistema operacional host. Ele foi criado para facilitar o desenvolvimento, a entrega e a execução de aplicações de forma consistente em qualquer ambiente.
 
     Um container é como uma “mini-máquina virtual”, mas mais leve e rápida, porque não precisa carregar um sistema operacional completo — ele compartilha o kernel do sistema operacional do host, mas isola o processo.
 
