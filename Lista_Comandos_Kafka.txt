@@ -2,27 +2,97 @@ KAFKA
 
 https://www.confluent.io/certification/   - prova de certificação
 
+
+O Apache Kafka é uma plataforma distribuída de mensagens que funciona como um sistema de streaming de dados em tempo real. Ele foi desenvolvido originalmente pelo LinkedIn e depois doado para a Apache Foundation. Seu funcionamento se baseia em publicar, armazenar e consumir fluxos contínuos de dados (eventos), de forma rápida, tolerante a falhas e escalável.
+
+* Conceito Central
+
+Kafka funciona como um corretor de mensagens (message broker) onde os produtores enviam mensagens (dados), os dados são armazenados em tópicos, e os consumidores leem essas mensagens.
+
+* Conceitos-Chave do Kafka:
+
+        1 - Produtores (Producers): Aplicações que publicam mensagens (eventos) em um ou mais tópicos do Kafka.
+
+        2 - Consumidores (Consumers): Aplicações que leem as mensagens de tópicos e as processam.
+
+        3 - Tópicos (Topics): Categorias para onde os dados são enviados. Cada tópico pode ter uma ou mais partições, permitindo paralelismo e escalabilidade.
+
+        4 - Partições (Partitions): Cada tópico é dividido em partições, que são unidades que armazenam eventos de forma ordenada e imutável. Cada mensagem tem um offset único dentro da partição.
+
+        5 - Brokers: Servidores que armazenam os dados dos tópicos e processam as requisições. Um cluster Kafka pode ter múltiplos brokers.
+
+        6 - Cluster: Conjunto de brokers Kafka trabalhando juntos. Pode ter alta disponibilidade e tolerância a falhas.
+
+        7 - Zookeeper (ou KRaft em versões recentes): Gerenciava a coordenação do cluster (líderes, configuração, etc). Está sendo substituído pelo modo KRaft (Kafka Raft Metadata mode).
+
+* Como o Kafka Funciona - Visão Geral:
+
+        [Producer] ---> [Kafka Topic (com Partições)] ---> [Consumer]
+
+        * O producer envia dados (mensagens) para um tópico.
+        * O Kafka armazena essas mensagens em partições de forma ordenada.
+        * Os consumers se inscrevem nos tópicos e leem os dados.
+        * O offset (posição de leitura) é controlado pelo consumer — permitindo reprocessar dados se necessário.
+
+* Exemplo de Aplicação
+
+        Imagine um sistema de e-commerce:
+
+                Quando um pedido é feito, o sistema envia um evento para o tópico pedidos.
+                Serviços diferentes consomem esse tópico:
+
+                        Um consumidor atualiza o estoque.
+                        Outro consumidor envia a confirmação por e-mail.
+                        Outro analisa os dados de vendas em tempo real.
+
+*  Vantagens do Kafka:
+
+        Alta performance (milhões de mensagens por segundo).
+        Durabilidade (dados armazenados em disco).
+        Escalabilidade horizontal.
+        Reprocessamento de dados (controle de offset).
+        Integrações com Spark, Flink, Hadoop, etc.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COMANDOS
+
+kafka-topics --version 					                                                            Exibe a versão do confluent qque está sendo utilizada
+
+kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3 --topic nome-do-topico         Cria um tópico
+
+kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --create --partitions 3 --replication-factor 1	 Criar tópico
+OBS: (nome do tópico sempre começando e com letras minusculas, sem espaço, números no começo ou caracteres especiais)
 Fator de replicação: primeiro criamos o leader (nó) e depois as replicas (nós), podemos ter quantas partições quisermos em um tópico
 
-kafka-topics --version 					Exibe a versão do confluent qque está sendo utilizada
-5.5.2-ce (Commit:417a2e7a085d90a7)
- 
-kafka-topics --bootstrap-server localhost:9092 --list						Listar tópicos  ( bootstrap: servidor onde estão localizados os tópicos)
+kafka-topics.sh --list --bootstrap-server localhost:9092                                     Listar tópicos ( bootstrap: servidor onde estão localizados os tópicos)
 
-kafka-topics --zookeeper localhost:2181 --list								Listar tópicos	(com o zookeeper nenhum tópico que é criado automáticamente é exibido)
+kafka-topics --zookeeper localhost:2181 --list					Listar tópicos	(com o zookeeper nenhum tópico que é criado automáticamente é exibido)
 
-kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --create --partitions 3 --replication-factor 1				Criar tópico
-OBS: (nome do tópico sempre começando e com letras minusculas, sem espaço, números no começo ou caracteres especiais)
+kafka-topics.sh --describe --bootstrap-server localhost:9092 --topic nome-do-topico                                             Exibir detalhes de um tópico
 
-kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --describe													Descrever tópico
+kafka-console-producer.sh --broker-list localhost:9092 --topic nome-do-topico                                                   Enviar mensagens (Producer via CLI)
 
-kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --delete													Deletar tópico
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic nome-do-topico --from-beginning                             Consumir mensagens (Consumer via CLI)
+
+kafka-topics.sh --delete --bootstrap-server localhost:9092 --topic nome-do-topico                                               Excluir um tópico
+
+kafka-topics --bootstrap-server localhost:9092 --topic <nomeTópico> --delete							Deletar tópico
+
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic nome-do-topico --group nome-do-grupo --from-beginning       Criar consumidor em grupo
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list                                                               Ver consumidores conectados
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group nome-do-grupo                                     Ver detalhes de um grupo de consumidores
+
+kafka-console-producer.sh --broker-list localhost:9092 --topic nome-do-topico < arquivo.txt      Produzir e consumir com arquivos (Produzir a partir de um arquivo:)
+
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic nome-do-topico --from-beginning > mensagens.txt Produzir e consumir com arquivos (Consumir e salvar em arquivo)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 PRODUTOR CONSOLE - O producer tem que estar mesmo local onde executamos os tópicos ou seja dentro Broker
 
 
-kafka-console-producer --broker-list localhost:9092 --topic <nomeTópico>									Enviar dados para um tópico
+kafka-console-producer --broker-list localhost:9092 --topic <nomeTópico>					Enviar dados para um tópico
 
 
 kafka-console-producer --broker-list localhost:9092 --topic <nomeTópico> --producer-property acks=all		Enviar dados para todos reconhecerem (Leader e ISR)
@@ -34,7 +104,7 @@ acks=all: todos recebem e confirmam o recebimento da mensagem (leader e réplica
 CONSUMER CONSOLE
 
 
-kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico>								Receber mensagens em tempo real
+kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico>						Receber mensagens em tempo real
 
 kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico> --from-beginning				Receber mensagens desde a criação do tópico
 
@@ -44,9 +114,9 @@ kafka-console-consumer –-bootstrap-server localhost:9092 --topic <nomeTópico>
 GRUPOS DE CONSUMERS CONSOLE
 
 
-kafka-consumer-groups –-bootstrap-server localhost:9092 --list											Listar grupos
+kafka-consumer-groups –-bootstrap-server localhost:9092 --list					Listar grupos
 
-kafka-consumer-groups –-bootstrap-server localhost:9092 --describe --group <nomeGrupo>					Descrever grupo
+kafka-consumer-groups –-bootstrap-server localhost:9092 --describe --group <nomeGrupo>		Descrever grupo
 
 Redefinir o deslocamento do mais antigo
 
