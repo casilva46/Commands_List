@@ -10,6 +10,10 @@ DOCKER
 • docker-compose stop					            Parar os serviços (todos os containers)
 • docker-compose start					            Iniciar os serviços (todos os containers)
 • docker-compose dowm					            Matar os serviços
+• docker volume create Nome_volume                  Cria um volume gerenciado pelo Docker
+• docker volume list                                Lista os volumes
+• docker volume inspect Nome_volume                 Exibindo detalhes do volume
+• docker volume rm Nome_volume	                    Remove um volume (sem containers)
 • docker volume prune					            Apagar todos os volumes sem uso
 • docker container prune                            Apaga todos os containers parados 
 • docker system prune --all				            Apagar tudo (image, volume, network)
@@ -18,35 +22,129 @@ DOCKER
 • docker ps 						                Visualiza todos containers Ativos
 • docker ps –a						                Visualiza todos containers Ativos e Parados
 • docker exec -it <Container_name> bash             Acessar o terminal interativo do container
-• docker stop <Container_name>                      Parar o container
-• docker start <Container_name>                     Parar o container
+• docker stop <Container_name>                      Parar um container. Podemos parar varios containers com mesmo comando container1 container2 containerN
+• docker start <Container_name>                     Inicia um container. Podemos iniciar  varios containers com mesmo comando container1 container2 containerN
 • docker exec -it <container> <comando>		        Executar comandos no container
 • docker logs <container>				            Visualizar os logs de um container especifico
 • docker-compose logs					            Visualizar os logs de todos os containers
 • docker cp <diretório> <container>:/<diretório>  	Enviar arquivos de um container para outro
+• optionalfeatures.exe                              habilita e desabilita recursos do windows
+• docker rm <Container_name>                        Remover o container
+• docker rm -f <Container_name>                     Remover o container com force. Remove mesmo se estiver em execução
+• docker container rm <container ID>                Apaga um container pelo numero do ID
+• docker rm $(docker ps -a -q)                      Para remover todos os containers (inclusive parados)
+• docker rmi Name_Image                             Apaga uma imagem
+• docker network ls                                 Lista todas as redes Docker disponíveis
+• docker inspect <Container_name>                   Exibe informações detalhadas sobre o container
+• docker network inspect bridge                     Exibe informações detalhadas sobre a rede bridge (default do Docker)
+• docker network create Nome_Rede                   Cria uma nova rede
+• docker network rm Nome_Rede                       Deleta uma rede
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
 
-• docker build -t <Name_Image> .                Execute o comando em um prompt de comando na mesma pasta onde se encontra o arquivo Dockerfile para criar a imagem (OBS o ponto no final faz parte do comando, o nome da imagem deve ser todo em minusculo)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* CRIAR UMA IMAGEM 
+
+• docker build -t <Name_Image> .                    Execute o comando em um prompt de comando na mesma pasta onde se encontra o arquivo Dockerfile para criar a imagem  (OBS o ponto no final faz parte do comando, o nome da imagem deve ser todo em minusculo)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* CRIAR CONTAINER 
 
 • docker run -dit --name <Container_name> <Name_Image>
 
 EX: docker run -dit --name dsa-container-lab1 dsa-img-lab1
 
 docker run	                Cria e inicia um novo container a partir de uma imagem
--d	                        Executa o container em background (modo detached)
+-d	                        Executa o container em background (modo detached). O container continua em funcionamento mesmo após fechar o terminal 
 -i	                        Mantém a entrada padrão (stdin) aberta, mesmo sem interação
 -t	                        Aloca um terminal TTY para o container
 --name dsa-container-lab1	Dá um nome personalizado ao container
-dsa-img-lab1	            É o nome da imagem usada para criar o containe
+dsa-img-lab1	            É o nome da imagem usada para criar o container (sem a imagem o container não é criado)
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+COPY . .  => Quer dizer copie tudo na pasta corrente do host hospedeiro (primeiro ponto) para a pasta corrente do container (segundo ponto). OBS deve haver espaço entre os pontos
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* MAPEAMENTO DE PORTAS E REDE
+
+docker run -dit --name Container_name -p 8501:8501 Name_Image
+
+Onde: 
+-p      Mapeamento de portas
+
+8501    Antes dos dois pontos (:) é a porta da máquina host (local)
+8501    Após os dois pontos (:) é a porta dentro do container
 
 docker run -d -p 8080:80 nginx
 
-docker rm <Container_name>                          Remover o container
-docker container rm <container ID>                  Apaga um container pelo numero do ID
-docker rm $(docker ps -a -q)                        Para remover todos os containers (inclusive parados)
+# Inicia um novo container Ubuntu conectado à rede personalizada nova_rede
 
+    docker run -dit --network nova_rede --name <Container_name>  ubuntu
 
-optionalfeatures.exe (habilita e desabilita recursos do windows)
+# Desconecta o container da rede rede_lab4
+
+    docker network disconnect nova_rede <Container_name> 
+
+# Conecta o container à rede bridge (Default)
+
+    docker network connect bridge <Container_name> 
+
+# Obtém os endereços IP dos containers na rede bridge usando json
+
+    docker network inspect bridge | jq '.[0].Containers | to_entries[] | {id: .key, ip: .value.IPv4Address}'
+
+# Obtém os endereços IP dos containers na rede bridge usando grep e awk
+
+    docker network inspect bridge | grep '"IPv4Address"' | awk -F '"' '{print $4}'
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* PONTOS DE MONTAGEM (persistencia de arquivos)
+
+    * Bind Mount 
+    Um Bind Mount é um tipo de montagem de volume no Docker (ou no Linux) em que você vincula um diretório ou arquivo do seu sistema de arquivos local (host) diretamente para dentro do filesystem do container.
+    (LEMBRE-SE DE ALTERAR "/Users/dmpm/Downloads" PARA UMA PASTA NO SEU COMPUTADOR. NO WINDOWS USE CONTRA-BARRA AO INVÉS DE BARRA.)
+    OBS: Dois ou mais containers podem apontar para o mesmo arquivo local 
+
+# Criando um container e montando um diretório do host usando bind mount
+
+docker run -it --name lab3-exemplo1 --mount type=bind,source=/caminho/no/host,target=/caminho/no/container ubuntu
+
+# Criando outro container com bind mount de forma simplificada (-v)
+
+docker run -it --name lab3-exemplo2 -v /caminho/no/host:/caminho/no/container ubuntu
+
+    * Volume 
+    Um volume no Docker é um método de persistência de dados usado para armazenar informações geradas e utilizadas por containers, fora do sistema de arquivos temporário do container. Ou seja: Mesmo que o container seja destruído, os dados no volume continuam existindo.
+
+docker volume create Nome_volume 
+
+# Criando um container apontando para o volume gerenciado pelo Docker
+
+docker run -it --name=Nome_Container --mount source=Nome_Volume_Criado,destination=/caminho/no/container ubuntu
+
+docker run -d --name meu-container -v meu-volume:/app/dados minha-imagem
+
+docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=senha -v mysql-data:/var/lib/mysql mysql
+
+# Diferença entre Volume e Bind Mount
+
+Recurso	        Volume Docker	            Bind Mount
+Criado por	    Docker	                    Usuário
+Localização	    Gerenciado internamente	    Caminho do host definido pelo usuário
+Portável	    Sim	                        Não (depende do host)
+Backup fácil	Sim	                        Não
+Ideal para	    Produção	                Desenvolvimento
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -1,14 +1,14 @@
 
 ************************************************************************** LISTA DE COMANDOS LINUX ****************************************************************************
 
-
-ln -s /home/USER/scripts/rdmup.ksh rdmup (pasta para onde será direcionado) - criar link Simbólico
 find . | grep "Optimization"
 grep -i fasttrack Version.xml
 find . | grep "InformationGovernanceCatalog"
-find ./ * -size +800M                 Faz a busca de arquivos maiores que 800Mb
-find ./ -size -800M                   Faz a busca de arquivos menores que 800Mb
-find ./ -size +10G -type f
+find ./ * -size +800M                           Faz a busca de arquivos maiores que 800Mb
+find ./ -size -800M                             Faz a busca de arquivos menores que 800Mb
+find ./ -size +10G -type f                   Procura, a partir do diretório atual arquivos com mais de 10 Gb. -type fRestringe a busca a arquivos (ignora diretórios etc)
+find /Nome_Diretorio -name "*.txt"           Faz a busca por qualquer arquivo com a extansão .txt em um diretório especifico
+find /Nome_Diretorio -type d -name "Docs"    Faz a busca por um diretorio (type d) chamado Docs
 
 find $PWD -name XXXXXXXXXXXX
 
@@ -17,23 +17,47 @@ find / -iname XXXXXXXXXXXXXX
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 COMANDOS BÁSICOS
 
-<TAB>	                               Completa nomes e comandos no shell.
-<Ctrl>+<C>	                          Interrompe a execução de um comando.
-<Ctrl>+<Z>	                          Pausa a execução de um comando. Para retornar use fg n, sendo n um número exibido entre colchetes [ ], exemplo: fg 1.
+<TAB>	                                Completa nomes e comandos no shell.
+<Ctrl>+<C>	                            Interrompe a execução de um comando.
+<Ctrl>+<Z>	                            Pausa a execução de um comando. Para retornar use fg n, sendo n um número exibido entre colchetes [ ], exemplo: fg 1.
 history		                            Exibe o histórico de comandos digitados.
-history -cw	                         Limpa o histórico do shell.
-↑ ou ↓		                             As teclas direcionais para cima ou para baixo exibem os comandos digitados que estão armazenados no histórico.
-|	(Pipe)                             Filtra a saída do terminal. Útil para combinar diversos comandos.
-echo "Livro Shell" >                 Arquivo	Salva o conteúdo de “Livro Shell” no “arquivo”.
-echo "Livro Shell" >>                Arquivo	Salva o conteúdo de “Livro Shell” no final do “arquivo”. Não apaga o conteúdo pre existente, apenas adiciona ao final.
-nome="Tales" ; echo $nome	“nome”     Recebe o valor de “Tales” e exibe o valor da variável.
-
+history -cw	                            Limpa o histórico do shell.
+↑ ou ↓		                            As teclas direcionais para cima ou para baixo exibem os comandos digitados que estão armazenados no histórico.
+|	(Pipe)                              Filtra a saída do terminal. Útil para combinar diversos comandos.
+echo "Livro Shell" >                    Arquivo	Salva o conteúdo de “Livro Shell” no “arquivo”.
+echo "Livro Shell" >>                   Arquivo	Salva o conteúdo de “Livro Shell” no final do “arquivo”. Não apaga o conteúdo pre existente, apenas adiciona ao final.
+nome="Tales" ; echo $nome	“nome”      Recebe o valor de “Tales” e exibe o valor da variável.
 
 scp -p user@host:/<caminho_origem> : user@host:/<caminho_destino>
 
 scp usuário@máquina:<diretório_origem> <diretório_destino>
 
 scp Nome_arquivo user@host:/<caminho_destino>
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Links simbólicos (soft links)
+
+    * São arquivos especiais que apontam para o caminho de outro arquivo ou diretório.
+    * Funcionam para diretórios e podem apontar para arquivos em outros sistemas.
+    * Se o arquivo original for deletado, o link simbólico fica “quebrado”.
+
+
+ln -s arquivo_origem link_destino           Cria um link simbó (soft links)
+
+
+Exemplos:
+
+    ln arquivo.txt arquivo_hardlink.txt
+    ln -s /home/user/arquivo.txt arquivo_symlink.txt
+
+
+ls -l    mostra o link simbólico com uma seta
+
+    arquivo_symlink.txt -> /home/user/arquivo.txt
+
+
+
+ln -s /home/USER/scripts/rdmup.ksh rdmup (pasta para onde será direcionado) - criar link Simbólico
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 dmidecode -t 1                 Para saber se uma máquina é fisica ou virtual
@@ -47,7 +71,38 @@ mv ./arquivo ./arquivo_bkp    renomeia um arquivo ou diretório
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CRONTAB
 
-sudo crontab -u root -e      para criar uma tabela de agendamentos cron com a permissão do superusuário (root)
+    O crontab é uma ferramenta no Linux/Unix usada para agendar a execução automática de comandos ou scripts em horários específicos. 
+    Serve para: 
+
+        * Automatizar tarefas recorrentes, como backups, atualizações, envios de relatórios, limpeza de arquivos etc.
+        * Rodar scripts em horários programados (minutos, horas, dias, semanas, meses).
+
+Estrutura básica de uma linha no crontab:
+
+* * * * * comando_a_executar
+- - - - -
+| | | | |
+| | | | +----- Dia da semana (0 - 7) (domingo=0 ou 7)
+| | | +------- Mês (1 - 12)
+| | +--------- Dia do mês (1 - 31)
+| +----------- Hora (0 - 23)
++------------- Minuto (0 - 59)
+
+Exemplos: 
+
+30 3 * * * /home/usuario/scripts/backup.sh              Executar um backup todo dia às 3:30 da manhã
+0 0 * * 0 /script.sh	                                Executa script.sh todo domingo à meia-noite
+*/5 * * * * /comando	                                Executa a cada 5 minutos
+0 8 1 * * /relatorio.sh	                                Executa dia 1 de todo mês às 8h
+
+
+# Comandos:
+
+crontab -l                                               Listar tarefas agendadas para o seu usuário
+crontab -e                                               Editar as tarefas agendadas (abre o editor padrão)
+crontab -r                                               Remover todas as tarefas agendadas
+
+sudo crontab -u root -e                                  Para editar o crontab de outro usuário com a permissão do superusuário (root)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Listar diretórios recursivamente e salvar a saída em arquivo
@@ -222,36 +277,66 @@ touch -m arquivo	   Altera a data e hora de modificação do arquivo.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 INFORMAÇÕES GERAIS
 
-free -m			            Mostra o uso (livre/usado) das memórias.
-df -h			            Mostra o espaço utilizado pelos dispositivos.
-df -hi 			            Mostra a quantidade de inodes ocupando espaço em um disco
-du -h			            Mostra o espaço utilizado pelos arquivos.
-cat /proc/cpuinfo	        Informações do processador do computador.
-cat /proc/meminfo	        Informações da memória do computador.
-cat /proc/partitions	    Informações sobre discos e partições.
-ps                          Lista a lista de processos em execução, útil para saber o pid de um processo para o mandar abaixo com o comando kill, entre outras coisas
-pstree -p		            Mostra cada processo em execução, em forma de árvore, contendo o PID de cada processo.
-ps -a                       Mostra os processos de todos os usuários (permissão de root para tal)
-ps -x                       Mostra processos que não estejam associados ao terminal de comandos
-ps -u                       Mostra a lista detalhada contendo o usuário que é dono do processo
-ps -aux | grep XXXX         Mostra a lista de processos, o | grep realiza um filtro para uma busca mais especifica
-lspci			            Exibe informações dos dispositivos da máquina.
-lsusb			             Exibe informações dos dispositivos USB da máquina.
-lscpu                       Exibe a quantidade de CPU que a máquina possui
-ls -la /dev/sd*             Lista dos discos que estão fisicamente conectados na máquina
-sudo fdisk /dev/sda
-fsck /dev/sda               Faz uma verificaão na saúde da Partição 
-sensors		                Exibe informações de temperatura da máquina, CPU, cooler, placa mãe
-hddtemp /dev/[sh]d[a-z]	    Exibe informações sobre temperatura dos dispositivos de armazenamento.
-inxi -v7			        Informações completas sobre o hardware da máquina.
-w  			                Exibe os usuários logados, com sessão aberta no sistema.
-whoami                      Exibe com qual usuário estou conectado
-iotop -Pak		            Analisa a leitura e gravação dos discos.
-sar -q                      Exibe o uso da máquina
-cut -d: -f1 /etc/group	    Exibe todos os grupos disponíveis no sistema.
-
-sar -q -s 06:00:00 | head
-
+free -m			                    Mostra o uso (livre/usado) das memórias.
+df -h			                    Mostra o espaço utilizado pelos dispositivos.
+df -hi 			                    Mostra a quantidade de inodes ocupando espaço em um disco
+du -h			                    Mostra o espaço utilizado pelos arquivos.
+du * -hs                            Exibe um resumo do uso do espaço em disco
+du -sh /diretorio                   Exibe o espaço utilizado por um diretorio especifico
+du -h --max-depth=1                 Sumariza a utilização da pasta, o =1 está relacionado com o nível que estamos no diretório.
+du -h --max-depth=1 /diretorio
+cat /proc/cpuinfo	                Informações do processador do computador.
+cat /proc/meminfo	                Informações da memória do computador.
+cat /proc/partitions	            Informações sobre discos e partições.
+ps                                  Lista a lista de processos em execução, útil para saber o pid de um processo para o mandar abaixo com o comando kill
+pstree -p		                    Mostra cada processo em execução, em forma de árvore, contendo o PID de cada processo.
+ps -a                               Mostra os processos de todos os usuários (permissão de root para tal)
+ps -x                               Mostra processos que não estejam associados ao terminal de comandos
+ps -u                               Mostra a lista detalhada contendo o usuário que é dono do processo
+ps -aux | grep XXXX                 Mostra a lista de processos, o | grep realiza um filtro para uma busca mais especifica
+lspci			                    Exibe informações dos dispositivos da máquina.
+lsusb			                    Exibe informações dos dispositivos USB da máquina.
+lscpu                               Exibe a quantidade de CPU que a máquina possui
+ls -la /dev/sd*                     Lista dos discos que estão fisicamente conectados na máquina
+fdisk /dev/sda
+fdisk -l                            lista discos e partições 
+lsblk                               Lista todos os dispositivos conectados ao sistema, como discos, partições, volumes, SSDs, HDs, pendrives
+lsblk -f                            Mostra também o sistema de arquivos (ext4, xfs, vfat etc)
+lsblk -d                            Mostra apenas os discos (sem partições)
+lsblk -p                            Mostra caminhos completos (ex: /dev/sda)
+fsck /dev/sda                       Faz uma verificaão na saúde da Partição 
+sensors		                        Exibe informações de temperatura da máquina, CPU, cooler, placa mãe
+hddtemp /dev/[sh]d[a-z]	            Exibe informações sobre temperatura dos dispositivos de armazenamento.
+inxi -v7			                Informações completas sobre o hardware da máquina.
+w  			                        Exibe os usuários logados, com sessão aberta no sistema.
+whoami                              Exibe com qual usuário estou conectado
+iotop -Pak		                    Analisa a leitura e gravação dos discos.
+sar -q                              Exibe o uso da máquina (load average) 
+sar -q -s 06:00:00 | head           Exibe as primeiras linhas da média de uso da CPU (load average) a partir das 06:00:00 horas
+cut -d: -f1 /etc/group	            Exibe todos os grupos disponíveis no sistema.
+clock                               Define a hora do processador
+date                                Exibe a data e hora
+env                                 Exibe as variáveis de ambiente
+stat Nome_Arquivo                   Exibe informações sobre um arquivo
+finger                              Pesquisa informações de utilizadores
+history                             Lista os últimos comandos usados
+last                                Indica o último login de utilizadores
+lpq                                 Examina a spool queue
+manpath                             Mostra a path de procura para as páginas do comando man
+printenv                            Imprime as variáveis de ambiente
+pwd                                 Mostra-nos o caminho por inteiro do diretório em que nos encontramos em dado momento, ou seja um pathname
+set                                 Define variáveis da sessão, ou seja, da shell, na C shell, na bash ou na ksh
+spend                               Lista os custos ACITS UNIX até à data
+time                                Mede o tempo de execução de programas
+uptime                              Diz-nos há quanto tempo o sistema está funcional, quando foi ligado e o seu uptime
+w                                   Mostra-nos quem está no sistema ou que comando cada job está a executar
+who                                 Mostra-nos quem está logado no sistema
+whois Nome_Dominio                  usado para consultar informações de registro de domínios da internet (como Proprietário, DNS, data de criação, expiração etc)
+uname-a                             Exibe a versao do SO e do kernell instalada
+dstat                               Exibe informaoes resumidas da máquina
+dstat -cdn                          Monitorar CPU, disco e rede
+dstat -cm                           Monitorar uso de memória
+dstat -taf                          Monitorar tudo (resumo completo)
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 DESLIGAR OU REINICIAR O SISTEMA
 
@@ -270,7 +355,7 @@ GERENCIAR USUÁRIOS E GRUPOS
 id  						             Identifica os grupos do usuário
 adduser XXXXXXX				             Cria o usuário “XXXXX”.
 passwd -a user_name nome_grupo           Adiciona o usuário ao grupo
-gpasswd -d user_name nome_grupo           Remove o usuário do grupo
+gpasswd -d user_name nome_grupo          Remove o usuário do grupo
 adduser XXX YYYY			             Adiciona o usuário XXXX ao grupo YYYY.
 deluser XXX YYYY                         Remove o usuário XXXX ao grupo YYYY.
 groupdel nome_grupo                      Deleta o grupo (Os usuários não são deletados)
@@ -355,7 +440,7 @@ mount -o remount,rw /	                Remonta o diretório raiz em modo de leitu
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 COMPACTAÇÃO E DESCOMPACTAÇÃO
 
-Comandos							Descrição
+Comandos							      Descrição
 tar									      Junta vários arquivos e gera um arquivo.tar.
 tar -cvf arquivo.tar Músicas/		      Gera um “arquivo.tar” do diretório “Músicas”.
 tar -tvf arquivo.tar				      Exibe o conteúdo do “arquivo.tar”, sem extraí-lo.
@@ -374,13 +459,39 @@ gunzip arquivo.zip					      Descompacta um arquivo .zip
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROCESSOS
 
-top				Trabalha com processos em tempo real.
-top -c: 		Mostra o uso de recursos de forma detalhada
-htop			Trabalha com processos em tempo real de forma mais amigável.
-kill			Mata processos através.
-kill -9			Mata processos de forma forçada.
-killall		    Mata o aplicativo e todos processos ligados a ele.
-kill all -9 	Mata o aplicativo de forma forçada e todos processos ligados a ele. Apaga o que já existe.
+top				    Exibe exibe, em tempo real, uma visão completa do uso de recursos do sistema
+top -c: 		    Mostra o uso de recursos de forma detalhada
+htop			    Trabalha com processos em tempo real de forma mais amigável.
+iostat              Lista os processos em execução com mais detalhes
+kill <PID>			Mata um processo, como por exemplo kill -kill 100 ou kill -9 100 ou kill -9 %1
+kill -9 <PID>		Mata processos de forma forçada.
+kill -15 <PID>      Encerra um processo de forma educada. Permite que o processo se encerre com segurança, liberando recursos, salvando arquivos, etc
+killall	 <PID>	    Mata o aplicativo e todos processos ligados a ele.
+killall -9 <PID>	Mata o aplicativo de forma forçada e todos processos ligados a ele. Apaga o que já existe
+jobs                Listar os processos em segundo plano ou suspensos (background ou stopped) iniciados no shell atual
+./meu_script.sh &   Coloca um processo para rodar diretamente em segundo plano (&)
+bg                  Coloca um processo suspenso em background
+fg                  Ao contrário do comando bg, o fg traz de volta um processo ao foreground
+^y                  Suspende o processo no próximo pedido de input
+^z                  Suspende o processo actual
+
+
+ps                                                                              Lista processos do terminal atual
+ps -e                                                                           Lista todos os processos do sistema
+ps -ef                                                                          Lista todos processos com detalhes
+ps aux                                                                          Lista todos processos no estilo BSD
+ps -ef | grep nginx                                                             Ver todos os processos do usuário "nginx"  
+ps -ef | awk '$1 == "usuario"'                                                  Ver processos iniciados por um usuário específico 
+ps -ef | grep <PID>                                                             Ver processo com PID   
+ps -ef | grep nome_do_programa                                                  Ver processos de um programa           
+
+ps -ef | grep DSD.RUN | grep -v | sort -k5
+
+ps -ef | grep DSD.RUN | grep -v | wc -l
+
+ps -ef | grep -i DSD.RUN | grep -v grep                                             Lista todos os processos
+
+ps -ef | grep -i DSD.RUN | grep -v grep | awk '(print $2)' | xargs -i kill -9 {}    Mata todos os processos 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 REDE E DOWNLOADS
@@ -402,7 +513,7 @@ netstat                                              Mostra o estado da rede
 netstat -a | grep LISTEN
 netstat -a | grep CLOSE_WAIT
 netstat -a | grep ESTABLISHED
-
+netstat -tuln                                       Lista as portas abertas e conexões ativas
 netstat -i                                          lista as interfaces de rede e e suas respctivas estatisticas de trafego
 netstat -s                                          lista as estatisticas de trafego para cada protocolo de rede
 netstat -r                                          lista as tabelas de roteamento
@@ -411,6 +522,11 @@ netstat -l                                          lista as portas que estão s
 rsh                                                 Um shell em outros sistemas UNIX
 ssh                                                 Versão segura do rsh
 nmap                                                Poderoso port-scan, para visualizarmos portas abertas num dado host
+nmap 172.17.0.3
+nmap -p- 172.17.0.3                                 Escaneia todas as portas do IP
+nmap -sS -sV -p- 172.17.0.3                         Faz uma varredura detalhada usando SYN Scan e detecção de versão dos serviços
+lsof                                                Lista os arquivos abertos, vem de list open files
+lsof -i :8501                                       Lista processos que estão usando a porta 8501
 ping                                                Pingar um determinado host
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -419,10 +535,10 @@ PROCURAR ARQUIVOS E DIRETÓRIOS
 Comando	Descrição
 find	Pesquisa por arquivos.
 find $HOME -name "Janelas" -exec rm -vf {} \;	Procura pelos arquivos com nome de “Janelas” no diretório do usuário e os apaga.
-find . -mtime 3 -print	Procura no diretório corrente por arquivos que foram modificados a 3 dias.
+find . -mtime 3 -print	                        Procura no diretório corrente por arquivos que foram modificados a 3 dias.
 find . \( -iname "*.png" -o -iname "*.jpg" \) -print -exec tar -rf images.tar {} \;	Procura por imagens do tipo ".png" e ".jpg" no diretório corrente e cria um pacote chamado imagens.tar com as imagens encontradas.
-find / -group users -print 2>/dev/null	Procura em todo sistema por arquivos pertencentes ao grupo users.
-find ~/Música -size +10M -exec ls -lh {} \;	Procura por arquivos maiores que 30M no diretório ~/Músicas, listando o arquivo com o seu tamanho.
+find / -group users -print 2>/dev/null	        Procura em todo sistema por arquivos pertencentes ao grupo users.
+find ~/Música -size +10M -exec ls -lh {} \; 	Procura por arquivos maiores que 30M no diretório ~/Músicas, listando o arquivo com o seu tamanho.
 find ~/Música -size +10M -size -30M -exec ls -lh {} \;	Limita o tamanho do arquivo, por exemplo: maior que 10M e menor que 30M.
 find /var/spool/cups/tmp/ -mtime +7 -exec rm -Rf {""} \;	Procura e remove arquivos de uma área temporária aonde os arquivos só devem permanecer por uma semana.
 find $HOME -type d -exec chmod 755 {} \;	Modifica as permissões de diretórios recursivamente para 755 na $HOME do usuário.
@@ -558,97 +674,35 @@ chown -R nome_user:nome_grupo  diretorio/   Altera o usuário e grupo em uma arv
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 *****Comandos de Gestão de Arquivos e Diretórios
 
-cd: Mudar de diretório atual, como por exemplo cd diretório, cd .., cd /
-cmp: Compara dois arquivos
-comm: Seleciona ou rejeita linhas comuns a dois arquivos selecionados
-cp: Copia arquivos, como o copy do MS-DOS
-crypt: Encripta ou Descripta arquivos (apenas CCWF)
-diff: Compara o conteúdo de dois arquivos ASCII
-file: Determina o tipo de arquivo
-grep: Procura um arquivo por um padrão, sendo um filtro muito útil e usado, por exemplo um cat a.txt | grep ola irá mostrar-nos apenas as linhas do arquivo a.txt que contenham a palavra “ola”
-gzip: Comprime ou expande arquivo
-ln: Cria um link a um arquivo
-ls: Lista o conteúdo de uma diretório, semelhante ao comando dir no MS-DOS
-lsof: Lista os arquivos abertos, vem de list open files
-mkdir: Cria um diretório, vem de make directory”
-mv: Move ou renomeia arquivos ou diretórios
-pwd: Mostra-nos o caminho por inteiro da diretório em que nos encontramos em dado momento, ou seja um pathname
-quota: Mostra-nos o uso do disco e os limites
-rm: Apaga arquivos, vem de remove, e é semelhante ao comando del no MS-DOS, é preciso ter cuidado com o comando rm * pois apaga tudo sem confirmação por defeito
-rmdir: Apaga diretório, vem de remove directory
-stat: Mostra o estado de um arquivo, útil para saber por exemplo a hora e data do último acesso ao mesmo
-sync: Faz um flush aos buffers do sistema de arquivos, sincroniza os dados no disco com a memória, ou seja escreve todos os dados presentes nos buffers da memória para o disco
-tar: Cria ou extrai arquivos, muito usado como programa de backup ou compressão de arquivos
-tee: Copia o input para um standard output e outros arquivos
-tr: Traduz caracteres
-umask: Muda as proteções de arquivos
-uncompress: Restaura um arquivo comprimido
+cd                      Mudar de diretório atual, como por exemplo cd diretório, cd .., cd /
+cmp                     Compara dois arquivos (cmp arquivo1 arquivo2)
+comm                    Seleciona ou rejeita linhas comuns a dois arquivos selecionados
+cp                      Copia arquivos, como o copy do MS-DOS
+crypt                   Encripta ou Descripta arquivos (apenas CCWF)
+diff                    Compara o conteúdo de dois arquivos (diff arquivo1 arquivo2)
+file                    Determina o tipo de arquivo
+grep                    Procura um arquivo por um padrão, sendo um filtro muito útil 
+ls                      Lista o conteúdo de uma diretório, semelhante ao comando dir no MS-DOS
+mkdir                   Cria um diretório, vem de make directory”
+mv                      Move ou renomeia arquivos ou diretórios
+pwd                     Mostra-nos o caminho por inteiro da diretório em que nos encontramos em dado momento, ou seja um pathname
+quota                   Mostra-nos o uso do disco e os limites
+sync                    Faz um flush aos buffers do sistema de arquivos, sincroniza os dados no disco com a memória
+tar                     Cria ou extrai arquivos, muito usado como programa de backup ou compressão de arquivos
+tee                     Copia o input para um standard output e outros arquivos
+tr                      Traduz caracteres
+umask                   Muda as proteções de arquivos
+uncompress              Restaura um arquivo comprimido
 
-
-fdisk -l: lista discos e partições  
-
-df -h | grep ^/dev
-
-lsblk: Lista todos os blocos de armazenamento, incluindo partições de disco e unidades óticas. Os detalhes incluem o tamanho total da partição/bloco e o ponto de montagem, se houver. Não relata o espaço em disco usado / livre nas partições.
-
-wc:          Conta linhas, palavras e mesmo caracteres num arquivo
-wc -c        Exibe o número de bytes contados (--bytes)
-wc -m        Exibe o número de caracteres contados (--chars)
-wc -l        Exibe o número de linas contadas (--lines)
-wc -L        Exibe a linha mais extensa (--max-line-length)
-wc -w        Exibe o número de palavras contadas
+wc:                     Conta linhas, palavras e mesmo caracteres num arquivo
+wc -c                   Exibe o número de bytes contados (--bytes)
+wc -m                   Exibe o número de caracteres contados (--chars)
+wc -l                   Exibe o número de linas contadas (--lines)
+wc -L                   Exibe a linha mais extensa (--max-line-length)
+wc -w                   Exibe o número de palavras contadas
 
 sort:        Ordena, une ou compara texto, podendo ser usado para extrair informações dos arquivos de texto ou mesmo para ordenar dados de outros comandos
 uniq:        Reporta ou apaga linhas repetidas num arquivo
-
-ps -ef | grep DSD.RUN | grep -v | sort -k5
-
-ps -ef | grep DSD.RUN | grep -v | wc -l
-
-ps -ef | grep -i DSD.RUN | grep -v grep                                             Lista todos os processos
-
-ps -ef | grep -i DSD.RUN | grep -v grep | awk '(print $2)' | xargs -i kill -9 {}    Mata todos os processos 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-****Comandos de Controlo de Processos
-
-kill: Mata um processo, como por exemplo kill -kill 100 ou kill -9 100 ou kill -9 %1
-bg: Coloca um processo suspenso em background
-fg: Ao contrário do comando bg, o fg traz de volta um processo ao foreground
-jobs: Permite-nos visualizar jobs em execução, quando corremos uma aplicação em background, poderemos ver esse job com este comando, e terminá-lo com um comando kill -9 %1, se for o job número 1, por exemplo
-top: Lista os processos que mais cpu usam, útil para verificar que processos estão a provocar um uso excessivo de memória, e quanta percentagem decpu cada um usa em dado momento
-^y: Suspende o processo no próximo pedido de input
-^z: Suspende o processo actual
-iostat: lista os processos em execução com mais detalhes
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Comandos de Informação de Estado
-
-clock: Define a hora do processador
-date: Exibe a data e hora
-df: Exibe um resumo do espaço livre em disco
-du: Exibe um resumo do uso do espaço em disco
-du * -hs:Exibe um resumo do uso do espaço em disco
-env: Exibe as variáveis de ambiente
-finger: Pesquisa informações de utilizadores
-history: Lista os últimos comandos usados, muito útil para lembrar também de que comandos foram usados para fazer determinada acção no passado ou o que foi feito em dada altura
-last: Indica o último login de utilizadores
-lpq: Examina a spool queue
-manpath: Mostra a path de procura para as páginas do comando man
-printenv: Imprime as variáveis de ambiente
-pwd: Mostra-nos o caminho por inteiro do diretório em que nos encontramos em dado momento, ou seja um pathname
-set: Define variáveis da sessão, ou seja, da shell, na C shell, na bash ou na ksh
-spend: Lista os custos ACITS UNIX até à data
-time Mede o tempo de execução de programas
-uptime: Diz-nos há quanto tempo o sistema está funcional, quando foi ligado e o seu uptime
-w: Mostra-nos quem está no sistema ou que comando cada job está a executar
-who: Mostra-nos quem está logado no sistema
-whois: Serviço de diretório de domínios da Internet, permite-nos saber informações sobre determinados domínios na Internet, quando um domínio foi registado, quando expira, etc
-whoami: Diz-nos quem é o dono da shell
-uname-a: exibe a versao do SO e do kernell instalada
-dstat: exibe informaoes resumidas da máquina
-
-du -h --max-depth=1  Sumariza a utilização da pasta, o =1 está relacionado com o nível que estamos no diretório.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos de Controle e Acesso

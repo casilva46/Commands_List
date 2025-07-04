@@ -1,0 +1,149 @@
+HIVE
+
+hive                                    inicia a linha de comando do Hive (Beeline)
+show databases;                         Lista / Verifica a existencia de banco de dados no Hive
+show tables;						    Exibe as tabelas dentro de uma banco de dados
+create database nome_do_banco;          Cria um novo banco de dados
+use nome_do_banco;                      Muda para o banco de dados na qual se dejesa trabalhar
+DROP DATABASE nome_do_banco CASCADE;    Excluir banco de dados
+DROP TABLE clientes;                    Deletar tabela
+describe nome_tabela;			        Verifica a estrutura da tabela
+
+INSERT INTO TABLE clientes VALUES (1, 'Carlos', 35);                        Inserir dados em uma tabela
+
+LOAD DATA INPATH '/user/dados/clientes.csv'                                 Carregar dados de um arquivo (no HDFS)
+INTO TABLE clientes; 
+
+SELECT * FROM clientes;                                                     Consultar dados
+
+SELECT nome, idade FROM clientes WHERE idade > 30;                          Consultar dados com clausula WHERE
+
+SELECT idade, COUNT(*) FROM clientes GROUP BY idade;                        Agrupamento e agregações
+
+ALTER TABLE clientes ADD COLUMNS (email STRING);                            Alterar tabela (Adicionar coluna)
+
+ALTER TABLE clientes RENAME TO clientes_ativos;                             Alterar tabela (Renomear tabela)
+
+ALTER TABLE logs ADD PARTITION (ano=2025, mes=7);                           Adicionar partição
+
+* Criar uma tabela (gerenciada)
+
+CREATE TABLE clientes (
+  id INT,
+  nome STRING,
+  idade INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+* Criar tabela particionada
+
+CREATE TABLE logs (             
+  id INT,
+  mensagem STRING
+)
+PARTITIONED BY (ano INT, mes INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','; 
+
+* Criar tabela com HiveQL + Parquet
+
+CREATE TABLE produtos_parquet (
+  id INT,
+  nome STRING
+)
+STORED AS PARQUET;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+create table temp_XXXXXXXXXXXX (texto String);   (cria uma area(tabela) de transferencia temporária para carregar os dados antes de serem levados para a tabela definitiva)
+
+LOAD DATA LOCAL INPATH '/home/hadoop/colaboradores.csv' OVERWRITE INTO TABLE temp_XXXXXXXXXXXX;  (faz o import dos dados para a tabela temporária)
+
+SELECT * FROM temp_colab;
+
+INSERT overwrite table colaboradores 
+SELECT  
+  
+  regexp_extract(texto, '^(?:([^,]*),?){1}', 1) ID,  
+  regexp_extract(texto, '^(?:([^,]*),?){2}', 1) nome,  
+  regexp_extract(texto, '^(?:([^,]*),?){3}', 1) cargo,
+  regexp_extract(texto, '^(?:([^,]*),?){4}', 1) salario,  
+  regexp_extract(texto, '^(?:([^,]*),?){5}', 1) cidade
+
+FROM temp_colab;
+
+
+SELECT * FROM colaboradores;
+
+SELECT * FROM colaboradores WHERE Id = 1002;
+
+SELECT * FROM colaboradores WHERE salario >= 25000;
+
+SELECT * FROM colaboradores WHERE salario > 10000 AND cidade = 'Natal';
+
+SELECT sum(salario), cidade FROM colaboradores GROUP BY cidade;
+
+------------------------------------------------------------------------------lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+
+HIVE
+
+$hive                 						inicia a linha de comando do Hive (Beeline)
+
+> show databases;     						Verifica a existencia de banco de dados no Hive
+
+> create database <nome do banco de dados>;   Cria um novo banco de dados
+
+> use <nome do banco de dados>;               Muda para o banco de dados na qual se dejesa trabalhar
+
+> show tables;								  Exibe as tabelas dentro de uma banco de dados
+
+>describe <nome da tabela>;					  Verifica a estrutura da tabela
+
+
+>CREATE TABLE IF NOT EXISTS colaboradores (id int, nome String, cargo String, salario decimal)
+COMMENT 'tabela de colaboradores'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'   (\t = tecla TAB no teclado)
+LINES TERMINATED BY '\n';	(\n = tecla enter no teclado)
+
+
+ALTER TABLE colaboradores CHANGE salario salario Double;
+
+ALTER TABLE colaboradores ADD COLUMNS (cidade String COMMENT 'Nome da Cidade');
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+create table temp_XXXXXXXXXXXX (texto String);   (cria uma area(tabela) de transferencia temporária para carregar os dados antes de serem levados para a tabela definitiva)
+
+LOAD DATA LOCAL INPATH '/home/hadoop/colaboradores.csv' OVERWRITE INTO TABLE temp_XXXXXXXXXXXX;  (faz o import dos dados para a tabela temporária)
+
+SELECT * FROM temp_colab;
+
+INSERT overwrite table colaboradores 
+SELECT  
+  
+  regexp_extract(texto, '^(?:([^,]*),?){1}', 1) ID,  
+  regexp_extract(texto, '^(?:([^,]*),?){2}', 1) nome,  
+  regexp_extract(texto, '^(?:([^,]*),?){3}', 1) cargo,
+  regexp_extract(texto, '^(?:([^,]*),?){4}', 1) salario,  
+  regexp_extract(texto, '^(?:([^,]*),?){5}', 1) cidade
+
+FROM temp_colab;
+
+
+SELECT * FROM colaboradores;
+
+SELECT * FROM colaboradores WHERE Id = 1002;
+
+SELECT * FROM colaboradores WHERE salario >= 25000;
+
+SELECT * FROM colaboradores WHERE salario > 10000 AND cidade = 'Natal';
+
+SELECT sum(salario), cidade FROM colaboradores GROUP BY cidade;
+
+
+
+
+
+
