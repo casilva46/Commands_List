@@ -77,6 +77,22 @@ CRONTAB
         * Automatizar tarefas recorrentes, como backups, atualizações, envios de relatórios, limpeza de arquivos etc.
         * Rodar scripts em horários programados (minutos, horas, dias, semanas, meses).
 
+sudo /etc/init.d/cron start             Inicia diretamente o serviço através do scrip localizado em /etc/init.d/
+sudo /etc/init.d/cron stop              Para diretamente o serviço através do scrip localizado em /etc/init.d/
+sudo /etc/init.d/cron status            Verificar o status do serviço através do scrip localizado em /etc/init.d/
+sudo service cron start                 Inicia o serviço
+sudo service cron stop                  Para o serviço
+sudo service cron status                Verifida o status do serviço
+ps aux | grep cron                      Verifica se o serviço está em execução
+
+*/5 * * * * /diretorio/meu_script.sh
+
+*/5 * * * * /diretorio/meu_script.sh >> /diretório_destino/auditoria.log 2>&1     Executa um script agendado e gera uma saída para outro diretorio
+                                                                                    >>: adiciona a saída ao arquivo auditoria.log (sem apagar o conteúdo anterior).
+                                                                                    2>&1: redireciona os erros (stderr) para o mesmo lugar da saída padrão (stdout).
+                                                                                    Ou seja: tudo que o script gerar (erro ou sucesso) será registrado no auditoria.log.
+
+
 Estrutura básica de uma linha no crontab:
 
 * * * * * comando_a_executar

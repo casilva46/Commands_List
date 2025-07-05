@@ -1,1 +1,8 @@
-Automação de Tarefas no Linuxcom Shell Script
+Shell Script
+    Shell Script é um script (arquivo de texto) que contém uma sequência de comandos para serem executados pelo interpretador de comandos do Linux (bash, sh, etc.). Ele é muito usado para automação de tarefas, como backups, instalações, monitoramento de sistemas e manipulação de arquivos.
+
+chmod +x                                    Adiciona permissão de execução e torna um arquivo executável no Linux
+chmod -x                                    Remove a permissão de execução
+chmod +x nome_do_arquivo                    Tornar um arquivo executável no Linux
+chmod +x /Diretório/*.sh                    Torna todos os arquivos que estão dentro de uma pastas com a exetensão .sh executáveis
+./meu_script.sh                             Executa um script a partir da pasta de origem dele.
