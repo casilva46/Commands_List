@@ -2,7 +2,7 @@ DOCKER x DOCKER COMPOSE X SWARM X KUBERNETES
 
 * DOCKER 
 
-    Docker é uma plataforma que permite empacotar, distribuir e executar aplicações em containers, que são ambientes isolados, leves e portáteis.
+    Docker é uma plataforma que permite empacotar, distribuir e executar aplicações em containers, que são ambientes isolados, leves e portáteis. Docker não é uma máquina virtual, mas sim um isolamento no nível do sistema operacional, ele utiliza funcionalidades do kernel Linux (como cgroups e namespaces) para isolar processos. O container compartilha o mesmo kernel do host, mas roda como se estivesse isolado, com seu próprio sistema de arquivos, rede, bibliotecas, etc.
 
          Vantagens:
             * Portabilidade (roda em qualquer ambiente com Docker instalado)
@@ -387,7 +387,7 @@ Image_name	            Imagem Docker que será usada (pode ser baseada em Redis 
 KUBERNETES
 
     Kubernetes (K8s) é uma plataforma open source para orquestração (dinâmica) de contêineres, criada originalmente pelo Google e mantida pela CNCF (Cloud Native Computing Foundation).
-Ele automatiza implantação, escalabilidade, balanceamento de carga e gerenciamento de aplicações em contêineres. Os K8s são os arquivos de configuração do Kubernetes. O Kubernetes é uma das plataformas de orquestração de contêineres mais populares do mundo ideal para aplicações em nuvem. 
+Ele automatiza implantação, escalabilidade, balanceamento de carga e gerenciamento de aplicações em contêineres. Os K8s são os arquivos de configuração com a extensão .yaml do Kubernetes. O Kubernetes é uma das plataformas de orquestração de contêineres mais populares do mundo ideal para aplicações em nuvem. 
 
 Instalação do Kubernetes
 
@@ -401,7 +401,7 @@ Instalação do Kubernetes
 * Componentes principais
 
 Componente              Função
-Pod	                    A menor unidade do Kubernetes, que contém um ou mais contêineres.
+Pod	                    A menor unidade do Kubernetes. Na prática um POD é uma unidade de processamento (pode ter um ou mais containers relacionados)
 Node	                Máquina (virtual ou física) onde os pods são executados. Pode ser worker ou control-plane.
 Cluster	                Conjunto de nós gerenciados por um control plane (o cérebro do K8s).
 Deployment	            Gerencia a criação e atualização de pods.
@@ -411,13 +411,18 @@ Namespace	            Isola ambientes dentro do cluster.
 
 Comandos
 
+minikube start                                                          Inicia o cluster Kubernetes local. Cria um container no Docker desktop para a gestão do kubernertes
+kubectl cluster-info                                                    Exibe informações sobre o cluster Kubernetes atua
+minikube stop                                                           Desligando o cluster Kubernetes
+minikube delete                                                         Deleta o cluster Kubernetes
+minikube image load Image_name:v1                                       Carrega a imagem Docker local diretamente no ambiente Minikube
 kubectl get pods	                                                    Lista os pods do cluster.
 kubectl get services	                                                Lista os serviços.
 kubectl get deployments	                                                Lista os deployments.
 kubectl get nodes	                                                    Lista os nós do cluster.
 kubectl get namespaces	                                                Lista os namespaces.
 kubectl get all	                                                        Lista todos os recursos no namespace atual.
-kubectl describe pod <nome>	                                            Detalha informações de um pod.
+kubectl describe pod <pod_nome>	                                        Detalha informações de um pod.
 kubectl logs <pod>	                                                    Mostra os logs de um pod.
 kubectl logs <pod> -c <container>	                                    Logs de um contêiner específico dentro do pod.
 kubectl apply -f arquivo.yaml	                                        Cria ou atualiza recursos definidos no YAML.
@@ -444,7 +449,58 @@ kubectl get pods --namespace=<ns>	                                    Lista pods
 kubectl top pod	                                                        Mostra uso de CPU/memória dos pods (precisa do Metrics Server).
 kubectl top node	                                                    Mostra uso de CPU/memória dos nós.
 kubectl apply -k <diretório>	                                        Aplica Kustomize.
-kubectl explain <recurso>	                                            Explica campos de um recurso (ex: kubectl explain deployment.spec.template).
+kubectl explain <recurso>	                                            Explica campos de um recurso (ex: kubectl explain deployment.spec.template)
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Procedimento para subir um container Docker
+
+Tenha o Desktop Instalado em sua máquina. Acesse o link abaixo e escolha o SO para a sua máquina.
+
+    https://docs.docker.com/desktop/setup/install/windows-install/
+
+
+Quando executamos o comando docker build e passamos o nome de uma imagem (pode ter qualquer nome) o mesmo vai até o Dockerfile e faz a leitura do arquivo e este último contém todas as configurações necessárias para a criação da imagem que dará origem aos containers.  
+
+1 - Criar um arquivo Dockerfile dentro de um diretório/pasta na sua máquina e dentro dele crie um arquvivo chamado Dockerfile. OBS esse arquivo não deve ter nenhuma extensão.
+
+2 - Quando executamos o comando docker build o mesmo irá fazer a leitura do arquivo Dockerfile que contém os parametros de criação da imagem. O Docker não cria containers do zero, ele instancia containers a partir dessas imagens. O nome da imagem deve estar todo em minusculo. 
+
+    Ex: docker build -t Nome_da_imagem .    (O ponto quer dizer faça isso no diretório atual, daí a importancia de executar o comando na mesma pasta onde se encontra o arquivo Dockerfile)
+
+3 - Com o comando docker run fazemos a criação do container a partir da imagem criada.
+
+docker run -dit --name Nome_Container Nome_da_imagem 
+
+
+Exemplo de um arquivo Dockerfile: 
+
+# Define a imagem base
+FROM ubuntu:22.04
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos do diretório atual (máquina local) para o diretório de trabalho no contêiner
+COPY . .
+
+# Instala as dependências
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-pip && rm -rf /var/lib/apt/lists/*
+
+# Instala as dependências Python
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Define a porta que o contêiner irá escutar
+EXPOSE 8000
+
+# Define o comando padrão a ser executado quando o contêiner for iniciado
+CMD ["python3", "app.py"]
+
+OBS: Letras em Maiús são reservadas para o Docker. 
+
+
+
+
+    
 
 
 

@@ -68,7 +68,8 @@ Estrutura de diretórios (Pastas) no Linux
 	Visão Geral em Forma de Árvore
 
 			/
-			── bin      → Binários essenciais do sistema. Contém os comandos essenciais do sistema, como ls, cp, mv, cat
+			── bin      → Contém os binários essenciais para todos os usuários do sistema. Contém os comandos essenciais do sistema, como ls, cp, mv, cat
+			── sbin     → Contém binários para administração do sistema, geralmente usados pelo root.
 			── boot     → Arquivos de boot, incluindo o kernel. Arquivos necessários para inicialização do sistema, incluindo o kernel (vmlinuz) e o GRUB.
 			── dev      → Arquivos de dispositivos. Contém arquivos especiais que representam dispositivos de hardware, como /dev/sda, /dev/tty
 			── etc      → Arquivos de configuração do sistema. Ex: /etc/passwd, /etc/hostname, /etc/network/interfaces.o
