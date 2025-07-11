@@ -1,0 +1,62 @@
+
+A linguagem Python é quase um padrão em projetos de ML, mas pode não ser a ideal se precisarmos criar aplicações web que serão executadas via nagegador. 
+A linguagem R é exelente para a análises estatísticas, mas não é a ideal para aplicações web. 
+Java e Scala são excelentes linguagens para criar pipelines robustos e aplicações de missão crítica que rodam no lado servidor. 
+Para aplicações WEB JavaScript é praticamente o padrão e ainda oferece diversos frameworks como o React, Vue e o TensorFlow.Js para aplicações de Machine Learning.
+A linguagem Go é amplamente usada em aplicações de Blockchain, sendo ideal se integrarmos ML e Blockchain na mesma aplicação. 
+
+* JAVASCRIPT 
+    JavaScript foi criada inicialmente para tornar as páginas web "vivas", isto é deixa-las com mais interatividade isto porque HTML e CSS não são linguagens de programação e sim linguagens de marcação. 
+    Os programas escritos com JavaScript são chamados de Scripts. Eles podem ser escritos diretamente no arquivo HTML de uma página web e executados automaticamente à medida que a página é carregada. 
+    Os Scripts são fornecidos e executados como texto simples. Eles não precisam de preparação ou compilação especial para serem executados. Nesse aspecto o JavaScript é muito diferente de outra linguagem chamada Java. 
+
+        * Linguagem de script orientada a objetos.
+        * Executada no navegador (front-end) e também no servidor (com Node.js).
+        * Usada para criar funcionalidades dinâmicas como sliders, validação de formulários, animações, etc.
+
+JAVASCRIPT x JAVA
+
+    Quando o JavaScript foi criado, inicialmente tinha outro e se chamava "LiveScript". Mas a linguagem Java era muito popular na época, então foi decidido que posicionar uma nova linguagem como "irmão mais novo" do Java ajudaria a popularizar a linguagem. 
+    A medida que evoului JavaScript tornou-se uma linguagem totalmente indenpendente com a sua própria especificação chamada ECMAScript e agora não tem nenhuma relação com o Java. 
+    Hoje JavaScript pode ser executada não apenas no navegador, mas também no servidor ou na verdade em qualquer dispositivo que tenha um programa especial chamado JavaScript Engine. O navegador possui um engine encorporado as vezes sendo chamado de "JavaScript Vitual Machine"
+    
+        OBS: Não é a Java Virtual Machine (JVM), cuidado para não confundir. A JVM é um programa que instalamos na máquina para a execução de códigos em Java, a JVM é o que permite que o Java seja multiplataforma. 
+
+    Diferentes engines tem diferentes "codinomes". Por Exemplo:
+
+        V8 - no Chrome, Opera e Edge
+        SpiderMonkey - no Firefox
+
+    No lado do servidor podemos usar o Node.js para a execução do código JavaScript
+
+    node -v         Faz a validação da instalação do NodeJS (CMD)
+    npm -version    Faz a validação do npm (gerenciador de pacotes JavaScript)
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GO
+    A linguagem Go, também conhecida como Golang, é uma linguagem de programação criada pelo Google em 2007 e lançada publicamente em 2009. Ela foi desenvolvida por Robert Griesemer, Rob Pike e Ken Thompson, com o objetivo de combinar a performance e a segurança de linguagens como C/C++ com a simplicidade e a produtividade de linguagens modernas.
+
+    Caracteristicas: 
+
+        * Compilada e fortemente tipada: Código-fonte é convertido diretamente em binário, resultando em alta performance.
+        * Sintaxe simples e clara: Facilita a leitura, escrita e manutenção do código.
+        * Concorrência nativa com goroutines: Permite criar aplicações altamente concorrentes com facilidade.
+        * Gerenciamento de memória automático (garbage collector).
+        * Compilação rápida: Um dos objetivos principais é reduzir o tempo entre escrever e executar o código.
+        * Biblioteca padrão rica: Oferece suporte para redes, manipulação de arquivos, HTTP, criptografia e mais.
+
+    Bibliotecas
+
+        * Gonum: conjunto de pacotes projetados para tornar a escrita de algoritmos numéricos e científicos produtiva, eficiente e escalável.
+        * GoLearn:  é uma biblioteca de aprendizado de máquina para Go
+        * Gorgonia:  é uma biblioteca que facilita o aprendizado de máquina em Go. Escreva e avalie equações matemáticas envolvendo matrizes multidimensionais com facilidade
+        * eaopt: é uma biblioteca de otimização evolutiva
+        * GoMind: é uma biblioteca de redes neurais escrita inteiramente em Go
+        * goml: é uma biblioteca de aprendizado de máquina escrita inteiramente em Golang
+        * Goga: um algoritmo genético em Golang
+
+go version          Valida a instalação do Go. 
+
+
+
+

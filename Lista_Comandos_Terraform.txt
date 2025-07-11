@@ -75,3 +75,41 @@ Global options (use-as antes do subcomando, se houver):
 -version      	version Um alias para o subcomando "version".
 
 terraform <Nome_Comando> -help 		Exibe mais informações/opções sobre um comando
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Preração para usar o terraform na máquina local. 
+
+Intale o terraform
+
+
+Instale o AWS CLI para Windows
+
+Execute a linha abaixo no prompt de comandos (CMD)
+
+msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+
+O CLI será instalado no path abaixo
+
+C:\Program Files\Amazon\AWSCLIV2\
+
+Valide a instalação com o comando 
+
+aws --version
+
+Configuração das credenciais de acesso. 
+
+Abra o prompt de comando:
+
+Procure por "cmd" ou "PowerShell" no menu Iniciar e abra o prompt.
+
+3. Execute o comando aws configure:
+Este comando irá guiá-lo na configuração das credenciais e da região padrão.
+AWS Access Key ID: Insira sua chave de acesso do AWS IAM.
+AWS Secret Access Key: Insira sua chave de acesso secreta do AWS IAM.
+Default region name: Escolha a região da AWS onde você deseja trabalhar (ex: us-east-1).
+Default output format: Você pode escolher o formato de saída dos dados (ex: json, text, table).
+
+
+4. Localização do arquivo credentials (chaves de acesso):
+O arquivo com as credenciais (e o arquivo config com a região e formato) são criados em `C:\Users\USERNAME\.aws\` (substitua USERNAME pelo seu nome de usuário).

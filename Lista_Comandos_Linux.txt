@@ -31,19 +31,15 @@ sudo systemctl reboot                           Reboot
 sudo systemctl poweroff                         Desligar	
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DISPOSITIVOS DE ARMAZENAMENTO NO LINUX
 
-find . | grep "Optimization"
-grep -i fasttrack Version.xml
-find . | grep "InformationGovernanceCatalog"
-find ./ * -size +800M                           Faz a busca de arquivos maiores que 800Mb
-find ./ -size -800M                             Faz a busca de arquivos menores que 800Mb
-find ./ -size +10G -type f                   Procura, a partir do diretório atual arquivos com mais de 10 Gb. -type fRestringe a busca a arquivos (ignora diretórios etc)
-find /Nome_Diretorio -name "*.txt"           Faz a busca por qualquer arquivo com a extansão .txt em um diretório especifico
-find /Nome_Diretorio -type d -name "Docs"    Faz a busca por um diretorio (type d) chamado Docs
+/dev/hda1           IDE             Primeira partição (1) do disco conectado no primeiro canal (a) IDE  
+/dev/hda2           IDE             Segunda partição (2) do disco conectado no primeiro canal (a) IDE
+/dev/hdb1           IDE             Primeira partição (1) do disco conectado no segundo canal (b) IDE 
+/dev/hdb2           IDE             Segunda partição (2) do disco conectado no segundo canal (b) IDE 
 
-find $PWD -name XXXXXXXXXXXX
-
-find / -iname XXXXXXXXXXXXXX
+/dev/sda1           SATA             Primeira partição (1) do disco conectado no primeiro canal (a) SATA
+/dev/sdb1           SATA             Primeira partição (1) do disco conectado no segundo canal (b) SATA
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 COMANDOS BÁSICOS
@@ -62,11 +58,6 @@ nome="Tales" ; echo $nome	“nome”      Recebe o valor de “Tales” e exibe 
 >   Redirecionamento simples - sobreescreve um conteúdo já existente, se o arquivo não existir, ele será criado
 >>  Redirecionamento (append/adicionar) - Adiciona o conteúdo ao final do arquivo, se o arquivo não existir será criado
 
-scp -p user@host:/<caminho_origem> : user@host:/<caminho_destino>
-
-scp usuário@máquina:<diretório_origem> <diretório_destino>
-
-scp Nome_arquivo user@host:/<caminho_destino>
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Links simbólicos (soft links)
 
@@ -88,9 +79,56 @@ ls -l    mostra o link simbólico com uma seta
 
     arquivo_symlink.txt -> /home/user/arquivo.txt
 
-
-
 ln -s /home/USER/scripts/rdmup.ksh rdmup (pasta para onde será direcionado) - criar link Simbólico
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+REGEX
+    Expressões regulares (REGEX) são elementos de texto, palavras chaves e modificadores que formam um padrão. São usados para buscar e manipular padrões em texto, muito usada em Linux, Python, editores como VS Code, e comandos como grep, sed, awk.
+
+Exemplos básicos de regex:
+
+Padrão	    Significado	                                                    Exemplo que casa
+abc	        Letras exatas abc	                                            abc, abcde
+^           Inicio da Linha
+$           Final da Linha
+^abc	    Começa com abc	                                                abc123, abcdef
+abc$	    Termina com abc	                                                123abc, xyzabc
+.	        Qualquer caractere (menos nova linha)	                        a, 1, @, etc.
+a.c	        Qualquer coisa entre a e c	                                    abc, a9c, a c
+[abc]	    Um dos caracteres dentro dos conchetes	                        a, b, c
+[^abc]	    Qualquer caractere exceto os que estão dentro dos conchetes     d, e, 1
+[0-9]	    Um número de 0 a 9	                                            3, 7
+[a-z]	    Uma letra minúscula	                                            g, z
+[A-Z]	    Uma letra maiúscula	                                            H, B
+[t-z]       Qualquer caracter dentro do intervalo
+[a-zA-Z]	Qualquer letra	                                                a, B, Z
+\d	        Dígito (igual a [0-9])	                                        3, 8
+\w	        Letra, número ou _ (igual a [a-zA-Z0-9_])	                    a, 9, _
+\s	        Qualquer espaço em branco (espaço, tab, nova linha)	            ' ', \t
+z*          Letra z zero ou mais vezes
+z+          Letra z uma ou mais vezes
+?{0,1}      Pode aparecer ou não (opcional)
+*{0,}       Pode aparecer em qualquer quantidade
++{1,}       Deve aparecer no mínimo uma vez
+a{2}        Casa a letra "a" duas vezes
+a{2,4}      Casa a letra "a" de duas a quatro vezes
+a{2,}       Casa a letra "a" no mínimo duas vezes
+.*          Qualquer coisa, tudo ou nada
+
+Quantificadores:
+
+Símbolo	    Significado	                Exemplo
+*	        Zero ou mais repetições	    a* casa com ``, a, aaa
++	        Uma ou mais repetições	    a+ casa com a, aa
+?	        Zero ou uma vez	            a? casa com ``, a
+{n}	        xatamente n vezes	        a{3} casa com aaa
+{n,}	    Pelo menos n vezes	        a{2,} casa com aa, aaa
+{n,m}	    Entre n e m vezes	        a{2,4} casa com aa, aaa, aaaa
+
+Exemplos: 
+
+grep 'erro' arquivo.log                 encontrar linhas que contêm a palavra erro
+grep -E '^Erro|^Falha' arquivo.log      Mostra linhas que começam com Erro ou Falha. -E (modo extendido)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -172,7 +210,7 @@ ps -ef user,pid,cmd,pcpu,pmem --sort -rss | head -n20
 
 find /produtos/bdr/* -size "+3G" -exec ls -lah {} \;
 
-df -h | awk '$5 >=90 {print $5,6}' ou df -h | awk '$5 >=90 {print $2,$4,$5,$6}' (verifica o uso acima de 90% 
+df -h | awk '$5 >=90 {print $5,6}' ou df -h | awk '$5 >=90 {print $2,$4,$5,$6}' (verifica o uso acima de 90% )
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Descobrindo o processo que está consumindo mais CPU
@@ -210,7 +248,16 @@ service sssd start
 service sshd restart
 service sssd status
 
-systemctl restart httpd.service
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Validaçao do serviço HTTPD 
+
+systemctl start httpd.service           Inicia o serviço
+systemctl stop httpd.service            Para o serviço
+systemctl restart httpd.service         reinicia o serviço
+systemctl status httpd.service          Exibe o status do serviço
+systemctl enable httpd.service          Habilita o serviço a iniciar junto dom o boot da máquina
+systemctl disable httpd.service         Retira o serviço do boot da máquina
+systemctl is-enable httpd.service       Verifica se o serviço está ativado com o boot da máquina. echo $ (0 é ativado ; 1 é desativado)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Validaçao do serviço SSHD
@@ -247,13 +294,45 @@ sudo systemctl enable mysql                 Habilita o MySQL para iniciar com o 
 sudo mysql                                  Acessar o MySQL
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Verificar a memória swap da máquina
+SWAP
+    Swap é uma área de espaço em disco usada como memória virtual quando a memória RAM está cheia. Ele permite que o sistema continue funcionando, mesmo que a RAM esteja sobrecarregada, movendo temporariamente dados inativos da RAM para o disco.
 
-$cat /proc/swaps
+free -h                         Verifica o uso de memória, inclusive a swap
+swapon --show                   Verificar o uso da swap
+cat /proc/swaps                 Verificar o uso da swap
+swapoff                         Desativa a swap
+swapon                          Ativa a swap
+swapon -s                       Exibe o uso de cada espaço de swap. Extraído  do arquivo /proc/swaps
 
-$cat /proc/sys/vm/swappiness
+Swapness:
+    É um parâmetro do kernel que controla a tendência do sistema a usar a memória swap. Serve para ver o valor atual da política de uso de swap configurada no servidor ou seja, com que frequência o kernel do Linux move dados da RAM para a área de swap.
+    O valor vai de 0 a 100:
+    OBS: O padrão das máquinas Cloudera é sempre 1
 
-OBS: O padrão das máquinas cloudera é sempre 1
+Valor	        Comportamento
+0	            Evita ao máximo usar swap (só em último caso)
+100	            Usa swap com mais frequência, mesmo com RAM livre
+60 (padrão)     Balanceado, troca com uso moderado da swap
+
+Exemplo: 
+$ cat /proc/sys/vm/swappiness
+60                              Isso significa que o sistema está com comportamento padrão: troca moderada para swap.
+
+
+cat /proc/sys/vm/swappiness         Arquivo que contém as configurações da memória swap
+sudo sysctl vm.swappiness=20        Altera temporariamente. OBS: Essa mudança não persiste após o reboot. 
+sudo vi /etc/sysctl.conf            Alterar permanentemente. Edite o arquivo sysctl.conf / Adicione ou altere a linha: vm.swappiness=20 (ou outro valor)
+sudo sysctl -p                      Aplica as alterações feitas no arquivo /etc/sysctl.conf
+
+Qual valor devo escolher?
+
+Situação	                    Valor sugerido
+Servidor com muita RAM	        10 ou menos
+Desktop comum	                20 a 60
+Sistema com pouca RAM ou SSD	10 a 30
+Servidor de banco de dados	    0 a 10
+
+OBS: Em SSDs, menos swap = menos escrita no disco = maior durabilidade.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SERVIÇO NMON
@@ -262,21 +341,36 @@ cd /logs/nmon
 
 ./nmon
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-COMANDOS DE VERIFICAÇÃO
+SYSTEMCTL 
+    O comando systemctl é o principal utilitário de controle do systemd, usado para gerenciar serviços, unidades, sessões, alvos (targets), e o sistema como um todo.
 
-systemctl list-unit-files: lista todos os servios e status
+Sintaxe básica:
 
-systemd-analyse blame exibe como foi o último processo de boot da máquina
+    systemctl [ação] [nome_do_servico]
 
-systemctl status <serviço>: exibe o status do serviço
 
-systemctl | grep running: exibe todos os serviços que estão em execução
-
-systemctl list-units -all --state=inactive: lista todos os serviços que estão inativos
-
-systemctl list-units -all --state=running: lista todos os serviços que estão em execução
-
-dmesg  mostra informações do sistema)
+systemctl start nome.service	                                Inicia um serviço agora
+systemctl stop nome.service	                                    Para um serviço
+systemctl restart nome.service	                                Reinicia um serviço
+systemctl reload nome.service	                                Recarrega as configurações (sem reiniciar o serviço)
+systemctl status nome.service	                                Mostra o status atual do serviço
+systemctl enable nome.service	                                Ativa o serviço no boot
+systemctl disable nome.service	                                Desativa o serviço no boot
+systemctl is-active nome.service	                            Verifica se o serviço está ativo
+systemctl is-enabled nome.service	                            Verifica se o serviço inicia automaticamente
+systemctl mask nome.service	                                    Bloqueia completamente o serviço
+systemctl unmask nome.service	                                Desbloqueia serviço que foi mascarado
+systemctl daemon-reexec	                                        Reinicia o próprio processo systemd
+systemctl daemon-reload	                                        Recarrega arquivos de unidade (após edição/criação)
+systemctl list-units --type=service                             Listar serviços em execução
+systemctl | grep running                                        exibe todos os serviços que estão em execução
+systemctl list-unit-files --type=service                        Listar todos os serviços conhecidos (ativos ou não):
+systemctl list-unit-files                                       lista todos os servios e status
+systemd-analyze                                                 Ver tempo de boot
+systemd-analyse blame                                           exibe como foi o último processo de boot da máquina
+systemctl list-units -all --state=inactive                      lista todos os serviços que estão inativos
+systemctl list-units -all --state=running                       lista todos os serviços que estão em execução
+dmesg                                                           mostra informações do sistema
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 MANIPULANDO ARQUIVOS E DIRETÓRIOS
@@ -294,7 +388,11 @@ mkdir		              Cria um diretório.
 mkdir -p	              Cria vários diretórios simultâneos.
 rm			              Remove um arquivo.
 rm -r		              Remove um arquivo, exige uma confirmação antes da remoção
+rm -r -i                  Use -i para modo interativo (mais seguro)
 rm -rf		              Remove um arquivo ou diretório sem perguntar
+rm -rf /                  Apaga todo o sistema operacional
+rm -rf *                  Apaga tudo no diretório atual
+rm -rf .                  Apaga o diretório atual e tudo dentro dele
 rmdir		              Remove um diretorio desde que esteja vazio
 cp			              Copia um arquivo.
 cp -r		              Copia um diretório recursivamente.
@@ -319,6 +417,28 @@ ls -lt | head -40 : Filtra pelas ultimas 40 saídas
 ls -lt | grep jul" "(dia)"   Filtra por uma data especifica
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LIXEIRA 
+    No Linux, a lixeira é implementada de forma diferente dos sistemas como Windows. Cada usuário tem sua própria lixeira localizada em um diretório oculto. Aqui está como visualizar, entender e manipular a lixeira no Linux:
+
+sudo apt-get install trash-cli                              Instala a lixeira
+
+ls ~/.local/share/Trash/files                               Visualizar arquivosque estão na lixeira pelo terminal
+ls ~/.local/share/Trash/info                                Ver as informações (origem, data etc.)
+du -sh ~/.local/share/Trash/files/*                         Ver todos os arquivos e tamanhos
+mv arquivo.txt ~/.local/share/Trash/files/                  Alternativa mais segura: mover para "lixeira"
+mv ~/.local/share/Trash/files/arquivo.txt ~/Documentos/     Recuperar arquivo da lixeira
+rm -rf ~/.local/share/Trash/files/*                         esvaziar a lixeira
+rm -rf ~/.local/share/Trash/info/*                          esvaziar a lixeira
+trash arquivo.txt                                           Envia para a lixeira (como "rm")
+trash-put arquivo.txt                                       Envia para a lixeira (como "rm")
+trash arquivo.txt                                           Move um arquivo para a lixeira
+trash-list                                                  Lista conteúdo que está na lixeira. Também exibe o path do arquivo assim como data e hora da exclusão.
+trash-restore arquivo.txt                                   Restaurar um arquivo
+restore-trash                                               Restaura um arquivo que está na lixeira.  
+trash-rm  arquivo.txt                                       Exclui um arquivo da lixeira
+trash-empty                                                 Esvazia a lixeira                                            
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 DATA E HORA
 
 date			       Exibe e altera a data e a hora do sistema.
@@ -333,24 +453,27 @@ INFORMAÇÕES GERAIS
 
 free -m			                    Mostra o uso (livre/usado) das memórias.
 df -h			                    Mostra o espaço utilizado pelos dispositivos.
-df -hi 			                    Mostra a quantidade de inodes ocupando espaço em um disco
+df -hi 			                    Mostra a quantidade de inodes ocupando espaço em um disco. Inodes são elementos que identificam um arquivo no sistema de arquivos.
 df -hT	                            Mostra uso de disco com tipo de sistema de arquivos
 du -h			                    Mostra o espaço utilizado pelos arquivos.
 du * -hs                            Exibe um resumo do uso do espaço em disco
 du -sh /diretorio                   Exibe o espaço utilizado por um diretorio especifico
 du -h --max-depth=1                 Sumariza a utilização da pasta, o =1 está relacionado com o nível que estamos no diretório.
 du -h --max-depth=1 /diretorio      verificar o uso de espaço em disco por subdiretórios
-cat /proc/cpuinfo	                Informações do processador do computador
+cat /proc/cpuinfo	                Informações do processador (es) encontrados no sistema
 cat /proc/meminfo	                Informações da memória do computador.
 cat /proc/partitions	            Informações sobre discos e partições.
+cat /proc/ioports                   informações sobre endereços de memória usados pelos dispositivos
+cat /proc/interrupts                Informações sobre requisições de interrupção (IRQ) nos processadores
 ps                                  Lista a lista de processos em execução, útil para saber o pid de um processo para o mandar abaixo com o comando kill
 pstree -p		                    Mostra cada processo em execução, em forma de árvore, contendo o PID de cada processo.
 ps -a                               Mostra os processos de todos os usuários (permissão de root para tal)
 ps -x                               Mostra processos que não estejam associados ao terminal de comandos
 ps -u                               Mostra a lista detalhada contendo o usuário que é dono do processo
 ps -aux | grep XXXX                 Mostra a lista de processos, o | grep realiza um filtro para uma busca mais especifica
-lspci			                    Exibe informações dos dispositivos da máquina.
-lsusb			                    Exibe informações dos dispositivos USB da máquina.
+lsmod                               Lista módulos carregados. No Linux módulos são os drivers necessários para o funcionamento de algum componente de hardware.
+lspci			                    Exibe informações dos dispositivos PCI conectados na máquina.
+lsusb			                    Exibe informações dos dispositivos USB conectados na máquina.
 lscpu                               Exibe a quantidade de CPU que a máquina possui
 ls -la /dev/sd*                     Lista dos discos que estão fisicamente conectados na máquina
 fdisk /dev/sda
@@ -359,7 +482,8 @@ lsblk                               Lista todos os dispositivos conectados ao si
 lsblk -f                            Mostra também o sistema de arquivos (ext4, xfs, vfat etc)
 lsblk -d                            Mostra apenas os discos (sem partições)
 lsblk -p                            Mostra caminhos completos (ex: /dev/sda)
-fsck /dev/sda                       Faz uma verificaão na saúde da Partição 
+fsck                                Verifica inconsistências no sistema de arquivos (como blocos corrompidos, arquivos órfãos, inodes danificados).
+fsck /dev/sda                       Faz uma verificação na saúde da Partição 
 sensors		                        Exibe informações de temperatura da máquina, CPU, cooler, placa mãe
 hddtemp /dev/[sh]d[a-z]	            Exibe informações sobre temperatura dos dispositivos de armazenamento.
 inxi -v7			                Informações completas sobre o hardware da máquina.
@@ -377,6 +501,8 @@ stat Nome_Arquivo                   Exibe informações sobre um arquivo
 finger                              Pesquisa informações de utilizadores
 history                             Lista os últimos comandos usados
 last                                Indica o último login de utilizadores
+last reboot                         Mostra quando o sistema foi ligado pela última vez
+lastlog                             Exibe qdo foi a última vez que cada usuário se logou no sistema
 lpq                                 Examina a spool queue
 manpath                             Mostra a path de procura para as páginas do comando man
 printenv                            Imprime as variáveis de ambiente
@@ -409,32 +535,66 @@ reboot			                                                        Reinicia o sist
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GERENCIAR USUÁRIOS E GRUPOS
 
-id  						             Identifica os grupos do usuário
-adduser XXXXXXX				             Cria o usuário “XXXXX”.
+USUÁRIOS
+    No Linux, usuários são entidades que representam pessoas ou processos que usam o sistema. Cada usuário tem permissões, identificadores e arquivos associados. A gestão de usuários é essencial para segurança, controle de acesso e organização.
+
+    Tipos de usuários no Linux:
+
+        * root: Superusuário com permissões totais (UID 0)
+        * usuários normais: Criados para uso pessoal ou profissional, com acesso limitado
+        * usuários de sistema: Usados por serviços (ex: www-data, nobody, mysql) sem login comum
+
+    Arquivos importantes:
+
+        /etc/passwd: Lista todos os usuários e dados básicos
+        /etc/shadow: Armazena as senhas criptografadas
+        /etc/group: Lista os grupos e seus membros
+        /etc/login.defs: Define políticas de criação de usuário e senha
+
+
+/etc/passwd                              Arquivo que armazena informações básicas (nome de usuário, UID, GID, /home ) sobre os usuários pode ser lido por qq usuário. 
+cat /etc/passwd                          Ler o arquivo passwd
+id user_name 						     Identifica os grupos primários do usuário. Ver informações sobre o Usuário.
+adduser XXXXXXX				             Cria um novo usuário
+useradd -m -s /bin/bash Nome_usuário     Cria um novo Usuário onde: -m: cria o diretório /home/Nome_usuário e -s: define a shell padrão
+useradd -m Nome_usuário                  Criar com senha
+passwd Nome_usuário                      Criar com senha
+userdel Nome_usuário                     Excui um usuário, mas não apaga a sua /home
+userdel - r Nome_usuário                 Excui um usuário e também a sua /home
+usermod -l novo_nome nome_antigo         Renomeia um usuário (a pasta no /home não muda de nome)
+usermod -d /home/aluno3 aluno3           Para trocar o /home de um usuário após renomear o user (Primeiro crie uma pasta no /home e depois mude o apontamento)
+usermod -s /bin/bash Nome_usuário        Muda o shell padrão do usuário
+usermod -aG nome_grupo nome_user         Adicionar usuário a um grupo existent / Muda o usuário de grupo / inclui um usuário a um grupo
+passwd -l Nome_usuário                   Bloqueia o login de um usuário
+passwd -u Nome_usuário                   Desbloqueia o login de um usuário
+passwd user_name                         Redefinir senha
 passwd -a user_name nome_grupo           Adiciona o usuário ao grupo
-gpasswd -d user_name nome_grupo          Remove o usuário do grupo
 adduser XXX YYYY			             Adiciona o usuário XXXX ao grupo YYYY.
 deluser XXX YYYY                         Remove o usuário XXXX ao grupo YYYY.
-groupdel nome_grupo                      Deleta o grupo (Os usuários não são deletados)
-userdel -r nome_user                     Deleta o usuário e o seu diretório /home
-
-cat /etc/passwd                          Lista todos os usuários criados (usuários nologin são usuários de sistema)
-cat /etx/group                           Lista os grupos
 cut -d: -f1 /etc/passwd                  Tras somente os nomes sem as informações
 getend passwd user_name                  Trás somente as informaçoes de um usuário
 
 GRUPOS
+    No Linux, grupos são usados para gerenciar permissões de acesso de múltiplos usuários a arquivos, diretórios, dispositivos e comandos especiais. Eles são parte fundamental do sistema de controle de acesso.
+    Tipos de grupos no Linux: 
 
-groupadd Nome_grupo                             Cria um grupo de usuários 
+        * Primário	Grupo principal de um usuário. Está definido no /etc/passwd.
+        * Secundário	Grupos adicionais aos quais o usuário pertence. Listados em /etc/group.
+
+/etc/group                                      Arquivo onde os grupos estão armazenados
+cat /etc/group                                  Ler o arquivo group
+groups                                          Visualiza os grupos de um usuário atual                                          
+groups nome_usuario                             Visualiza os grupos de um usuário
+groupadd Nome_grupo                             Cria um novo grupo de usuários 
 gpasswd -a Nome_usuário Nome_grupo              Inclui o usuário em um grupo
 gpasswd -d Nome_usuário Nome_grupo              Exclui o usuário de um grupo
+gpasswd -A Nome_usuário Nome_grupo              Torna um usuário administrador do grupo 
+gpasswd Nome_grupo                              Atribui uma senha para um grupo
+gpasswd -r Nome_grupo                           Remove a senha do grupo
+getent group Nome_grupo                         Visualizar membros de um grupo
 groupmod -n novo_Nome_grupo antigo_Nome_grupo   renomeia o nome do grupo
+groupdel nome_grupo                             Apaga o grupo (Os usuários não são deletados)
 
-passwd user_name                        Redefinir senha
-
-usermod -l novo_nome nome_antigo        Renomeia um usuário (a pasta no /home não muda de nome)
-usermod -d /home/aluno3 aluno3          Para trocaro /home de um usuário após renomear o user (Primeiro crie uma pasta no /home e depois mude o apontamento)
-usermod -aG nome_grupo nome_user        Muda o usuário de grupo / inclui um usuário a um grupo
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 COMANDOS DE EDIÇÃO DE TEXTO
 
@@ -479,11 +639,12 @@ Locate x Find
 
 Exemplo: locate arquivo.txt
 
+locate	                                            Procura por arquivos no sistema que estão em uma base de dados.
 locate backup                                       Buscar arquivos que contenham "backup"
 locate "*.conf"                                     Buscar arquivos .conf
 locate nginx | grep conf                            Limitar resultado do locate com grep
 locate /etc/passwd                                  Buscar arquivos específicos com caminho
-sudo updatedb                                       Atualizar banco de dados do locate
+sudo updatedb                                       Atualiza o banco de dados de arquivos que é utilizado pelo comando locate
 
 * Find
 
@@ -511,14 +672,20 @@ Onde:
 -mtime -7       modificados nos últimos 7 dias
 -exec executar  comandos nos arquivos encontrados
 
-find /home -name "*.pdf"                            Buscar arquivos por extensão
-find /var -type d -name "log*"                      Buscar diretórios
-find / -size +100M                                  Buscar arquivos com tamanho específico
-find /home -type f -mtime -3                        Buscar arquivos modificados nos últimos 3 dias
-find / -type f -atime +10                           Buscar arquivos acessados há mais de 10 dias
-find / -type f -perm 0777                           Buscar arquivos com permissão 777
-find /tmp -name "*.log" -exec rm -f {} \;           Executar um comando nos arquivos encontrados
-find /var -type f -ctime -1                         Buscar arquivos criados recentemente (usando -ctime)
+find /home -name "*.pdf"                     Busca arquivos por extensão
+find /var -type d -name "log*"               Busca diretórios
+find / -size +100M                           Busca arquivos com tamanho específico
+find /home -type f -mtime -3                 Busca arquivos modificados nos últimos 3 dias
+find / -type f -atime +10                    Busca arquivos acessados há mais de 10 dias
+find / -type f -perm 0777                    Busca arquivos com permissão 777
+find /tmp -name "*.log" -exec rm -f {} \;    Executar um comando nos arquivos encontrados
+find /var -type f -ctime -1                  Busca arquivos criados recentemente (usando -ctime)
+find . | grep "Optimization"				 Procura recursivamente a partir do diretório atual (.), listando todos os arquivos e diretórios encontrados.
+find ./ * -size +800M                        Faz a busca de arquivos maiores que 800Mb
+find ./ -size -800M                          Faz a busca de arquivos menores que 800Mb
+find ./ -size +10G -type f                   Procura, a partir do diretório atual arquivos com mais de 10 Gb. -type fRestringe a busca a arquivos (ignora diretórios etc)
+find /Nome_Diretorio -name "*.txt"          Faz a busca por qualquer arquivo com a extansão .txt em um diretório especifico
+find /Nome_Diretorio -type d -name "Docs"    Faz a busca por um diretorio (type d) chamado Docs
 
 Resumo: 
 
@@ -528,13 +695,13 @@ find	    Sistema de arquivos em tempo real	Mais lenta	        Sempre atual	     
 
 GREP 
 
-grep "root" /etc/passwd                             Buscar string exata em um arquivo
+grep "root" /etc/passwd                             Busca string exata em um arquivo
 grep -i "ubuntu" arquivo.txt                        Ignorar diferenças entre maiúsculas e minúsculas
-grep -r "erro" /var/log/                            Buscar recursivamente em diretórios
+grep -r "erro" /var/log/                            Busca recursivamente em diretórios
 grep -n "falha" /var/log/syslog                     Exibir linhas e número da linha
-grep -l "mensagem" *.log                            Mostrar apenas os nomes dos arquivos com correspondênci
-grep -v "sucesso" resultado.txt                     Mostrar linhas que não contêm a palavra
-grep -E "erro|fail|critical" arquivo.log            Buscar por múltiplos padrões
+grep -l "mensagem" *.log                            Mostra apenas os nomes dos arquivos com correspondênci
+grep -v "sucesso" resultado.txt                     Mostra linhas que não contêm a palavra
+grep -E "erro|fail|critical" arquivo.log            Busca por múltiplos padrões
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 VISUALIZAR TEXTOS
@@ -547,8 +714,18 @@ head -c 33	    Lê os primeiros 33 caracteres de um arquivo texto.
 tail		    Lê as últimas Linhas de um arquivo texto.
 tail -n 2	    Lê as duas últimas linhas de um arquivo texto.
 tail -c 33	    Lê os últimos 33 caracteres de um arquivo texto.
-more		    Visualiza um arquivo texto de forma interativa.
-less		    Visualiza um arquivo texto de forma interativa. Possui mais opções e é mais otimizado que o more.
+more		    Visualiza um arquivo texto de forma interativa. Rola a página apenas em um sentido
+less		    Visualiza um arquivo texto de forma interativa. Possui mais opções e é mais otimizado que o more. Permite rolar a página para baixo e cima
+fold            Encurta, ou seja, faz um fold das linhas longas para caberem no dispositivo de output
+lpq             Examina a spooling queue da impressora
+lpr             Imprime um arquivo
+lprm            Remove jobs da spooling queue da impressora
+page            Funciona de forma parecida com o comando more, mas exibe os ecrãs de forma invertida ao comando more
+pr              Pagina um arquivo para posterior impressão
+zcat            Mostra-nos um arquivo comprimido
+xv              Serve para exibir, imprimir ou mesmo manipular imagens
+gv              Exibe arquivos ps e pdf
+xpdf            Exibe arquivos pdf, usa o gv
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos de Ajuda e Documentação
@@ -557,7 +734,7 @@ apropos:  Localiza comandos por pesquisa de palavra-chave
 find:     Localizar arquivos, como por exemplo: find . -name *.txt -print, para pesquisa de arquivos de texto do diretório atual
 info:     Abre o explorador de informações
 man:      Manual muito completo, pesquisar informação acerca de todos os comandos que necessitemos de saber, como por exemplo man find
-whatis:   Descreve o que um determinado comando é/faz
+whatis:   Descreve o que um determinado comando é e o ele faz
 whereis:  Localizar a página de ajuda (man page), código fonte, ou arquivos binários, de um determinado programa
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -590,7 +767,6 @@ c - para criar
 z - para compactar 
 f - para especificar o nome do arquivo de saída
 
-
 gzip Nome_arquivo                         Compacta um arquivo
 gunzip arquivo.zip					      Descompacta um arquivo .zip
  
@@ -614,7 +790,6 @@ bg                      Coloca um processo suspenso em background
 fg                      Ao contrário do comando bg, o fg traz de volta um processo ao foreground
 ^y                      Suspende o processo no próximo pedido de input
 ^z                      Suspende o processo actual
-
 
 ps                                                                              Lista processos do terminal atual
 ps -e                                                                           Lista todos os processos do sistema
@@ -681,47 +856,229 @@ lsof -i :8501                                       Lista processos que estão u
 ping                                                Pingar um determinado host
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-PROCURAR ARQUIVOS E DIRETÓRIOS
+FIREWALL
+    Um firewall é um sistema de segurança que controla o tráfego de rede — ele decide quais conexões são permitidas ou bloqueadas com base em regras definidas.
+    No Linux, o firewall é implementado principalmente através do iptables ou do nftables (mais novo). Ferramentas como firewalld e ufw facilitam a configuração.
 
-Comando	Descrição
-find	Pesquisa por arquivos.
-find $HOME -name "Janelas" -exec rm -vf {} \;	Procura pelos arquivos com nome de “Janelas” no diretório do usuário e os apaga.
-find . -mtime 3 -print	                        Procura no diretório corrente por arquivos que foram modificados a 3 dias.
-find . \( -iname "*.png" -o -iname "*.jpg" \) -print -exec tar -rf images.tar {} \;	Procura por imagens do tipo ".png" e ".jpg" no diretório corrente e cria um pacote chamado imagens.tar com as imagens encontradas.
-find / -group users -print 2>/dev/null	        Procura em todo sistema por arquivos pertencentes ao grupo users.
-find ~/Música -size +10M -exec ls -lh {} \; 	Procura por arquivos maiores que 30M no diretório ~/Músicas, listando o arquivo com o seu tamanho.
-find ~/Música -size +10M -size -30M -exec ls -lh {} \;	Limita o tamanho do arquivo, por exemplo: maior que 10M e menor que 30M.
-find /var/spool/cups/tmp/ -mtime +7 -exec rm -Rf {""} \;	Procura e remove arquivos de uma área temporária aonde os arquivos só devem permanecer por uma semana.
-find $HOME -type d -exec chmod 755 {} \;	Modifica as permissões de diretórios recursivamente para 755 na $HOME do usuário.
-find $HOME -type f -exec chmod 644 {} \;	Modifica as permissões de arquivos recursivamente para 644 na $HOME do usuário.
-locate	Procura por arquivos no sistema que estão em uma base de dados.
-updatedb	Atualiza o banco de dados de arquivos que é utilizado pelo comando locate.
- 
+Principais ferramentas de Firewall no Linux:
+
+Ferramenta	    Descrição
+iptables	    Tradicional, poderoso, mas mais complexo
+nftables	    Substituto moderno do iptables
+firewalld	    Interface dinâmica para iptables/nftables, usada no RHEL, CentOS, Fedora
+ufw	            “Uncomplicated Firewall”, usado no Ubuntu; simples de configurar
+
+IPTABLES
+
+    Quando usar iptables?
+
+        * Você precisa de controle avançado e personalizado.
+        * Vai gerenciar firewalls em servidores críticos.
+        * Deseja aplicar regras por interface, conexão, pacotes específicos, NAT etc.
+        *  Mais poderoso, porém mais trabalhoso.
+
+sudo iptables -P INPUT DROP                                                 Bloqueia todo tráfego de entrada (Default)
+sudo iptables -P OUTPUT ACCEPT                                              Permite tudo que sai (Default)
+sudo iptables -P FORWARD DROP                                               Bloqueia redirecionamentos (Default)
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT       Permite conexões existentes
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT                          Permite SSH
+sudo iptables -A INPUT -i lo -j ACCEPT                                      Permitir tráfego local (loopback)
+sudo iptables -A INPUT -p icmp -j ACCEPT                                    Permite ping
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT                          Permitir HTTP (porta 80)
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT                         Permitir HTTPS (porta 443)
+sudo iptables -A INPUT -s 192.168.0.100 -j DROP                             Bloquear um IP específico
+sudo iptables -A INPUT -p tcp --dport 23 -j REJECT                          Bloquear uma porta (ex: 23 - Telnet)
+iptables -L -n -v                                                           Verifica Regras Atuais com detalhes
+sudo iptables -F                                                            Apagar todas as regras
+sudo iptables -D INPUT 3                                                    Deletar uma regra específica (ex: INPUT regra 3)
+sudo iptables-save > /etc/iptables/rules.v4                                 Salvar regras (Debian/Ubuntu)
+sudo iptables-restore < /etc/iptables/rules.v4                              Restaurar regras
+
+UFW 
+
+     Quando usar ufw?
+        * Você quer uma solução simples e rápida.
+        * Está configurando um servidor pessoal ou ambiente de testes.
+        * Deseja permitir ou negar portas com poucos comandos.
+        * Mais simples, ideal para quem quer algo funcional e direto.
+
+sudo ufw --help 					Ajuda
+sudo ufw status						Verifica o status do serviço e se existe alguma regra aplicada
+sudo ufw enable 					Habilita o serviço
+sudo ufw disable					Desabilita o serviço porém nao limpa as regras do firewall
+sudo ufw reset						Limpa todas as regras aplicadas no firewall
+sudo ufw status numered				Lista todas as regras existentes de forma numerada
+sudo ufw delete (number)			Apaga uma regra baseada na numeração atribuída no comando anterior
+sudo ufw status verbose             Verifica Regras Atuais
+sudo ufw deny incoming				Nega todas as conexoes de entrada no firewall. Bloqueia tudo por padrão
+sudo ufw allow incoming				Permite todas as conexoes de entrada no firewall
+sudo ufw deny outgoing				Nega todas as conexoes de saísa do firewall
+sudo ufw allow outgoing				Permite todas as conexoes de saísa do firewall 
+sudo allow ssh						Permite conexao de um serviço especifico
+sudo deny ssh						Nega conexao de um serviço especifico
+sudo allow 22						Permite conexao de uma porta especifico
+sudo deny 22						Nega conexao de uma porta especifico
+sudo allow 6000:6005/tcp			Permite conexao de um range especifico de portas
+sudo deny 6000:6005/tcp				Nega conexao de um range especifico de portas
+sudo allow xxx.xxx.xxx.xxx			Permite conexao de um IP especifico
+sudo deny xxx.xxx.xxx.xxx			Nega conexao de um IP especifico
+sudo allow xxx.xxx.xxx.xxx/24		Permite conexao de uma rede especifica
+sudo deny xxx.xxx.xxx.xxx/24		Nega conexao de uma rede especifica
+	
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-*****Exibição ou Impressão de Arquivos
+SEGURANÇA e AUDITORIA 
 
-cat: Mostra o conteúdo de um arquivo, como o comando type do MD-DOS, e é muito usado também para concatenar arquivos, como por exemplo fazendo cat a.txt b.txt > c.txt” para juntar o arquivo a.txtb.txt num único de nome c.txt
-fold: Encurta, ou seja, faz um fold das linhas longas para caberem no dispositivo de output
-head: Mostra as primeiras linhas de um arquivo, como por exemplo com head -10 a.txt, ou usado como filtro para mostrar apenas os primeiros x resultados de outro comando
-lpq: Examina a spooling queue da impressora
-lpr: Imprime um arquivo
-lprm: Remove jobs da spooling queue da impressora
-more: Mostra o conteúdo de um arquivo, mas apenas um ecrã de cada vez, ou mesmo output de outros comandos, como por exemplo ls | more
-less: Funciona como o more, mas com menos features, menos características e potenciais usos
-page: Funciona de forma parecida com o comando more, mas exibe os ecrãs de forma invertida ao comando more
-pr: Pagina um arquivo para posterior impressão
-tail: Funciona de forma inversa ao comando head, mostra-nos as últimas linhas de um arquivo ou mesmo do output de outro comando, quando usado como filtro
-zcat: Mostra-nos um arquivo comprimido
-xv: Serve para exibir, imprimir ou mesmo manipular imagens
-gv: Exibe arquivos ps e pdf
-xpdf: Exibe arquivos pdf, usa o gv
+* Auditd (Linux Audit Daemon)
+
+    Ferramenta oficial e poderosa para auditoria no Linux. Permite rastrear eventos do kernel como:
+        * Acesso a arquivos sensíveis
+        * Mudança de permissões
+        * Comandos executados
+        * Alterações em grupos e usuários
+
+sudo apt-get  install auditd                                        Instala a ferramenta: Debian/Ubuntu
+sudo yum install audit                                              Instala a ferramenta: RHEL/CentOS
+
+sudo systemctl start auditd                                         Iniciar o serviço:
+sudo systemctl enable auditd                                        Habilita o serviço
+sudo ausearch                                                       Ver registros
+sudo aureport                                                       Ver eventos recentes
+
+sudo auditctl -w /etc/passwd -p war -k passwd_monitor               Exemplo: auditar acesso ao /etc/passwd
+Onde: 
+-w: adiciona "watch" no arquivo
+-p war: alerta em write (escrita), attribute change (a), read (r)
+-k: chave para identificar no log
+
+sudo ausearch -k passwd_monitor                                 Ver logs
+journalctl                                                      Logs do sistema (syslog/journal)
+journalctl -u ssh.service                                       Logs do SSH
+journalctl -xe                                                  Logs de erro detalhados
+
+cat /var/log/auth.log                                           Ver tentativas de login:  Debian/Ubuntu
+cat /var/log/secure                                             Ver tentativas de login: RHEL/CentOS
+cat ~/.bash_history                                             Auditar histórico de comandos. Esse histórico pode ser alterado ou apagado. Para segurança real, use auditd.
+
+* Auditoria de arquivos com inotify
+    Para auditoria em tempo real de arquivos/diretórios:
+
+sudo apt install inotify-tools                                  Instala a ferramenta
+inotifywait -m /etc                                             Exemplo de utilização.
+
+* Rastrear alterações com tripwire ou AIDE
+    Ferramentas que detectam alterações não autorizadas em arquivos críticos.
+    Funcionam como um sistema de integridade de arquivos.
+
+* Comando last, who, w
+
+last	Últimos logins, reboots
+w	    Quem está logado e o que está fazendo
+who	    Usuários conectados no momento
+
+*  Boas práticas para auditoria:
+    * Ative e configure o auditd corretamente
+    * Audite arquivos críticos: /etc/passwd, /etc/shadow, /etc/sudoers, /var/log
+    * Monitore comandos sensíveis como sudo, useradd, passwd
+    * Configure envio de logs para servidor remoto (log centralizado)
+    * Use ferramentas como logwatch, fail2ban, auditd, AIDE para alertas
+
+
+find / -perm -4000 -or -perm -2000           Localizar arquivos com permissões especiais no sistema de arquivos Linux
+onde:
+find /: inicia a busca a partir da raiz (/).
+-perm -4000: procura arquivos com o bit SUID (Set User ID) ativado. SUID (4000): Quando um arquivo executável tem esse bit, ele será executado com os privilégios do dono do arquivo (normalmente root)
+-or -perm -2000: OU arquivos com o bit SGID (Set Group ID) ativado. Em arquivos executáveis, o processo herda o GID do arquivo.
+
+passwd -x 30 -n 1 -w 7 -i 7 Nome_usuário      Configurar políticas de expiração da senha do usuário aNome_usuário no Linux
+onde: 
+-x 30	Define o número máximo de dias que a senha é válida (expira em 30 dias).
+-n 1	Define o número mínimo de dias antes que a senha possa ser alterada (1 dia).
+-w 7	Define o número de dias de antecedência com que o usuário será avisado antes da expiração da senha (7 dias antes).
+-i 7	Define o número de dias de graça após a expiração da senha antes de desativar a conta (7 dias).
+
+passwd -S Nome_usuário          Exibe o status da senha do usuário de forma resumida. Ele é útil para verificar rapidamente o estado da conta e as regras de expiração
+
+Saída: Nome_usuário PS 2025-07-07 1 30 7 7 (Password set, SHA512 crypt.)
+Onde: 
+Nome_usuário	Nome do usuário.
+PS	            Status da senha:
+                • P = senha está definida
+                • L = conta bloqueada
+                • NP = sem senha
+2025-07-07	    Data da última alteração de senha.
+1	            Número mínimo de dias para trocar a senha (-n).
+30	            Número máximo de dias que a senha é válida (-x).
+7	            Número de dias de aviso antes da senha expirar (-w).
+7	            Número de dias de tolerância após expiração (-i).
+
+chage -E 04/05/2006 Nome_usuario    Define a data de expiração da conta do usuário. Após essa data a conta é bloqueada independentemente de a senha ainda estar válida
+onde: 
+-E	            Define a data de expiração da conta no formato DD/MM/AAAA (em algumas distros, exige AAAA-MM-DD)
+04/05/2006	    Data de expiração (4 de maio de 2006). OBS: Em algumas distribuições (como Debian, Ubuntu), o formato aceito é AAAA-MM-DD
+Nome_usuario	Nome da conta do usuário a ser modificada
+
+chage -E -1 Nome_usuario        Para desativar a expiração da conta
+chage -l Nome_usuario           verificar a data de expiração
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-****Comandos de Transferência de Arquivos
+SCP X RSYNC
 
-ftp:transferência de arquivos ftp, transferir arquivos entre vários hosts de uma rede, como a um servidor de ftp para enviar ou puxar arquivos
-rsync: Sincroniza de forma rápida e flexível dados entre dois computadores
-scp: Versão segura do rcp
+SCP
+    O comando scp (Secure Copy Protocol) é usado para copiar arquivos ou diretórios entre computadores via SSH. Ele é útil para transferir dados de forma segura entre máquinas locais e remotas.
+        * O servidor de destino precisa estar com o SSH habilitado.
+        * Você pode usar nomes de domínio também: scp file.txt user@meuservidor.com:/caminho/
+        * Para ambientes Windows, use via Git Bash, WSL, ou PuTTY (com pscp).
+
+Opção	Descrição
+-r	    Copia recursivamente (para diretórios)
+-P	    Especifica a porta SSH
+-C	    Ativa compressão dos dados durante a cópia
+-i	    Usa uma chave privada específica (ex: -i chave.pem)
+
+Sintaxe do comando:
+
+    scp [opções] origem destino
+
+
+
+scp arquivo.txt usuario@192.168.0.10:/caminho/destino/                  Copiar um arquivo da máquina local para um servidor remoto
+scp usuario@192.168.0.10:/caminho/arquivo.txt /destino/local/           Copiar um arquivo de um servidor remoto para a máquina local
+scp -r pasta/ usuario@192.168.0.10:/caminho/destino/                    Copiar um diretório inteiro (com -r)
+scp -P 2222 arquivo.txt usuario@192.168.0.10:/caminho/                  Usar uma porta SSH personalizada (ex: 2222)
+
+scp -p user_name@host:/caminho/origem/Arquivo.txt : user_name@host:/caminho/destino/
+
+
+RSYNC
+    O comando rsync é uma ferramenta poderosa e eficiente para sincronizar arquivos e diretórios localmente ou remotamente. É muito usado para backups, deploys e transferências otimizadas, pois só copia o que mudou. O rsync é seguro quando usado com SSH (-e ssh), e pode até utilizar chaves SSH sem senha para automação.
+
+Opção	        Descrição
+-a	            Modo arquivamento: recursivo, preserva links, donos, etc.
+-v	            Verbose (mostra detalhes)
+-z	            Comprime os dados durante a transferência
+-e ssh	        Usa SSH como meio de transporte
+--delete	    Deleta no destino os arquivos que não existem mais na origem
+--progress	    Mostra o progresso da cópia
+
+Pode copiar:
+
+    Local → Local
+    Local → Remoto
+    Remoto → Local
+
+Sintaxe do comando:
+
+    rsync [opções] origem destino
+
+
+rsync -av /home/user/projetos/ /backup/projetos/                                                Copiar diretório local para outro local
+rsync -av /home/user/projetos/ usuario@192.168.0.10:/home/usuario/backup/                       Copiar para servidor remoto (via SSH)
+rsync -av usuario@192.168.0.10:/home/usuario/backup/ /home/user/projetos/                       Copiar de servidor remoto para local
+rsync -av -e "ssh -p 2222" /dados/ usuario@host:/destino/                                       Usar porta SSH personalizada
+rsync -av --exclude 'node_modules' --exclude '*.log' ./ projeto@servidor:/deploy/               Excluir arquivos/pastas durante a cópia
+
+rsync -avz --delete --progress -e "ssh -p 2222" /meus_dados/ usuario@meuserver.com:/backup/     Exemplo com tudo
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 PERMISSÕES
 
@@ -852,8 +1209,17 @@ wc -l                   Exibe o número de linas contadas (--lines)
 wc -L                   Exibe a linha mais extensa (--max-line-length)
 wc -w                   Exibe o número de palavras contadas
 
-sort:        Ordena, une ou compara texto, podendo ser usado para extrair informações dos arquivos de texto ou mesmo para ordenar dados de outros comandos
-uniq:        Reporta ou apaga linhas repetidas num arquivo
+sort arquivo.txt            Ordena um texto de forma alfabética em uma lista. 
+sort -r arquivo.txt         Ordenar de forma reversa
+sort -f arquivo.txt         Ordenar ignorando maiúsculas e minúsculas
+sort -n numeros.txt         Ordenar numericamente
+sort -k2 arquivo.txt        Ordenar pela segunda coluna (por padrão o delimitador é espaço/tab)
+sort -t: -k2 arquivo.txt    Ordenar com delimitador personalizado (ex: :)
+sort -u arquivo.txt         Ordenar e remover linhas duplicadas
+
+uniq                        Reporta ou apaga linhas repetidas num arquivo
+
+sort nomes.txt | uniq       Combinar com uniq para eliminar duplicatas
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos de Controle e Acesso
@@ -869,83 +1235,13 @@ yppasswd: Mudar a password do nosso utilizador nas páginas amarelas (yellow pag
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos de Comunicações
 
-mail: Enviar e receber emails
-mesg: Permitir ou negar mensagens de terminal e pedidos de conversação (talk requests)
-pine: Outra forma de enviar e receber emails, uma ferramenta rápida e prática
-talk: Falar com outros utilizadores que estejam logados no momento
-write: Escrever para outros utilizadores que estejam logados no momento
+mail:       Enviar e receber emails
+mesg:       Permitir ou negar mensagens de terminal e pedidos de conversação (talk requests)
+pine:       Outra forma de enviar e receber emails, uma ferramenta rápida e prática
+talk:       Falar com outros utilizadores que estejam logados no momento
+write:      Escrever para outros utilizadores que estejam logados no momento
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EDITAR E FILTRAR TEXTOS
-
-Comandos Descrição
-rev Inverte o conteúdo de um arquivo texto. Exemplo: “TALES” para “SELAT”.
-grep Faz pesquisa dentro de arquivo texto.
-egrep "t\." arquivo Retorna busca por palavras que tiverem “t.”.
-egrep "carr?o" arquivo Filtra apenas por “carro” e “caro” dentro do “arquivo” texto.
-grep "[hG]" arquivo Filtra por todas palavras que contenha “h” minúsculo e “G” maiúsculo.
-grep "[a-e]" arquivo Filtra por todas as palavras que contenham as letras: “a, b, c, d, e”, e minúsculas.
-grep "[A-Za-z0-9]" arquivo Filtra por todas as letras maiúsculas, minúsculas e números, deixando de fora apenas caracteres especiais.
-grep "[^gb]ato" arquivo Ignora as letras “g” e “b” minúsculas, seguidas dos caracteres “ato”, ou seja considera válida a palavra jato, mas não considera a palavra gato.
-grep "^a" arquivo Filtra palavras que contenham a letra “a” desde que apareçam no início da linha.
-grep "t$" arquivo Filtra palavras que contenham a letra “t” no fim da linha.
-grep "a\b" arquivo Filtra apenas palavras que contenha letra “a” no fim da palavra.
-grep "ar\B" arquivo Filtra o meio das palavras que contenha “ar”, ignora o início e fim.
-grep -c "a" arquivo Exibe a quantidade de linhas que contenha a letra “a”.
-grep -n la arquivo Exibe o número das linhas que a aparecem as letras “la”.
-grep -v a arquivo Exibe as linhas que não apresentam a letra “a” minúscula.
-grep -A 2 "TV" arquivo Exibe duas linhas após a ocorrência “TV”.
-grep -B 2 "TV" arquivo Exibe duas linhas antes da ocorrência “TV”.
-grep -i "a" arquivo Exibe todas as linhas que contenham as letras “a” e “A”.
-cat lista-MAC | grep Tales Filtra o conteúdo do arquivo “lista-MAC” buscando pelas palavras “Tales”.
-cut Recorta pedaços de texto.
-cut -d":" -f1,7 /etc/passwd Exibe o primeiro e sétimo campo do arquivo /etc/passwd, delimitados por dois pontos “:”.
-echo "Testando o cut." | cut -d" " -f1 Como saída terá apenas a palavra “Testando”, o corte foi feito pelo cut.
-
-.                    Qualquer letra
-^                    Inicio da Linha
-$                    Final da Linha
-[xyz]                Qualquer um dos caracteres dentro dos conchetes
-[^xyz]               Qualquer caracter com exeção dos que estão dentro dos conchetes
-[t-z]                Qualquer caracter dentro do intervalo
-z*                   Letra z zero ou mais vezes
-z+                   Letra z uma ou mais vezes
-?{0,1}               Pode aparecer ou não (opcional)
-*{0,}                Pode aparecer em qualquer quantidade
-+{1,}                Deve aparecer no mínimo uma vez
-a{2}                 Casa a letra "a" duas vezes
-a{2,4}               Casa a letra "a" de duas a quatro vezes
-a{2,}                Casa a letra "a" no mínimo duas vezes
-.*                   Qualquer coisa, tudo ou nada
-
-sed Editor de textos não interativo.
-sed '2d' arquivo Deleta a segunda linha do “arquivo”.
-sed '1,3d' arquivo Apaga as linhas do “arquivo” no intervalo 1-3.
-sed '2,4!d' arquivo Apaga todas as linhas do “arquivo”, exceto o intervalo entre 2-4.
-sed '3,$d' arquivo Apaga da linha informada (3) até o final do arquivo.
-sed '/livro/d' arquivo Apaga as linhas que tiveram a palavra “livro”.
-sed 's/.\{7\}//' arquivo Apaga os 7 primeiros caracteres de todas as linhas.
-sed 's/troca isso/por isso/g' arquivo Substitui todas as frases “troca isso” pelas frases “por isso”.
-sed '2s/^/Incluído no início da linha 2 /' arquivo Inclui o texto no início da linha informada.
-sed '2s/$/Incluído no final da linha 2 /' arquivo Inclui texto no final da linha informada.
-sed '3s/.*/Novo texto da linha 3/' arquivo Substitui todo o conteúdo de uma linha específica.
-sed -e '3a\' -e 'Nova linha inserida após a linha 3' arquivo Insere uma nova linha de texto após linha especificada.
-sed -e '3i\' -e 'Nova linha inserida antes da linha 3' arquivo Insere uma nova linha de texto antes de uma linha especificada.
-sed 's/[ ]\+/ /g' arquivo Apaga espaços em branco consecutivos.
-sed ':a;$!N;s/\n//;ta;' arquivo Remove todas as quebras de linha, deixando todo o texto em apenas uma linha.
-echo "Livro de Linux" | tr '[a-z]' '[A-Z]' Converte todas as letras para maiúsculas.
-sed 'y/abcdefghijklmnopqrstuvwxyzàáâãéêíóôõúç/ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁ ÃÉÊÍÓÔÕÚÇ/' arquivo Converte todas as letras para maiúsculas.
-sed 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁ ÃÉÊÍÓÔÕÚÇ/abcdefghijklmnopqrstuvwxyzàáâãéêíóôõúç/' arquivo Converte todas as letras para minúsculas.
-sed 's/^/§ /;:a;s/\(.*\)§ \+\([^ ]\+\)/\2 \1§/;ta;s/§//' arquivo Inverte a ordem das palavras em cada frase.
-sed 's|^ *\bNAME\b *=.*|NAME=Debian|' arquivo Modelo para troca de parâmetros em arquivos de configuração, no exemplo troca o valor que estiver na variável NAME por Debian
-sed '/tag>/,/<\/tag>/d' arquivo Apaga as linhas que possuem as tags e as linhas que estiverem entre as tags
-awk Linguagem de programação interativa.
-awk '{print $1}' arquivo Exibe as primeiras palavras de cada linha.
-awk '{print $2 ", preço " $4}' arquivo Adiciona a palavra “preço” entre a coluna 2 e 4 de cada linha.
-awk -F ":" '{print $2}' arquivo Filtra o segundo campo com o delimitador dois pontos.
-awk -F " |-" '{if ($3 >= "18") print}' arquivo Filtra valores especificados em uma condição
-
-----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GERENCIADOR DE  PACOTES
 
 apt-get                             update Atualiza o repositório de pacotes DEB.
@@ -989,7 +1285,6 @@ equo conf update                    Atualiza arquivo de configuração do Sabayo
 equo dt -a                          Procura por dependências não resolvidas e as resolve, no Sabayon.
 equo lt -a                          Procura por bibliotecas não resolvidas e as resolve, no Sabayon.
 modprobe <módulo>	                Carrega módulos do kernel.
-lsmod                               Lista módulos carregados.
 journalctl -xe	                    Examina logs do systemd com contexto detalhado.
 
 * Gerenciamento de Pacotes
@@ -1002,12 +1297,12 @@ Snap	                    snap install, snap list	                        Gerenci
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 MULTIMÍDIA
-Comandos	Descrição
-mpg123	Reproduz arquivos de áudio.
-mpg123 -C -z ~/Músuca/*	Reproduz todos os arquivos do diretório “Música” aleatoriamente, ativando controles.
-mplayer	Reproduz vídeo.
+Comandos	                    Descrição
+mpg123	                        Reproduz arquivos de áudio.
+mpg123 -C -z ~/Músuca/*	        Reproduz todos os arquivos do diretório “Música” aleatoriamente, ativando controles.
+mplayer	                        Reproduz vídeo.
 mplayer -vo caca arquivo.avi	Reproduz o “arquivo.avi” em formado ASCII.
-alsamixer	Ajusta os controles de áudio.
+alsamixer	                    Ajusta os controles de áudio.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 WEB
 
@@ -1021,36 +1316,314 @@ weblint: Verificador de sintaxes e de estilos html
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos de Processamento de Texto
 
-abiword: Processador de Texto Open Source
-addbib: Cria ou modifica bases de dados bibliográficas
-col: Reverte o filtro a line feeds
-diction: Identifica sentenças com palavras
-diffmk: Marca diferenças entre arquivos
-dvips: Converte arquivos TeX DVI em arquivos PostScript
-explain: Explica frases encontradas pelo programa diction
-grap: Preprocessador pic para desenhar gráficos, usado em tarefas elementares de análises de dados
-hyphen: Encontra palavras com hífens
-ispell: Verifica a ortografia de forma interativa
-latex: Formata texto em LaTeX, que é baseado no TeX
-pdfelatex: Para documentos LaTeX em formato pdf
+abiword:    Processador de Texto Open Source
+addbib:     Cria ou modifica bases de dados bibliográficas
+col:        Reverte o filtro a line feeds
+diction:    Identifica sentenças com palavras
+diffmk:     Marca diferenças entre arquivos
+dvips:      Converte arquivos TeX DVI em arquivos PostScript
+explain:    Explica frases encontradas pelo programa diction
+grap:       Preprocessador pic para desenhar gráficos, usado em tarefas elementares de análises de dados
+hyphen:     Encontra palavras com hífens
+ispell:     Verifica a ortografia de forma interativa
+latex:      Formata texto em LaTeX, que é baseado no TeX
+pdfelatex:  Para documentos LaTeX em formato pdf
 latex2html: Converter LaTeX para html
-lookbib: Encontra referências bibliográficas
-macref: Cria uma referência cruzada listando arquivos de macros nroff/troff
-ndx: Cria uma página de indexação para um documento
-neqn: Formata matemáticas com nroff
-nroff: Formata texto para exibição simples
-pic: Produz simples imagens para troff input
-psdit: Filtra um output troff para a Apple LaserWriter
-ptx: Cria uma indexação permutada mas não em CCWF
-refer: Insere referências de bases de dados bibliográficas
-roffbib: Faz o run off de uma base de dados bibliográfica
-sortbib: Ordena uma base de dados bibliográfica
-spell: Encontra erros de ortografia
-style: Analisa as características superficiais de um documento
-tbl: Formata tabelas para nroff/troff
-tex: Formata texto
-tpic: Converte arquivos pic source em comandos TeX
-wget: Permite-nos fazer o download completo de páginas web, com todos os arquivos, de forma fácil e não interactiva, sem exigir por isso presença do utilizador, respeitando também o arquivorobots.txt
+lookbib:     Encontra referências bibliográficas
+macref:     Cria uma referência cruzada listando arquivos de macros nroff/troff
+ndx:        Cria uma página de indexação para um documento
+neqn:       Formata matemáticas com nroff
+nroff:      Formata texto para exibição simples
+pic:        Produz simples imagens para troff input
+psdit:      Filtra um output troff para a Apple LaserWriter
+ptx:        Cria uma indexação permutada mas não em CCWF
+refer:      Insere referências de bases de dados bibliográficas
+roffbib:    Faz o run off de uma base de dados bibliográfica
+sortbib:    Ordena uma base de dados bibliográfica
+spell:      Encontra erros de ortografia
+style:      Analisa as características superficiais de um documento
+tbl:        Formata tabelas para nroff/troff
+tex:        Formata texto
+tpic:       Converte arquivos pic source em comandos TeX
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ADICIONANDO UM DISCO E CRIANDO NOVA PARTIÇÃO. 
+
+
+root@testeubuntu64:~# fdisk -l									(utilitário que ajuda a formatar o disco)
+
+root@testeubuntu64:~# fdisk -l /dev/sdb							(Visualização das informaçoes do disco)
+Disk /dev/sdb: 64 GiB, 68719476736 bytes, 134217728 sectors
+Disk model: VBOX HARDDISK
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+-------------------------------------------------------------------------------------------------------------
+INICIO DA FORMATAÇAO (MUITO CUIDADO)
+
+root@testeubuntu64:~# fdisk /dev/sdb
+
+Welcome to fdisk (util-linux 2.34).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0xa175e496.
+
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save & Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+Command (m for help): n 		(Digite 'n' e enter para criar uma nova partição)
+
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)       	(limite de 4 partition: 3 primary e 1 extended)
+   e   extended (container for logical partitions)
+Select (default p): p 									(Digite 'p' e click em enter)
+
+Partition number (1-4, default 1): 1					(numero '1' representa a primeira partition)
+First sector (2048-134217727, default 2048):			(digite enter para assumir o valor '2048')
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-134217727, default 134217727): +5GB   (+5GB é o tamanho da partition)
+
+Created a new partition 1 of type 'Linux' and of size 4.7 GiB.
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): e
+Partition number (2-4, default 2): 2
+First sector (9766912-134217727, default 9766912):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (9766912-134217727, default 134217727): +10GB
+
+Created a new partition 2 of type 'Extended' and of size 9.3 GiB.
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 1 extended, 2 free)
+   l   logical (numbered from 5)
+Select (default p): l
+
+Adding logical partition 5
+First sector (9768960-29298687, default 9768960):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (9768960-29298687, default 29298687): +10GB
+Value out of range.
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (9768960-29298687, default 29298687):
+
+Created a new partition 5 of type 'Linux' and of size 9.3 GiB.
+
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save & Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+----------------------------------------------------------------------------------------------
+
+FORMATAÇAO DAS PARTIÇOES
+
+root@testeubuntu64:~# lsblk -l
+NAME                  MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+loop0                   7:0    0 44.7M  1 loop /snap/snapd/15534
+loop1                   7:1    0 67.8M  1 loop /snap/lxd/22753
+loop2                   7:2    0 61.9M  1 loop /snap/core20/1328
+loop3                   7:3    0 67.2M  1 loop /snap/lxd/21835
+loop4                   7:4    0 43.6M  1 loop /snap/snapd/14978
+loop5                   7:5    0 61.9M  1 loop /snap/core20/1434
+sda                     8:0    0   64G  0 disk
+sda1                    8:1    0    1M  0 part
+sda2                    8:2    0    2G  0 part /boot
+sda3                    8:3    0   62G  0 part
+sdb                     8:16   0   64G  0 disk
+sdb1                    8:17   0  4.7G  0 part
+sdb2                    8:18   0    1K  0 part    		(nao se formata partição extended)
+sdb5                    8:21   0  9.3G  0 part
+sr0                    11:0    1 58.3M  0 rom
+ubuntu--vg-ubuntu--lv 253:0    0   31G  0 lvm  /
+root@testeubuntu64:~#
+root@testeubuntu64:~#
+root@testeubuntu64:~#
+root@testeubuntu64:~# mkfs.ext4 /dev/sdb1
+mke2fs 1.45.5 (07-Jan-2020)
+Creating filesystem with 1220608 4k blocks and 305216 inodes
+Filesystem UUID: 0aafe802-3dd4-4eef-87ca-82ab757b916e
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (16384 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+root@testeubuntu64:~#
+root@testeubuntu64:~# mkfs.ext4 /dev/sdb5
+mke2fs 1.45.5 (07-Jan-2020)
+Creating filesystem with 2441216 4k blocks and 610800 inodes
+Filesystem UUID: a6322513-35d7-4cce-8110-84d663004b84
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (16384 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+
+root@testeubuntu64:~# lsblk -f
+NAME                      FSTYPE      LABEL           UUID                                   FSAVAIL FSUSE% MOUNTPOINT
+loop0                     squashfs                                                                 0   100% /snap/snapd/15534
+loop1                     squashfs                                                                 0   100% /snap/lxd/22753
+loop2                     squashfs                                                                 0   100% /snap/core20/1328
+loop3                     squashfs                                                                 0   100% /snap/lxd/21835
+loop4                     squashfs                                                                 0   100% /snap/snapd/14978
+loop5                     squashfs                                                                 0   100% /snap/core20/1434
+sda
+├─sda1
+├─sda2                    ext4                        f2f754ca-20a6-430b-9eb7-854bed191472      1.7G     6% /boot
+└─sda3                    LVM2_member                 z3pb4Z-HuEq-1pDH-T07E-dLIL-yXTD-qE3AiN
+  └─ubuntu--vg-ubuntu--lv ext4                        afee074f-0b53-466b-879f-54c131ac16d9     22.2G    22% /
+sdb
+├─sdb1                    ext4                        0aafe802-3dd4-4eef-87ca-82ab757b916e
+├─sdb2
+└─sdb5                    ext4                        a6322513-35d7-4cce-8110-84d663004b84
+sr0                       iso9660     VBox_GAs_6.1.26 2021-07-28-16-34-25-54
+
+
+-------------------------------------------------------------------------------------------------
+CRIANDO OS PONTOS DE MONTAGEM 
+
+root@testeubuntu64:~# mkdir /mnt/arquivos
+root@testeubuntu64:~# mkdir /mnt/dados
+
+root@testeubuntu64:~# mount -t ext4 /dev/sdb1 /mnt/arquivos/
+
+root@testeubuntu64:~# mount -t ext4 /dev/sdb5 /mnt/dados/
+
+
+root@testeubuntu64:~# df -Th
+Filesystem                        Type      Size  Used Avail Use% Mounted on
+udev                              devtmpfs  1.9G     0  1.9G   0% /dev
+tmpfs                             tmpfs     394M  1.1M  393M   1% /run
+/dev/mapper/ubuntu--vg-ubuntu--lv ext4       31G  6.7G   23G  23% /
+tmpfs                             tmpfs     2.0G     0  2.0G   0% /dev/shm
+tmpfs                             tmpfs     5.0M     0  5.0M   0% /run/lock
+tmpfs                             tmpfs     2.0G     0  2.0G   0% /sys/fs/cgroup
+/dev/loop4                        squashfs   44M   44M     0 100% /snap/snapd/14978
+/dev/loop2                        squashfs   62M   62M     0 100% /snap/core20/1328
+/dev/loop1                        squashfs   68M   68M     0 100% /snap/lxd/22753
+/dev/loop3                        squashfs   68M   68M     0 100% /snap/lxd/21835
+/dev/loop5                        squashfs   62M   62M     0 100% /snap/core20/1434
+/dev/loop0                        squashfs   45M   45M     0 100% /snap/snapd/15534
+/dev/sda2                         ext4      2.0G  112M  1.7G   7% /boot
+tmpfs                             tmpfs     394M     0  394M   0% /run/user/1000
+/dev/sdb1                         ext4      4.6G   19M  4.3G   1% /mnt/arquivos
+/dev/sdb5                         ext4      9.2G   37M  8.6G   1% /mnt/dados
+
+-------------------------------------------------------------------------------------------------
+SALVANDO OS PONTOS DE MONTAGEM
+
+EDITAR O ARQUIVO
+
+root@testeubuntu64:~# cat /etc/fstab
+
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/ubuntu-vg/ubuntu-lv during curtin installation
+/dev/disk/by-id/dm-uuid-LVM-lK6qNjzwSqe7j9YxkYGtMAiJIrTdW9KTTDcSnqaL2w4fcnhs30tQSzENxplDRAto / ext4 defaults 0 1
+# /boot was on /dev/sda2 during curtin installation
+/dev/disk/by-uuid/f2f754ca-20a6-430b-9eb7-854bed191472 /boot ext4 defaults 0 1
+/swap.img       none    swap    sw      0       0
+/dev/sdb1       /mnt/arquivos   ext4    rw      0       0
+/dev/sdb2       /mnt/dados      ext4    rw      0       0
+
+
+
+
+
+
+
+
+
+
 
 
 

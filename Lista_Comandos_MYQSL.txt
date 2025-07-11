@@ -1,0 +1,115 @@
+Instalaçao do banco de dados MySQL
+
+sudo yum localinstall https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm 
+
+Esse comando inicia a instalação do MySQL:
+
+sudo yum install mysql-community-server
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*******Acesso ao SGBD MySQL
+
+mysql -u root -p 
+
+Senha: xxxxxxxxxxxxx
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*******Criando um Banco de Dados no MySQL
+
+mysql> create database <nome do Banco de Dados>; (não esquecer do ; no final do comando)
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use <nome do Banco de Dados>; (esse comando informa ao MySQL qual banco de dados iremos utilizar, muito impotante mudar senão ele criar as tabelas dentro de banco de dados de sistema)
+Database changed
+
+mysql> create table empregados (username varchar(30), password varchar(30)); (comando cria a tabela empregados com as colunas Username e password)
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into empregados values ('Alan Turing', 'dsahadoop'); (insere dados dentro da tabela empregados)
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from empregados; (comando para visualizar a tabela empregados dentro do banco de dados testedb)
++-------------+-----------+
+| username    | password  |
++-------------+-----------+
+| Alan Turing | dsahadoop |
+| Bill Gates  | dsahadoop |
+| Jeff Bezos  | dsahadoop |
++-------------+-----------+
+3 rows in set (0.00 sec)
+
+
+mysql> show databases;  (exibe os banco de dados existentes no momento)
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| testedb            |
++--------------------+
+5 rows in set (0.00 sec)
+
+
+mysql> use testedb;    --(comando muda para o DB na qual se deseja trabalhar)
+Database changed
+
+mysql> show tables;	    --(Comando para visualizar as tabelas existentes)
++-------------------+
+| Tables_in_testedb |
++-------------------+
+| empregados        |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> exit				--(comando para sair do MySQL)
+Bye
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*******Resset da senha do MySQL
+
+# Procedimento para configurar/alterar a senha do root  (usuário root do MySQL)
+
+# Para o serviço
+sudo systemctl stop mysqld
+
+# Inicializa em modo de segurança
+sudo mysqld --skip-grant-tables --user=mysql &  (O & no final do comando coloca o processo mysqld em backbround)
+
+# Abre o shell
+mysql
+
+# Reset dos privilégios
+FLUSH PRIVILEGES;
+
+# Altera a senha do root
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'dsahadoop';
+
+# Verifica as regras de senha
+SHOW VARIABLES LIKE 'validate_password%';
+
+# Ajusta a senha
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Dsahadoop@1';
+
+# Reinicia a máquina
+
+# Acessa o MySQL
+mysql -u root -p
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VALIDAÇÃO DOS SERVIÇOS MySQL
+
+sudo systemctl start mysqld
+sudo systemctl stop mysqld
+sudo systemctl status mysqld
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*******Download do conector JDBC para MySQL
+
+https://dev.mysql.com/downloads/connector/j/
