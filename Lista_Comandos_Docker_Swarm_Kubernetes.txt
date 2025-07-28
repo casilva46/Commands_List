@@ -60,6 +60,13 @@ DOCKER x DOCKER COMPOSE X SWARM X KUBERNETES
 • docker build -t Image_name .                    Execute o comando em um prompt de comando na mesma pasta onde se encontra o arquivo Dockerfile para criar a imagem  (OBS o ponto no final faz parte do comando, o nome da imagem deve ser todo em minusculo)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* CRIAR CONTAINER COM MAPEAMENTO DE VOLUME 
+
+docker run -dit --name <Container_name> -v ./Lab3:/lab3 <Name_Image>:lab3 /bin/bash
+
+. /Lab3 - Onde estou mapeando a pasta Lab3 do diretório corrente da minha máquina para dentro do container lab3 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 * CRIAR CONTAINER 
 
 • docker run -dit --name <Container_name> <Name_Image>
