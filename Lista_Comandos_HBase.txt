@@ -1,0 +1,56 @@
+COMANDOS HBASE
+
+hbase shell:		Inicia o shell do hbase
+
+version: 			Versão do Hbase
+status:  			Status do Cluster Hbase
+help:    			Lista todos os comandos
+table_help: 		Help
+whoami: 			Usuário logado no Hbase
+status ‘simple’ 	Status simples
+status ‘summary’	Status sumarizado
+status ‘detailed’	Status detalhado
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Administração de Tabelas
+
+
+create 'tabela', 'familia_coluna'	                    Cria uma tabela com uma família de colunas.
+disable 'tabela'	                                    Desabilita uma tabela antes de excluí-la ou alterá-la.
+enable 'tabela'	                                        Habilita uma tabela.
+drop 'tabela'	                                        Exclui uma tabela (após desabilitar).
+list	                                                Lista todas as tabelas existentes.
+exists 'tabela'	                                        Verifica se uma tabela existe.
+is_enabled 'tabela'	                                    Verifica se a tabela está habilitada.
+is_disabled 'tabela'	                                Verifica se a tabela está desabilitada.
+describe 'tabela'	                                    Exibe o esquema da tabela.
+alter 'tabela', {NAME => 'familia', VERSIONS => 3}	    Altera a definição da tabela (ex: número de versões).
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Inserção de Dados
+
+put 'tabela', 'linha', 'familia:coluna', 'valor'	                Insere ou atualiza dados.
+Exemplo: put 'clientes', '1', 'info:nome', 'Carlos'	                Insere o nome "Carlos" na linha 1.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Leitura de Dados
+
+get 'tabela', 'linha'	                                            Recupera todos os dados de uma linha.
+get 'tabela', 'linha', 'familia:coluna'	                            Recupera o valor de uma célula específica.
+get 'tabela', 'linha', {COLUMN => 'info:nome', VERSIONS => 3}	    Recupera as 3 últimas versões da célula.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Scan (Varredura de Dados)
+
+scan 'tabela'	                                                Escaneia e mostra todas as linhas da tabela.
+scan 'tabela', {STARTROW => '1'}	                            Escaneia a partir de uma linha específica.
+scan 'tabela', {FILTER => "ValueFilter(=, 'binary:valor')}"	    Usa filtros para varrer a tabela.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Remoção de Dados
+
+delete 'tabela', 'linha', 'familia:coluna'	                     Deleta o valor da célula.
+deleteall 'tabela', 'linha'	                                     Remove todas as colunas da linha.
+truncate 'tabela'	                                             Remove todos os dados da tabela (desativa e ativa novamente).
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
