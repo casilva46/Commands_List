@@ -1,0 +1,136 @@
+NiFi
+
+    O Apache NiFi é uma ferramenta de integração de dados open source desenvolvida originalmente pela NSA e doada à Apache Foundation. Ele é usado para automação de fluxos de dados entre sistemas heterogêneos* com foco em coleta, transformação, roteamento e monitoramento de dados em tempo real. Ele oferece uma interface gráfica intuitiva para projetar, gerenciar e visualizar o fluxo de dados, sendo amplamente utilizado em diversas indústrias para processamento de grandes volumes de dados, IoT, análise em tempo real, entre outros. 
+    Sistemas heterogêneos são ambientes de computação compostos por diferentes tipos de hardware, software, sistemas operacionais, linguagens de programação ou arquiteturas que trabalham em conjunto para executar tarefas ou oferecer serviços
+
+O que é o Apache NiFi?
+    O Apache NiFi (Niagara Files) é uma plataforma de DataFlow, que permite mover e processar dados de um sistema para outro de forma visual, com baixa necessidade de codificação.
+    Com o Apache NiFi, você consegue orquestrar todo esse processo em uma interface gráfica, conectando os componentes (processadores) como blocos de fluxo.
+
+Principais Características:
+
+    * Interface gráfica (drag-and-drop): permite criar fluxos de dados visualmente.
+    * Processamento em tempo real: ideal para pipelines de dados contínuos (streaming).
+    * Backpressure e Prioritização: controle de carga quando há gargalos.
+    * Versionamento de fluxos com NiFi Registry.
+    * Alta disponibilidade e escalabilidade: roda em cluster.
+    * Segurança: suporta autenticação, criptografia, controle de acesso por usuário/grupo.
+
+O que dá pra fazer com ele:
+
+    * Ingestão de dados de fontes como bancos de dados, APIs, arquivos, filas (Kafka, RabbitMQ), S3, etc.
+    * Transformações simples (regex, merge, split, conversão, etc.).
+    * Roteamento de dados com base em regras.
+    * Enriquecimento de dados em tempo real.
+    * Envio para sistemas de destino, como Hadoop, Elasticsearch, bancos relacionais, entre outros.
+
+Quando usar o Apache NiFi:
+
+    * Para pipelines de dados entre sistemas diversos.
+    * Quando precisa de controle, rastreabilidade e monitoramento dos fluxos.
+    * Em cenários de integração em tempo real ou quase tempo real.
+    * Para facilitar a integração com outras ferramentas, como Kafka, Hadoop, Spark, Elasticsearch, etc.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Principais Componentes do Apache NiFi
+
+1. Processador (Processor)
+    É o bloco fundamental de qualquer fluxo no NiFi. Cada processador realiza uma tarefa específica de entrada, saída, transformação ou roteamento de dados.
+
+Exemplos de processadores:
+
+    * GetFile, GetFTP, GetS3Object                  – para capturar dados.
+    * PutHDFS, PutDatabaseRecord                    – para enviar dados.
+    * RouteOnAttribute, ReplaceText, ConvertRecord  – para transformar ou rotear.
+
+    Cada processor pode ser configurado com:
+
+        Parâmetros (como host, porta, formato de dados)
+        Agendamento (intervalo ou evento)
+        Condições de falha ou sucesso
+
+2. Conexão (Connection)
+    É o canal que liga dois processadores. Ele armazena os FlowFiles (pacotes de dados) que transitam entre os componentes.
+
+As conexões permitem:
+
+    * Definir prioridade de execução.
+    * Estabelecer Back Pressure (limite de arquivos ou tamanho total para evitar sobrecarga).
+    * Filtragem por relação (success, failure, retry etc.).
+
+3. FlowFile
+    É a unidade de dados em movimento dentro do NiFi.
+
+Cada FlowFile possui:
+
+    * Conteúdo (payload): os dados reais.
+    * Atributos (metadata): informações como nome do arquivo, caminho, tipo, timestamp etc. OBS: Os atributos são úteis para decisões de roteamento e transformação dentro do fluxo.
+
+4. Controlador de Serviço (Controller Service)
+    São serviços reutilizáveis que fornecem configurações comuns para processadores.
+
+Exemplos:
+
+    * Pool de conexões JDBC para acesso a banco de dados.
+    * Serviço de Schema (Avro, JSON, CSV).
+    * Configuração de acesso a serviços externos (HDFS, AWS, Kafka, etc).
+
+OBS: Você configura uma vez e compartilha com vários processadores.
+
+5. Portas (Input/Output Ports)
+    Usadas para comunicação entre Process Groups (subfluxos) ou entre nós em um cluster.
+
+    * Input Port: recebe dados.
+    * Output Port: envia dados.
+
+OBS: Isso permite modularização e compartilhamento de fluxos entre equipes ou sistemas.
+
+6. Process Group
+    É um conjunto de processadores organizados como um subfluxo lógico.
+
+Permite:
+
+    * Modularização e reutilização.
+    * Controle de permissões específicas.
+    * Versionamento separado com o NiFi Registry.
+
+7. Templates e Registry
+
+    Template: permite exportar e importar um fluxo como XML.
+    NiFi Registry: ferramenta externa que permite versionar, compartilhar e gerenciar os fluxos com controle de versões (similar a Git para flows).
+
+8. Proveniência de Dados (Data Provenance)
+    Um dos grandes diferenciais do NiFi: rastreabilidade completa de cada FlowFile.
+
+Permite:
+
+    * Saber de onde veio o dado,
+    * Que alterações sofreu,
+    * Para onde foi enviado,
+    * Qual processador atuou sobre ele e quando.
+
+OBS: Ideal para auditoria, debugging e análise.
+
+9. Segurança e Controle de Acesso
+
+    * TLS/SSL para criptografia.
+    * LDAP, Kerberos, OpenID Connect para autenticação.
+    * RBAC (controle baseado em funções) para limitar ações por usuário ou grupo.
+
+10. Exemplo ilustrativo de fluxo NiFi
+
+[GetFile] → [UpdateAttribute] → [ConvertRecord] → [RouteOnAttribute]
+               ↓                                     ↓
+            [PutHDFS]                             [PutDatabaseRecord]
+
+    
+
+* GetFile:              coleta arquivos de um diretório local.
+* UpdateAttribute:      adiciona metadados (ex: nome do cliente).
+* ConvertRecord:        converte CSV para JSON.
+* RouteOnAttribute:     decide para onde o dado vai.
+* PutHDFS:              salva em Hadoop.
+* PutDatabaseRecord:    grava em banco relacional.
+
+
+
