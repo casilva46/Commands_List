@@ -1,0 +1,378 @@
+* Elastic
+
+	Elastic é uma empresa de software holandesa-americana que desenvolve uma plataforma para busca empresarial, observabilidade e segurança cibernética. O principal produto da empresa é o Elasticsearch, um poderoso mecanismo de busca e análise de dados distribuído e de código aberto.
+
+	Pense no Elastic como a empresa por trás de um conjunto de ferramentas que permitem:
+
+		* Buscar e analisar dados em larga escala : O Elasticsearch é o coração dessa capacidade. Ele é construído sobre o Apache Lucene e otimizado para lidar com grandes volumes de dados (estruturados e não estruturados) e fornecer resultados de busca em tempo quase real (Near Real Time). Ele é usado por grandes empresas para pesquisas em sites, catálogos de produtos, logs, etc.
+
+		* Monitorar o desempenho do sistema (Observabilidade): Com as ferramentas da Elastic, é possível coletar e analisar logs, métricas e traces de seus sistemas, permitindo identificar problemas, monitorar o desempenho e obter insights operacionais.
+
+		* Detectar e responder a ameaças de segurança cibernética (Segurança): A plataforma Elastic também oferece recursos para análise de segurança, ajudando a detectar, investigar e responder a ameaças em escala.
+
+* Como o Elasticsearch funciona?
+
+	O Elasticsearch funciona de uma forma que o torna extremamente rápido e escalável:
+
+		* Documentos: A unidade básica de informação no Elasticsearch é um "documento", que é um objeto JSON. Você pode indexar (armazenar e tornar pesquisável) qualquer tipo de dado em formato JSON.
+
+		* Índices: Documentos relacionados são agrupados em "índices". Pense em um índice como um banco de dados em um ambiente de banco de dados relacional.
+
+		* Índice invertido: Para buscas rápidas, o Elasticsearch usa uma estrutura de dados chamada "índice invertido". Em vez de escanear cada documento, ele mapeia todas as palavras únicas para suas localizações dentro dos dados, permitindo identificar correspondências rapidamente.
+
+		* Distribuído: O Elasticsearch é projetado para ser distribuído. Isso significa que ele pode dividir seus dados em "shards" (fragmentos) e distribuir esses shards por vários "nós" (servidores) em um "cluster". Isso proporciona:
+
+			* Escalabilidade: Você pode adicionar mais nós ao cluster para lidar com mais dados e mais consultas.
+
+			* Redundância: O Elasticsearch cria "réplicas" dos shards, garantindo que se um nó falhar, seus dados ainda estejam disponíveis.
+
+		* API RESTful: Ele expõe uma API RESTful, o que facilita a interação com o sistema usando requisições HTTP simples.
+		
+* O Elastic Stack (anteriormente ELK Stack)
+
+	O Elasticsearch é o componente principal do que é conhecido como Elastic Stack. Os outros componentes mais comuns são:
+
+		* Logstash: Uma ferramenta de pipeline de ingestão de dados que coleta, transforma e envia dados de diversas fontes para o Elasticsearch.
+
+		* Kibana: Uma ferramenta de visualização e dashboarding que permite explorar, analisar e visualizar os dados armazenados no Elasticsearch através de gráficos, tabelas e mapas interativos.
+
+		* Beats: Coletores de dados leves que enviam dados de dispositivos de borda ou servidores para o Logstash ou diretamente para o Elasticsearch.
+
+	Em resumo, a Elastic oferece uma suíte poderosa de ferramentas para lidar com grandes volumes de dados, permitindo que as empresas pesquisem, monitorem e protejam suas informações de forma eficiente.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Como o Elastic Funciona?
+
+	O ELK Stack, hoje mais conhecido como Elastic Stack, é uma poderosa combinação de ferramentas open-source da Elastic que trabalham em conjunto para coletar, processar, armazenar, analisar e visualizar grandes volumes de dados, especialmente logs e métricas. Ele é amplamente utilizado para observabilidade, segurança cibernética e busca empresarial.
+	
+* Como os Componentes do ELK Funcionam Juntos
+
+	O funcionamento do Elastic Stack pode ser dividido em um fluxo de três etapas principais, que envolvem seus componentes centrais:
+
+		* Coleta e Ingestão de Dados (Logstash e Beats)
+
+		* Armazenamento e Indexação (Elasticsearch)
+
+		* Visualização e Análise (Kibana)
+
+* Vamos detalhar cada um deles:
+
+1. Coleta e Ingestão de Dados
+
+	* Beats: São "shippers" (componentes responsáveis por coletar e enviar) de dados leves e de propósito único. Eles são instalados diretamente nos servidores ou sistemas de onde os dados se originam (aplicativos, máquinas virtuais, containers, etc.). Cada Beat é projetado para coletar um tipo específico de dado:
+
+		* Filebeat: Coleta logs de arquivos.
+
+		* Metricbeat: Coleta métricas de sistemas e serviços (CPU, memória, uso de disco, etc.).
+
+		* Packetbeat: Coleta dados de rede.
+
+		* Auditbeat: Coleta dados de auditoria e monitoramento de segurança.
+
+		* E muitos outros. Os Beats são eficientes e enviam os dados diretamente para o Logstash ou, em alguns casos, diretamente para o Elasticsearch.
+
+	* Logstash: É um pipeline de processamento de dados robusto. Ele recebe os dados dos Beats (ou de outras fontes, como bancos de dados, filas de mensagens, APIs, etc.). A função principal do Logstash é:
+
+		* Coletar: Ingerir dados de múltiplas fontes simultaneamente.
+
+		* Transformar: Processar e enriquecer os dados. Isso pode incluir parsing (dividir dados brutos em campos estruturados), filtragem (remover dados irrelevantes), anonimização, adição de geolocalização, entre outros.
+
+		* Enviar: Direcionar os dados processados para o Elasticsearch.
+		
+2. Armazenamento e Indexação
+
+	* Elasticsearch: É o coração do Elastic Stack. Depois que os dados são coletados e, opcionalmente, transformados pelo Logstash, eles são enviados para o Elasticsearch. Ele atua como um mecanismo de busca e análise distribuído, responsável por:
+
+		* Armazenar: Ingerir e persistir os dados em formato de documentos JSON.
+
+		* Indexar: Organizar os dados de forma que sejam rapidamente pesquisáveis. Ele faz isso criando um "índice invertido", que mapeia palavras únicas para as localizações onde aparecem nos documentos.
+
+		* Pesquisar: Realizar buscas complexas e agregadas em tempo quase real sobre os dados armazenados.
+
+		* Escalar: Ser distribuído em vários nós (servidores), o que permite lidar com terabytes ou petabytes de dados e milhões de consultas por segundo. Isso também garante alta disponibilidade e tolerância a falhas.
+		
+3. Visualização e Análise
+
+	* Kibana: É a interface de usuário web do Elastic Stack. Ele se conecta ao Elasticsearch e permite aos usuários:
+
+		* Explorar: Navegar e pesquisar os dados brutos armazenados no Elasticsearch.
+
+		* Visualizar: Criar gráficos, tabelas, mapas e outros tipos de visualizações interativas para representar os dados.
+
+		* Criar Dashboards: Combinar múltiplas visualizações em painéis personalizáveis para obter insights e monitorar o desempenho ou a segurança.
+
+		* Monitorar e Alertar: Configurar alertas com base em padrões ou limites nos dados, notificando os usuários sobre eventos importantes (por exemplo, erros, picos de tráfego, tentativas de login falhas).
+		
+* Fluxo Simplificado
+
+	Imagine que você tem vários servidores gerando logs de aplicativos e métricas de desempenho.
+
+		1 - Coletores de Dados (Beats):
+		
+			* Pense nos Beats como pequenos mensageiros. Eles ficam nos lugares onde os dados nascem (seu servidor, seu aplicativo, sua rede) e coletam os dados que você quer monitorar (logs, métricas, dados de segurança).
+			
+			* Eles são leves e eficientes, feitos para enviar os dados rapidamente.
+
+		2 - Processador e Enriquecedor (Logstash):
+		
+			* Os dados coletados pelos Beats chegam ao Logstash, que age como uma estação de tratamento.
+			
+			* Aqui, os dados são limpos, transformados e enriquecidos. Por exemplo, se um log de erro for apenas um texto longo, o Logstash pode extrair a hora, o tipo de erro e o usuário envolvido, deixando-o mais organizado.
+			
+			* Depois de processados, os dados são preparados para o próximo passo.
+
+		3 - Armazenador e Buscador (Elasticsearch):
+		
+			* Os dados já limpos e formatados são enviados para o Elasticsearch.
+
+			* Ele é como uma biblioteca superinteligente que armazena todos os seus dados e os organiza de uma forma que permite buscar e analisar qualquer coisa em segundos. Pense que ele "indexa" os dados, tornando a busca incrivelmente rápida.
+
+			* Ele também é construído para crescer, então pode lidar com volumes enormes de informações.
+
+		4 - Visualizador e Analisador (Kibana):
+		
+			* Por fim, entra o Kibana, que é sua janela para todos os dados no Elasticsearch.
+
+			* Com ele, você pode visualizar seus dados de forma interativa: criar gráficos, tabelas e painéis (dashboards) que mostram tendências, identificam problemas ou apresentam informações importantes.
+
+			* É aqui que você pode explorar, descobrir padrões e ter insights valiosos sobre o que está acontecendo em seus sistemas.
+
+Esse ecossistema integrado torna o Elastic Stack uma solução extremamente versátil e poderosa para qualquer organização que precise gerenciar e tirar valor de grandes volumes de dados.
+
+
+
+Tópicos Chave para Estudo
+
+Este roteiro é dividido em seções que cobrem as principais áreas exigidas para a certificação.
+
+1. Conceitos Fundamentais do Elastic Stack
+Elasticsearch:
+
+Arquitetura básica (nós, clusters, índices, shards, réplicas).
+
+O que são documentos e como são indexados.
+
+Noções de relevância e score (BM25).
+
+Kibana:
+
+Interface do usuário e principais funcionalidades.
+
+Conexão com Elasticsearch.
+
+Gerenciamento de espaços (spaces).
+
+Beats (Filebeat, Metricbeat, Winlogbeat):
+
+O que são e para que servem.
+
+Como coletam e enviam dados para o Elasticsearch.
+
+Configuração básica.
+
+Logstash:
+
+Conceito de pipeline (input, filter, output).
+
+Transformação e enriquecimento de dados.
+
+Uso de plugins comuns.
+
+2. Indexação e Ingestão de Dados
+Ingestão de Dados com Beats:
+
+Instalação e configuração de Filebeat, Metricbeat e Winlogbeat.
+
+Configuração de módulos.
+
+Envio de logs e métricas.
+
+Logstash para Transformação:
+
+Criação de pipelines Logstash.
+
+Uso de filtros comuns: grok, mutate, date, json, geoip.
+
+Saída para Elasticsearch.
+
+Kibana Ingest Node Pipelines:
+
+Criação e gerenciamento de pipelines de ingestão diretamente no Elasticsearch via Kibana.
+
+Processadores comuns: set, remove, rename, convert, split.
+
+3. Busca e Consulta de Dados (DSL - Domain Specific Language)
+Linguagem de Consulta do Kibana (KQL - Kibana Query Language):
+
+Sintaxe básica para filtragem de dados.
+
+Operadores lógicos (AND, OR, NOT).
+
+Consulta por campos e valores.
+
+Elasticsearch Query DSL (via Dev Tools no Kibana):
+
+Term vs. Match queries: Quando usar cada uma.
+
+Compound queries: bool query (must, should, must_not, filter).
+
+Range queries: Filtragem por intervalos.
+
+Exists e Missing queries: Verificação da presença ou ausência de campos.
+
+Wildcard e Regexp queries: Uso cauteloso para padrões.
+
+Nested queries: Consultando em objetos aninhados.
+
+4. Agregações e Análise de Dados
+Agregações de Buckets:
+
+Terms aggregation: Contagem de valores únicos.
+
+Date histogram aggregation: Agregação por tempo.
+
+Range aggregation: Agregação por intervalos numéricos.
+
+Geo-bounds e Geo-distance aggregations: Agregações geoespaciais.
+
+Agregações de Métricas:
+
+Avg, Sum, Min, Max aggregation.
+
+Cardinality aggregation: Contagem de valores únicos (aproximada).
+
+Percentiles aggregation: Cálculo de percentis.
+
+Combinando Agregações: Agregações aninhadas para análises mais complexas.
+
+5. Visualizações e Dashboards no Kibana
+Tipos de Visualizações:
+
+Gráficos de barras, linhas, pizza, área.
+
+Mapas (com dados geoespaciais).
+
+Tabelas de dados.
+
+Indicadores (Gauges, Metric).
+
+Criação e Configuração:
+
+Selecionando campos e métricas.
+
+Personalização de cores, rótulos e eixos.
+
+Uso de split series, split chart.
+
+Dashboards:
+
+Montagem de painéis com múltiplas visualizações.
+
+Filtragem de dashboards (global e por painel).
+
+Compartilhamento e incorporação de dashboards.
+
+6. Gerenciamento de Dados e Otimização
+Index Life Cycle Management (ILM):
+
+Conceito de fases (hot, warm, cold, delete).
+
+Configuração de políticas de ILM para automação do ciclo de vida dos índices.
+
+Index Templates:
+
+Criação de templates para aplicar configurações e mapeamentos a novos índices.
+
+Mapeamento (Mappings):
+
+Tipos de campos e suas propriedades (text, keyword, long, date, geo_point).
+
+Diferença entre text e keyword.
+
+Atualização de mapeamentos (quando possível e como).
+
+Recursos de Estudo Recomendados
+Documentação Oficial da Elastic: O melhor e mais completo recurso. Concentre-se nas seções de Kibana, Elasticsearch (busca e agregação), e Beats.
+
+Kibana Guide
+
+Elasticsearch Guide
+
+Beats Guides
+
+Logstash Guide
+
+Cursos Oficiais da Elastic (Elastic Training): Se possível, invista nos cursos oficiais. Eles são caros, mas de alta qualidade e alinhados com a certificação. O curso "Elastic Observability Fundamentals" ou "Elastic Search Engineer I" pode ser útil para reforçar a base.
+
+Exercícios Práticos:
+
+Ambiente Local: Configure um ambiente local com Elasticsearch, Kibana, Filebeat e Logstash. Pratique indexar dados de diferentes fontes, criar dashboards e realizar consultas complexas.
+
+Conjuntos de Dados: Utilize conjuntos de dados de exemplo (disponíveis publicamente) para praticar.
+
+Kibana Sample Data: O Kibana oferece dados de amostra que são excelentes para praticar visualizações e dashboards.
+
+Vídeos e Tutoriais: Procure por tutoriais no YouTube e blogs especializados que abordem os tópicos da certificação. Canais como "Elastic" e "javatpoint" podem ter conteúdo relevante.
+
+Simulados e Questões de Exemplo: Busque por simulados ou questões de exemplo para ter uma ideia do formato e do tipo de perguntas que você pode encontrar.
+
+Cronograma Sugerido (Exemplo)
+Este é apenas um exemplo. Adapte-o à sua disponibilidade e ritmo de aprendizado.
+
+Semana 1-2: Fundamentos do Elastic Stack
+
+Instalação e configuração básica.
+
+Exploração do Kibana e Dev Tools.
+
+Conceitos de Elasticsearch e arquitetura.
+
+Semana 3-4: Ingestão de Dados
+
+Filebeat e Metricbeat (instalação e módulos).
+
+Logstash (pipelines e filtros essenciais).
+
+Kibana Ingest Node.
+
+Semana 5-6: Busca e Consulta
+
+KQL e Query DSL (prática intensiva de diferentes tipos de query).
+
+Relevância e score.
+
+Semana 7-8: Agregações
+
+Agregações de buckets e métricas.
+
+Agregações aninhadas.
+
+Prática com dados reais.
+
+Semana 9-10: Visualizações e Dashboards
+
+Criação de todos os tipos de visualizações.
+
+Montagem de dashboards eficazes.
+
+Compartilhamento.
+
+Semana 11-12: Gerenciamento e Otimização + Revisão Geral
+
+ILM e Index Templates.
+
+Mapeamentos.
+
+Revisão de todos os tópicos.
+
+Resolução de simulados.
+
+Dicas Adicionais
+Mão na Massa: A prática é crucial. Quanto mais você interagir com o Elastic Stack, mais fácil será entender os conceitos.
+
+Entenda o "Porquê": Não apenas memorize comandos, mas entenda por que certas configurações ou consultas são usadas em cenários específicos.
+
+Acompanhe as Novidades: O Elastic Stack evolui rapidamente. Esteja ciente das últimas versões e recursos, embora a certificação se baseie em uma versão específica (verifique no site da Elastic qual a versão relevante para o exame).
+
+Participe da Comunidade: Fóruns e grupos de usuários podem ser ótimos lugares para tirar dúvidas e aprender com a experiência de outros.
