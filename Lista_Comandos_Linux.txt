@@ -445,7 +445,7 @@ date			       Exibe e altera a data e a hora do sistema.
 date -s			       Altera a data e a hora do sistema por extenso.
 date -r			       Exibe a última data e hora de modificação de um arquivo.
 cal                    Exibe o calendário
-touch			       Modifica a data e hora de um arquivo.
+touch			       Cria um arquivo vazio ou Modifica a data e hora de um arquivo.
 touch -m arquivo	   Altera a data e hora de modificação do arquivo.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
