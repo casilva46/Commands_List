@@ -835,6 +835,9 @@ wget -m -p -k -P                                    Diretório Site	Baixa um sit
 youtube-dl                                          Baixa vídeos da internet.
 ssh -p 2782 talesam@talesam.org                     Acessa via ssh o servidor talesam.org com o usuário talesam utilizando a porta 2782.
 
+curl -O https://exemplo.com/arquivo.csv		Baixar um arquivo da internet. O -O salva o arquivo com o nome original.
+
+
 netstat                                              Mostra o estado da rede
 netstat -a | grep LISTEN
 netstat -a | grep CLOSE_WAIT
