@@ -192,6 +192,10 @@ crontab -r                                               Remover todas as tarefa
 
 sudo crontab -u root -e                                  Para editar o crontab de outro usuário com a permissão do superusuário (root)
 
+at 			Permite agendar a execução de comandos ou scripts para uma hora e data definidas, apenas uma única vez
+
+at 15:30
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Listar diretórios recursivamente e salvar a saída em arquivo
 
