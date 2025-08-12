@@ -140,6 +140,8 @@ dos2unix <nome_arquivo>        Faz a convesão de um arquivo para formato Unix
 
 mv ./arquivo ./arquivo_bkp    renomeia um arquivo ou diretório
 
+while true; do echo "Ativo"; sleep 300; done - não deixa a sessão da máquina morrer
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CRONTAB
 
