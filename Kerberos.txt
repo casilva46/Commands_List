@@ -1,0 +1,161 @@
+Kerberos
+
+    O Kerberos é um protocolo de autenticação de rede projetado para permitir que duas partes (como um cliente e um servidor) comprovem sua identidade de forma segura em uma rede insegura, como a internet ou uma rede corporativa.
+    Foi desenvolvido pelo MIT nos anos 1980 e nomeado em homenagem ao Cérbero (Kerberos), o cão de três cabeças da mitologia grega que guardava o submundo — simbolizando a proteção contra acessos não autorizados.
+
+Kerberos é como um porteiro digital confiável que garante que:
+
+    Você é quem diz ser (sem mandar sua senha o tempo todo);
+    Os serviços que você acessa também são confiáveis;
+    Tudo isso acontece de forma criptografada e sem enviar senhas pela rede.
+
+Onde o Kerberos é usado?
+
+    Windows (Active Directory): é o protocolo de autenticação padrão.
+    Linux/Unix: amplamente usado em ambientes com autenticação centralizada.
+    Serviços corporativos: Hadoop, PostgreSQL, Apache, Samba etc.
+    Educação e governo: instituições que precisam de autenticação forte e centralizada.
+
+=========================================================================================================================================
+
+Como o Kerberos funciona? (Explicado em etapas)
+
+    Kerberos é um protocolo de autenticação baseado em tickets que permite que usuários acessem recursos de rede sem precisar enviar senhas pela rede. Ele usa criptografia de chave simétrica e funciona com base na confiança em um servidor central chamado KDC (Key Distribution Center).
+
+Principais componentes do Kerberos:
+
+Componente	        Função
+Cliente	            Usuário ou sistema que deseja acessar um serviço.
+Serviço	            Servidor ou aplicação que o cliente quer acessar.
+KDC                 (Key Distribution Center)	Servidor central que autentica usuários e emite tickets.
+AS                  (Authentication Server)	Parte do KDC que autentica o cliente e emite o TGT.
+TGS                 (Ticket Granting Service)	Parte do KDC que emite tickets para serviços com base no TGT.
+TGT                 (Ticket Granting Ticket)	Um ticket que comprova que o cliente foi autenticado com sucesso.
+Ticket de serviço	Um ticket que permite acessar um serviço específico (ex: servidor de arquivos).
+
+
+Etapas do funcionamento do Kerberos (Passo a passo):
+
+🔸 1. O usuário faz login (kinit / login no Windows)
+
+        O cliente insere o nome de usuário e a senha.
+        A senha nunca é enviada pela rede — ela é usada para gerar uma chave que criptografa a comunicação.
+
+🔸 2. Cliente → AS (Solicita TGT)
+
+        O cliente envia ao Authentication Server (AS):
+        Seu nome de usuário.
+        Nome do serviço de autenticação (TGS).
+        Marca de tempo (timestamp) criptografada.
+
+🔸 3. AS → Cliente (Retorna o TGT)
+
+O AS verifica o usuário e responde com:
+
+        Um TGT criptografado com a chave do TGS.
+        Uma chave de sessão para uso entre o cliente e o TGS.
+        O TGT é como um "passe VIP" que permite ao cliente pedir tickets para serviços, sem reautenticar com a senha.
+
+🔸 4. Cliente → TGS (Solicita ticket de serviço)
+
+        Quando o cliente quer acessar um serviço (ex: servidor de arquivos), ele envia:
+        O TGT recebido.
+        Nome do serviço desejado.
+        Um timestamp criptografado com a chave de sessão.
+
+🔸 5. TGS → Cliente (Retorna ticket de serviço)
+
+        O TGS responde com:
+        Um ticket de serviço, válido apenas para o serviço solicitado.
+        Outra chave de sessão para comunicação com o serviço.
+
+🔸 6. Cliente → Serviço (Acessa o recurso)
+
+        O cliente agora envia:
+        O ticket de serviço.
+        Um novo timestamp criptografado.
+        Se tudo estiver correto, o serviço permite o acesso — sem pedir senha novamente.
+
+Resultado final:
+
+    Você acessa recursos da rede de forma segura, rápida e sem enviar senhas diretamente.
+    Isso tudo é possível graças ao TGT e os tickets de serviço, que provam sua identidade.
+
+=====================================================================================================================================
+
+TGT
+
+O que é o TGT (Ticket Granting Ticket)?
+
+    O TGT (Ticket de Concessão de Tickets) é:
+    Um ticket criptografado emitido pelo KDC (Key Distribution Center), mais especificamente pelo AS (Authentication Server).
+    Ele prova que o usuário foi autenticado com sucesso.
+    É usado para solicitar outros tickets (como o TGS – Ticket Granting Service) sem precisar reautenticar com senha repetidamente.
+
+Como funciona o TGT no processo de autenticação?
+
+    Login do usuário: O usuário fornece seu nome de usuário e senha.
+    Requisição de TGT: O cliente (por ex., o computador do usuário) solicita um TGT ao AS do KDC.
+    Resposta do AS: 
+        O AS autentica o usuário (verificando a senha contra um hash armazenado) e retorna:
+
+            Um TGT criptografado com a chave do TGS.
+            Um sessão key (chave de sessão) para o cliente se comunicar com o TGS.
+
+    Solicitação de acesso a serviços: Quando o usuário quer acessar um serviço (ex: um servidor de arquivos), o cliente usa o TGT para solicitar ao TGS um ticket de serviço.
+    TGS emite o ticket de serviço, que o cliente usa para autenticar-se no serviço desejado.
+
+Segurança do TGT
+
+    O TGT é válido por um tempo limitado (ex: 10 horas) e pode ser renovado, dependendo da política.
+    Ele não contém a senha do usuário, apenas a prova de que o usuário foi autenticado.
+    Ele é criptografado, de modo que só o TGS pode lê-lo.
+
+Exemplo prático
+
+    Você entra no seu computador da empresa.
+    O sistema solicita e recebe um TGT.
+    Mais tarde, quando você acessa o servidor de arquivos ou o e-mail corporativo, o sistema usa o TGT para obter os tickets necessários – sem pedir sua senha novamente.
+
+
+Fluxograma Simplificado do Kerberos com TGT:
+
+[1] Usuário faz login
+        |
+        v
+[2] Requisição de TGT ao KDC (AS)
+        |
+        v
+[3] AS retorna TGT + sessão key
+        |
+        v
+[4] Cliente armazena TGT
+        |
+        v
+[5] Cliente solicita ticket de serviço (TGS) usando o TGT
+        |
+        v
+[6] TGS retorna ticket de serviço
+        |
+        v
+[7] Cliente usa ticket de serviço para acessar o serviço desejado
+
+
+=====================================================================================================================================================
+
+Resumo visual do fluxo:
+
+[1] Login → Cliente → AS: Requisição de TGT
+[2] AS → Cliente: TGT + chave de sessão
+[3] Cliente → TGS: Requisição de ticket de serviço com TGT
+[4] TGS → Cliente: Ticket de serviço
+[5] Cliente → Serviço: Envia ticket de serviço
+[6] Serviço → Libera acesso
+
+⚠️ Requisitos importantes:
+
+Requisito	                            Por quê?
+⏰ Relógio sincronizado (NTP)	    Kerberos depende de timestamps (proteção contra replay attacks).
+🏛️ KDC confiável e disponível	    Toda autenticação depende dele.
+🔐 Chaves secretas protegidas	    A segurança depende das chaves simétricas.
+
