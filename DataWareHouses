@@ -193,3 +193,69 @@ Aspecto	Banco de Dados Tradicional	Data Warehouse
 Foco	Processamento de transações	Análise e relatórios
 Atualização dos dados	Frequente e em tempo real	Carregamento periódico (ETL)
 Estrutura dos dados	Normalizada (mais complexa)	Desnormalizada (mais simples para análise)
+
+
+Tabelas fato e dimensão são conceitos fundamentais em modelagem dimensional de dados, especialmente em ambientes de Data Warehouse (Armazém de Dados). Elas são usadas para organizar os dados de forma eficiente para análise e geração de relatórios (Business Intelligence).
+
+✅ Tabela Fato
+
+A tabela fato é o centro do modelo dimensional. Ela armazena os fatos ou medidas quantitativas do negócio — ou seja, dados que podem ser contados ou agregados, como:
+
+Vendas
+
+Lucros
+
+Quantidades
+
+Custos
+
+Descontos
+
+Características:
+
+Contém medidas numéricas (ex: valor da venda, quantidade vendida).
+
+Possui chaves estrangeiras que se relacionam com as tabelas de dimensão.
+
+Pode conter dados agregados em diferentes níveis de granularidade (ex: diário, mensal).
+
+📦 Exemplo de tabela fato Fato_Vendas:
+
+id_venda	data_id	produto_id	cliente_id	valor_total	qtd
+123	20250819	2001	301	450.00	3
+
+
+Tabela Dimensão
+
+A tabela dimensão fornece contexto às medidas armazenadas na tabela fato. Ela contém dados descritivos, ou seja, informações qualitativas que ajudam a entender e filtrar os dados.
+
+Características:
+
+Armazena atributos descritivos (ex: nome do produto, categoria, cidade, nome do cliente).
+
+Usada para filtros, agrupamentos e segmentações em análises.
+
+Normalmente é menor em volume que a tabela fato.
+
+📦 Exemplo de tabela dimensão Dim_Produto:
+
+produto_id	nome_produto	categoria	marca
+2001	Camiseta Polo Azul	Roupas	MarcaX
+
+📦 Exemplo de tabela dimensão Dim_Cliente:
+
+cliente_id	nome_cliente	cidade	estado
+301	Ana Souza	São Paulo	SP
+
+
+         Dim_Produto
+              |
+         Dim_Cliente
+              |
+Dim_Tempo — Fato_Vendas — Dim_Loja
+
+
+Em resumo:
+Tipo	Contém	Tipo de dado	Exemplo
+Fato	Medidas, chaves estrangeiras	Quantitativos	valor_venda, qtd
+Dimensão	Atributos descritivos	Qualitativos	nome_produto, cidade
