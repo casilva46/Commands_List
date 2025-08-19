@@ -1,0 +1,195 @@
+DataWareHouses 
+
+link: https://www.oracle.com/br/database/what-is-a-data-warehouse/
+
+	Data Warehouses (ou Armazéns de Dados) são sistemas usados para armazenar, organizar e analisar grandes volumes de dados provenientes de diferentes fontes de dentro ou fora de uma empresa, com o objetivo principal de suporte à tomada de decisão. É um banco de dados centralizado e otimizado para consultas analíticas, e não para o processamento de transações do dia a dia (como é o caso dos bancos de dados operacionais).
+	
+	
+	
+Data Warehouse definido
+
+Um data warehouse é um tipo de sistema de gerenciamento de dados projetado para ativar e fornecer suporte às atividades de business intelligence (BI), especialmente a análise avançada. 
+Os data warehouses destinam-se exclusivamente a realizar consultas e análises avançadas e geralmente contêm grandes quantidades de dados históricos. 
+Os dados em um data warehouse geralmente são derivados de uma ampla variedade de fontes, como arquivos de log de aplicativos e aplicativos de transações.
+Um data warehouse centraliza e consolida grandes quantidades de dados de várias fontes. 
+Seus recursos analíticos permitem que as organizações obtenham informações de negócios úteis de seus dados para melhorar a tomada de decisões. 
+Com o tempo, cria-se um registro histórico que pode ser inestimável para cientistas de dados e analistas de negócios. Devido a esses recursos, um data warehouse pode ser considerado como a “única fonte confiável” de uma organização.
+
+
+Um data warehouse típico geralmente inclui os seguintes elementos:
+
+Um banco de dados relacional para armazenar e gerenciar dados
+Uma solução de extração, carregamento e transformação (ELT) para preparar os dados para análise
+Análise estatística, relatórios e recursos de mineração de dados
+Ferramentas de análise de clientes para visualizar e apresentar dados aos usuários de negócios
+Outras aplicações analíticas mais sofisticadas que geram informações acionáveis aplicando ciência de dados e algoritmos de inteligência artificial (IA) ou gráficos e recursos espaciais que permitem mais tipos de análise de dados em escala
+As organizações também podem selecionar uma solução que combine processamento de transações, análise em tempo real em data warehouses e data lakes e machine learning em um serviço de banco de dados MySQL, sem a complexidade, a latência, o custo e os riscos da duplicação de extração, transformação e carregamento (ETL).
+
+Benefícios de um Data Warehouse
+
+Os data warehouses oferecem o benefício único e abrangente de permitir que as organizações analisem grandes quantidades de dados variantes e extraiam um valor significativo, além de manter um registro histórico.
+
+Quatro características únicas (descritas pelo cientista da computação William Inmon, que é considerado o pai do data warehouse) permitem que os data warehouses forneçam esse benefício abrangente. De acordo com essa definição, os data warehouses são
+
+Orientados para o assunto. Eles podem analisar dados sobre um determinado assunto ou área funcional (como vendas).
+Integrados. Os data warehouses criam consistência entre diferentes tipos de dados de fontes distintas.
+Não volátil. Quando os dados estão em um data warehouse, eles são estáveis e não mudam.
+Variáveis de acordo com o tempo. A análise de data warehouse analisa as mudanças ao longo do tempo.
+
+Um data warehouse bem projetado realizará consultas muito rapidamente, fornecerá alta taxa de transferência de dados e dará flexibilidade suficiente para os usuários finais dividirem e organizarem ou reduzirem o volume de dados para um exame mais detalhado a fim de atender a uma variedade de demandas, seja em um nível alto ou em um nível muito bom e detalhado. O data warehouse serve como a base funcional para ambientes de BI de middleware que fornecem aos usuários finais relatórios, painéis e outras interfaces.
+
+Arquitetura de Data Warehouse
+A arquitetura de um data warehouse é determinada pelas necessidades específicas da organização. Arquiteturas comuns incluem
+
+Simples. Todos os data warehouses compartilham um design básico no qual metadados, dados de resumo e dados brutos são armazenados no repositório central do warehouse. O repositório é alimentado por fontes de dados em uma extremidade e acessado por usuários finais para análise, relatório e mineração na outra extremidade.
+
+Simples com uma área de preparo. Os dados operacionais devem ser limpos e processados antes de serem colocados no warehouse. Embora isso possa ser feito de forma programática, muitos data warehouses adicionam uma área de preparo de dados antes que eles entrem no warehouse, para simplificar a preparação dos dados.
+
+Hub e spoke. A adição de data marts entre o repositório central e os usuários finais permite que uma organização personalize seu data warehouse para atender a várias linhas de negócios. Quando os dados estiverem prontos para uso, eles serão movidos para o data mart apropriado.
+
+Áreas restritas. As áreas restritas são áreas privadas, seguras e protegidas que permitem às empresas explorar rápida e informalmente novos conjuntos de dados ou formas de analisar dados sem ter que obedecer ou cumprir as regras formais e o protocolo do data warehouse.
+
+****A Evolução dos Data Warehouses — Da Análise de Dados à IA e ao Machine Learning
+
+Quando os data warehouses entraram em cena pela primeira vez no final dos anos 1980, o objetivo era ajudar o fluxo de dados dos sistemas operacionais em sistemas de suporte à decisão (DSSs). Esses data warehouses iniciais exigiam uma quantidade enorme de redundância. A maioria das organizações tinha vários ambientes DSS que atendiam a seus vários usuários. Embora os ambientes de DSS usassem muitos dos mesmos dados, a coleta, a limpeza e a integração dos dados eram frequentemente replicadas em cada ambiente.
+
+À medida que os data warehouses se tornaram mais eficientes, eles evoluíram do armazenamentos de informações que forneciam suporte a plataformas tradicionais de BI a amplas infraestruturas analíticas compatíveis com uma grande variedade de aplicativos, como análise avançada operacional e gerenciamento de desempenho.
+
+O suporte a cada uma dessas cinco etapas exigiu uma variedade crescente de conjuntos de dados. As três últimas etapas em particular criam o imperativo para uma gama ainda maior de recursos de dados e análise avançada.
+
+Hoje, a IA e o machine learning estão transformando quase todos os setores, serviços e ativos corporativos, e os data warehouses não são exceção. A expansão do big data e a aplicação de novas tecnologias digitais estão impulsionando a mudança nos requisitos e recursos de data warehouse.
+
+O data warehouse de dados autônomo é a etapa mais recente nessa evolução, oferecendo às empresas a capacidade de extrair ainda mais valor de seus dados enquanto reduzem os custos e melhoram a confiabilidade e o desempenho do data warehouse.
+
+Saiba mais sobre data warehouses autônomos e, em seguida, comece com seu próprio data warehouse autônomo.
+
+Data Warehouses, Data Marts e Armazenamento de Dados de Operação
+Embora desempenhem funções semelhantes, os data warehouses são diferentes dos data marts e dos armazenamentos de dados de operação (ODSs). Um data mart realiza as mesmas funções que um data warehouse, mas dentro de um escopo muito mais limitado, geralmente um único departamento ou linha de negócios. Isso torna os data marts mais fáceis de estabelecer do que os data warehouses. No entanto, eles tendem a introduzir inconsistência porque pode ser difícil gerenciar de modo uniforme e controlar os dados em vários data marts.
+
+ODSs fornecem suporte somente a operações diárias; portanto, a visão dos dados históricos é muito limitada. Embora funcionem muito bem como fontes de dados atuais e sejam frequentemente usados como tal pelos data warehouses, não fornecem suporte a consultas historicamente detalhadas.
+
+O que é um data warehouse em nuvem?
+Um data warehouse em nuvem usa a nuvem para ingerir e armazenar dados de fontes de dados distintas.
+
+Os data warehouses originais foram criados em servidores on-premises. Esses data warehouses on-premises continuam tendo muitas vantagens hoje. Em muitos casos, eles podem oferecer melhor governança, segurança, soberania de dados e melhor latência. No entanto, os data warehouses on-premises não são tão elásticos e exigem uma previsão complexa para determinar como escalonar o data warehouse para necessidades futuras. O gerenciamento desses data warehouses também pode ser muito complexo.
+
+Por outro lado, entre algumas das vantagens dos data warehouses em nuvem estão:
+
+Suporte elástico e escalável para requisitos de armazenamento ou computação complexos ou variáveis
+Fácil de usar
+Facilidade de gerenciamento
+Contenção de custos
+Os melhores data warehouses em nuvem são totalmente gerenciados e autônomos, garantindo que até mesmo os iniciantes possam criar e usar um data warehouse com apenas alguns cliques. Uma maneira fácil de iniciar a migração para um data warehouse em nuvem é executar o data warehouse em nuvem on-premises, por trás do firewall do data center que atende aos requisitos de segurança e soberania de dados.
+
+Além disso, a maioria dos data warehouses em nuvem segue um modelo sem assinatura (Pay as You Go), o que traz economia de custos adicionais aos clientes.
+
+O que é um data warehouse moderno?
+Sejam eles parte de equipes de TI, engenharia de dados, análise de negócios ou ciência de dados, diferentes usuários em toda a organização têm necessidades diferentes de um data warehouse.
+
+Uma arquitetura de dados moderna atende a essas necessidades diferentes, oferecendo uma maneira de gerenciar todos os tipos de dados, cargas de trabalho e análises. Ela consiste em padrões de arquitetura com componentes necessários integrados para trabalhar juntos no alinhamento com as boas práticas do setor. O data warehouse moderno inclui:
+
+Um banco de dados convergente que simplifica o gerenciamento de todos os tipos de dados e oferece maneiras diferentes de usar os dados
+Serviços de ingestão e transformação de dados de autoatendimento
+Suporte para SQL, machine learning, gráfico e processamento espacial
+Várias opções de análise que facilitam o uso de dados sem movê-los
+Gerenciamento automatizado para provisionamento, escalonamento e administração simples
+Um data warehouse moderno pode aprimorar com eficiência os fluxos de trabalho de dados de maneira que outros warehouses não conseguem. Isso significa que todos, de analistas e engenheiros de dados a cientistas de dados e equipes de TI, podem realizar os trabalhos de maneira mais efetiva e buscar o trabalho inovador que impulsiona a organização, sem incontáveis atrasos e complexidade.
+
+Planejamento de um Data Warehouse
+Quando uma organização se propõe a projetar um data warehouse, ela deve começar definindo seus requisitos de negócios específicos, concordando com o escopo e elaborando um projeto conceitual. A organização pode então criar o design lógico e físico para o data warehouse. O design lógico envolve as relações entre os objetos e o design físico envolve a melhor maneira de armazenar e recuperar os objetos. O design físico também incorpora os processos de transporte, backup e recuperação.
+
+Todo design de data warehouse de dados deve abordar o seguinte:
+
+Conteúdo de dados específicos
+Relacionamentos dentro e entre grupos de dados
+O ambiente de sistemas que fornecerá suporte ao data warehouse.
+Os tipos de transformações de dados necessários
+Frequência de atualização de dados
+Um fator primário no design são as necessidades dos usuários finais. A maioria dos usuários finais está interessada em realizar análises e analisar dados agregados, em vez de transações individuais. No entanto, muitas vezes os usuários finais realmente não sabem o que querem até que surja uma necessidade específica. Assim, o processo de planejamento deve incluir exploração suficiente para antecipar as necessidades. Finalmente, o design do data warehouse deve permitir espaço para expansão e evolução para acompanhar as necessidades em evolução dos usuários finais.
+
+A Nuvem e o Data Warehouse
+Os data warehouses na nuvem oferecem as mesmas características e os benefícios dos data warehouses on-premise, mas com os benefícios adicionais da computação em nuvem, como flexibilidade, escalabilidade, agilidade, segurança e custos reduzidos. Os data warehouses em nuvem permitem que as empresas se concentrem unicamente na extração de valor de seus dados, em vez de precisarem construir e gerenciar a infraestrutura de hardware e software para fornecer suporte ao data warehouse.
+
+
+Por Que Não Executar a Análise Avançada em Seu Ambiente de OLTP?
+Os data warehouses são ambientes relacionais usados para análise de dados, particularmente de dados históricos. As organizações usam data warehouses para descobrir padrões e relacionamentos em seus dados que se desenvolvem com o tempo.
+
+Em contraste, os ambientes transacionais são usados para processar transações de forma contínua e são comumente usados para entrada de pedidos e transações financeiras e de varejo. Não se baseiam em dados históricos; na verdade, em ambientes OLTP, os dados históricos geralmente são arquivados ou simplesmente excluídos para melhorar o desempenho.
+
+Os data warehouses e os sistemas de OLTP diferem significativamente.
+
+                            Data Warehouse	                                                            Sistemas OLTP
+Carga de trabalho	          Acomoda consultas ad hoc e análise avançada de dados	                      Fornece suporte somente a operações predefinidas
+Modificações de dados	      Atualiza de forma automática regularmente	                                  Atualizações por usuários finais que emitem declarações individuais
+Projeto de esquema	        Utiliza esquemas parcialmente desnormalizados para otimizar o desempenho	  Utiliza esquemas totalmente normalizados para garantir a consistência dos dados
+Digitalização de dados	    Abrange milhares a milhões de linhas	                                      Acessa apenas um grupo de registros de cada vez
+Dados históricos	          Armazena muitos meses ou anos de dados	                                    Armazena dados por apenas semanas ou meses
+
+
+Implantação sem complexidade: Autonomous Data Warehouse
+A iteração mais recente do data warehouse é o data warehouse autônomo, que se baseia em IA e machine learning para eliminar tarefas manuais e simplificar a configuração, a implementação e o gerenciamento de dados. Um data warehouse como serviço autônomo na nuvem requer administração de banco de dados executada por humanos, configuração ou gerenciamento de hardware ou instalação de software.
+
+A criação de data warehouse, o backup, a correção e a atualização do banco de dados, além da expansão ou redução do banco de dados são todos executados automaticamente, com a mesma flexibilidade, dimensionamento, agilidade e redução de custos oferecidos pelas plataformas de nuvem. O data warehouse autônomo elimina a complexidade, acelera a implementação e libera recursos para que as organizações possam se concentrar em atividades que agreguem valor aos negócios.
+
+Oracle Autonomous Data Warehouse
+O Oracle Autonomous Data Warehouse é um data warehouse autônomo totalmente autônomo, fácil de usar e dimensionável elasticamente que oferece desempenho de consulta rápida e não requer administração de banco de dados. A configuração do Oracle Autonomous Data Warehouse é muito simples e rápida.
+
+OLAP X OLTP
+
+A diferença entre OLTP e OLAP está principalmente no objetivo e no tipo de operação que cada um executa sobre os dados. Vamos resumir e depois detalhar.
+
+OLTP → foco em eficiência transacional.
+
+OLAP → foco em eficiência analítica.
+
+OLTP vs OLAP
+
+Característica	              OLTP (Online Transaction Processing)	                            OLAP (Online Analytical Processing)
+Finalidade	                  Processar transações do dia a dia	                                Realizar análises e consultas complexas
+Tipo de dados	                Dados operacionais (atuais)	                                      Dados históricos (consolidados)
+Exemplo de uso	              Fazer uma compra online, inserir um pedido	                      Analisar vendas mensais, comparar lucros
+Usuário típico	              Funcionários operacionais, sistemas automatizados	                Analistas de negócios, gestores
+Consultas	                    Simples, rápidas, de leitura e escrita	                          Complexas, com agregações e leitura intensa
+Modelo de dados	              Normalizado (relacional, 3FN)	                                    Dimensional (modelo estrela ou floco de neve)
+Volume de dados	              Relativamente pequeno por transação	                              Grande volume de dados históricos
+Performance idealizada	      Alta para inserções/atualizações	                                Alta para leitura e agregações
+Atualizações	                Frequentes (inserção, atualização, exclusão)	                    Raras (geralmente só leitura)
+
+OLTP:
+
+Um sistema de supermercado processando vendas no caixa.
+
+Um sistema bancário registrando transferências em tempo real.
+
+Um app de delivery salvando o pedido feito pelo cliente.
+
+OLAP:
+
+Um painel de BI mostrando os produtos mais vendidos por região nos últimos 12 meses.
+
+Um relatório de desempenho de vendas por representante.
+
+Uma análise de tendências de consumo por faixa etária.
+
+
+Exemplo prático:
+
+	Imagine uma rede de supermercados. Cada loja registra suas vendas em um sistema local. Um Data Warehouse pode centralizar esses dados para:
+	Analisar as vendas por região;
+	Verificar quais produtos vendem mais em cada estação do ano;
+	Acompanhar tendências de consumo ao longo dos anos;
+	Cruzar dados de vendas com campanhas de marketing, para medir retorno sobre investimento.
+	
+Ferramentas populares de Data Warehouse:
+
+	Amazon Redshift
+	Google BigQuery
+	Snowflake
+	Microsoft Azure Synapse
+	Oracle Exadata
+	
+Data Warehouse vs Banco de Dados Tradicional
+Aspecto	Banco de Dados Tradicional	Data Warehouse
+Foco	Processamento de transações	Análise e relatórios
+Atualização dos dados	Frequente e em tempo real	Carregamento periódico (ETL)
+Estrutura dos dados	Normalizada (mais complexa)	Desnormalizada (mais simples para análise)
