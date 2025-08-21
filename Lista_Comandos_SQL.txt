@@ -114,25 +114,25 @@ IN (SELECT department_id
 
 FUNÇÃO SELECT
 
-SELECT * FROM CUSTOMER;                                        (SELECT * FROM Nome_Tabela;)
+SELECT * FROM db.tabe_name;                                        (SELECT * FROM Nome_Tabela;)
 
-SELECT * FROM CUSTOMER LIMIT 10;                              Limita a quantidade de registros retornados
+SELECT * FROM db.tabe_name LIMIT 10;                              Limita a quantidade de registros retornados
 
-SELECT CUSTOMER_id, NAME FROM CUSTOMER;                       Seleciona apenas colunas especificas de uma tabela  ( SELECT *  Nome_Coluna_A, Nome_Coluna_B FROM Nome_Tabela;)
-
-SELECT 
-PRODUCT_ID, 
-DESCRIPTION, 
-PRICE, 
-PRICE * 1.07 AS TAXED_PRICE 
-FROM PRODUCT;
+SELECT client_id, name FROM db.tabe_name;                       Seleciona apenas colunas especificas de uma tabela  ( SELECT *  Nome_Coluna_A, Nome_Coluna_B FROM Nome_Tabela;)
 
 SELECT 
-PRODUCT_ID,
-DESCRIPTION, 
-PRICE AS UNTAXED_PRICE, 
-PRICE * 1.07 AS TAXED_PRICE 
-FROM PRODUCT;                                               ( AS TAXED_PRICE adiciona uma nova colona na consulta)
+	product_id, 
+	description, 
+	price, 
+	price * 1.07 AS taxed_price 
+FROM product;
+
+SELECT 
+	product_id,
+	description, 
+	price AS untaxed_price, 
+	price * 1.07 AS taxed_price 
+FROM product;                                               ( AS TAXED_PRICE adiciona uma nova colona na consulta)
 
 SELECT 
 PRODUCT_ID, 
