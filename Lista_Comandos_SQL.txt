@@ -97,6 +97,16 @@ Chamamos de normalização de dados o processo formal e passo a passo que examin
 - HAVING            Filtra as linhas agrupadas
 - ORDER BY          Colunas a serem classificadas
 
+* Ordem de execução 
+	Depois que uma consulta é executada a ordem na qual ela é feita é da seguinte forma. 
+
+	1 - FROM			Coleta os dados
+	2 - WHERE			Filtra as linhas
+	3 - GROUP BY		Agrupa as linhas 
+	4 - HAVING			Filtra as linhas agrupadas
+	5 - SELECT			Especifica as colunas a serem exibidas
+	6 - ORDER BY		Reorganiza os resultados
+
 * OBS: As palvras em MAIÚSCULAS são reservadas do SQL e para nomes de colunas e tabelas usamos minúsculas  (EX: SELECT * FROM minha_tabela) 
 
 * Subqueries
